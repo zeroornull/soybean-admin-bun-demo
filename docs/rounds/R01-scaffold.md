@@ -128,12 +128,10 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 19528,
-    strictPort: true
+    port: 19528
   },
   preview: {
-    port: 19726,
-    strictPort: true
+    port: 19726
   }
 });
 ```
@@ -219,7 +217,7 @@ bun run typecheck
 
 ## 验收
 
-- [x] 开发页可访问：R01 初验时原端口 9528 因 Windows excluded range 回退到 9554；D14 后已改为 strict `19528` 并重新验证
+- [x] 开发页可访问：R01 初验时原端口 9528 因 Windows excluded range 回退到 9554；D14/D15 后已改为从 `19528` 起步并允许占用时自动递增
 - [x] `bun.lock` 出现在根目录，为可入库的文本 JSON lockfile
 - [x] `bun run typecheck` 退出码 0
 - [x] `legacy/` 仍在，根依赖使用 Bun，legacy 依赖保持 pnpm virtual store，未混用包管理器

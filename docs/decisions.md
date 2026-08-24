@@ -81,3 +81,11 @@
 - **原因**：Windows TCP excluded ranges 包含 `9454–9553` 与 `9559–9658`，原 dev 端口 9528 在 WSL 中无法 bind；默认自动递增又会隐藏真实端口。
 - **验证**：19528/19726 不在 Windows excluded ranges 内，改动前 Linux/Windows 两侧均无 listener；strict dev HTTP 与 headless Chrome、strict preview 均通过。
 - **替代**：若未来冲突，显式更换为另一个已验证的高位端口；不恢复自动漂移。
+
+### D15 · 高位端口保留，恢复 Vite 自动递增
+
+- **日期**：2026-08-24
+- **决策**：保留 dev `19528` / preview `19726` 作为起始端口，移除 `strictPort`，端口占用时允许 Vite 自动尝试后续端口。
+- **原因**：高位端口已避开当前 Windows excluded ranges，但未来仍可能被其他开发服务或 IDE 转发占用；自动递增能提高启动容错性。
+- **验证**：19528 已有开发服务、Windows Cursor 又监听 19529 时，第二个 dev 连续跳过两个端口，自动选择 19530 并 HTTP 200；临时占用 19726 时，preview 自动选择 19727，HTML 与生产 JS 均 HTTP 200。
+- **运行约定**：实际 URL 以 Vite 启动时打印的 `Local` 地址为准，不在脚本或文档中假设必然是起始端口。
