@@ -7,7 +7,7 @@ function setDarkMode(dark: boolean) {
 </script>
 
 <template>
-  <div data-page="home" class="min-h-screen grid place-items-center p-24px">
+  <div data-page="home" class="min-h-full grid place-items-center p-24px max-sm:p-12px">
     <section
       data-theme-panel
       class="card-wrapper w-full max-w-560px bg-[var(--card-bg)] p-24px text-center transition-colors duration-200"

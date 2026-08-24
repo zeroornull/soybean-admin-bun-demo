@@ -1,19 +1,29 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import LayoutContent from './modules/content.vue';
+import LayoutHeader from './modules/header.vue';
+import LayoutSider from './modules/sider.vue';
+
 defineOptions({ name: 'BaseLayout' });
+
+const siderCollapsed = ref(false);
+
+function toggleSider() {
+  siderCollapsed.value = !siderCollapsed.value;
+}
 </script>
 
 <template>
-  <div data-layout="base" class="min-h-screen flex bg-[var(--layout-bg)] text-[var(--text-color)]">
-    <aside
-      data-layout-sider
-      class="w-220px border-r border-[var(--border-color)] bg-[var(--card-bg)] p-20px transition-colors duration-200"
-    >
-      <strong class="text-18px">Soybean Admin</strong>
-      <p class="mb-0 mt-8px text-14px opacity-70">Base layout placeholder</p>
-    </aside>
+  <div
+    data-layout="base"
+    :data-sider-collapsed="siderCollapsed"
+    class="h-screen flex overflow-hidden bg-[var(--layout-bg)] text-[var(--text-color)]"
+  >
+    <LayoutSider :collapsed="siderCollapsed" />
 
-    <main class="min-w-0 flex-1">
-      <RouterView />
-    </main>
+    <section data-layout-main class="min-w-0 flex flex-1 flex-col">
+      <LayoutHeader :collapsed="siderCollapsed" @toggle-sider="toggleSider" />
+      <LayoutContent />
+    </section>
   </div>
 </template>

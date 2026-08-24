@@ -30,7 +30,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R02 | 应用启动链 | done | 2026-08-24 | assets/reset/loading/plugins 与异步 `setupApp` 已建立；isolated loading + headless Chrome mount 替换 + typecheck/build 全通过；已在高位端口复验 |
 | R03 | 样式系统 | done | 2026-08-24 | UnoCSS 66.8.1 + reset/global/CSS 变量 + `html.dark` 已接入；build CSS 规则与 Chrome Dark/Light 计算样式全验证 |
 | R04 | 路由基础 | done | 2026-08-24 | vue-router 5.2.0 + history/hash + base/blank 父子 RouterView + Home/Login/404 已落地；两种模式真实 Chrome 全路径通过 |
-| R05 | 布局骨架 | pending | | |
+| R05 | 布局骨架 | done | 2026-08-24 | header/sider/content vertical shell + 本地 220/64px 折叠 + Home/Login 硬编码导航已落地；桌面/blank/360px 真实 Chrome 全通过 |
 | R06 | Pinia 状态基座 | pending | | |
 | R07 | 环境变量、代理与 Mock | pending | | |
 | R08 | HTTP 请求核心 | pending | | |

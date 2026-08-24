@@ -73,10 +73,20 @@ R12 再引入 `KeepAlive` 并与 tab store 的 cache 对齐。现在不做无条
 
 ## 验收
 
-- [ ] home 有顶栏、侧栏、内容区
-- [ ] 侧栏可折叠，内容区宽度跟着变
-- [ ] login 全屏，无侧栏
-- [ ] 缩小浏览器到手机宽度时，侧栏不要撑爆（可以先 `overflow-auto`，R15–R17 页面交付时再完整回归）
+- [x] Home 同时渲染 `data-layout-header`、`data-layout-sider`、`data-layout-content`，内容页只在 Content 的 RouterView 中出现
+- [x] 侧栏展开 220px、折叠 64px，780px 视口下主区宽度从 560px 跟随变为 716px
+- [x] 从侧栏进入 Login 后只有 blank layout，header/sider/content 全部不渲染
+- [x] Chrome 切到 360×800 后，侧栏宽 64px、主区 296px，document/body scrollWidth 都为 360，无横向溢出
+
+R05 实际证据（2026-08-24）：
+
+- 新增 `src/layouts/modules/header.vue`、`sider.vue`、`content.vue`，BaseLayout 只保留本地 `siderCollapsed` ref 和三模块组装；
+- Header 高 56px，只负责折叠事件与当前 route title；Sider 只硬编码 Home/Login 两个 RouterLink；Content 只有普通 RouterView/component；
+- Chrome 桌面实测：展开 `sider=220/main=560`，点 toggle 后 `sider=64/main=716`，Header 始终 56px，Content `overflow-y:auto`；
+- 从折叠侧栏点 Login 后 base 三模块全部卸载，只渲染 blank/login；返回 Home 后布局本地 ref 按预期重建为展开态；
+- Chrome 360px 实测无横向溢出，移动媒体类将侧栏约束为 64px，菜单/品牌文案隐藏；
+- 生产构建转换 46 个模块，生成约 6.81 kB CSS，已检出 220/64px width、56px height、overflow-auto、min-width:0 规则；
+- `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 均通过，未引入 KeepAlive、`@sa/materials`、theme drawer、global search 或 Pinia。
 
 ## 常见坑
 
