@@ -67,7 +67,7 @@ bunx vue-tsc -v   # 应能正常输出 TypeScript 版本
 
 ### 3. `index.html`
 
-对标 `legacy/index.html`，端口先换 9528，避免和 legacy 的 9527 冲突：
+对标 `legacy/index.html`。新项目使用高位开发端口 19528，避开当前 Windows/WSL 的排除端口区间；preview 使用 19726：
 
 ```html
 <!doctype html>
@@ -128,10 +128,12 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 9528
+    port: 19528,
+    strictPort: true
   },
   preview: {
-    port: 9726
+    port: 19726,
+    strictPort: true
   }
 });
 ```
@@ -217,7 +219,7 @@ bun run typecheck
 
 ## 验收
 
-- [x] 开发页可访问：代码配置为 9528；本次 tmux 运行环境占用 9528–9553，Vite 自动回退到 9554 并通过 HTTP 烟雾验证
+- [x] 开发页可访问：R01 初验时原端口 9528 因 Windows excluded range 回退到 9554；D14 后已改为 strict `19528` 并重新验证
 - [x] `bun.lock` 出现在根目录，为可入库的文本 JSON lockfile
 - [x] `bun run typecheck` 退出码 0
 - [x] `legacy/` 仍在，根依赖使用 Bun，legacy 依赖保持 pnpm virtual store，未混用包管理器

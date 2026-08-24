@@ -104,7 +104,7 @@ R02 实际证据（2026-08-24）：
 - `src/plugins/assets.ts`、`index.ts`、`loading.ts` 与 `src/styles/reset.css` 已建立，reset 与 legacy 原文逐字一致；
 - `main.ts` 已改为异步 `setupApp()`，启动顺序为 assets → loading → createApp → mount，并留出 store → router → i18n 插入点；
 - `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 均通过，构建转换 15 个模块；
-- dev server 本次因 tmux 端口占用从 9528 回退到 9555；根 HTML、main、loading、assets、reset、App 和 favicon 均 HTTP 200；
+- R02 初验时，9528–9553 位于 Windows excluded range，9554 又有另一个 `bun dev`，因此临时使用 9555；D14 后已在 strict `19528` 重新验证根 HTML、main、loading、assets、reset、App 和 favicon 全部 HTTP 200；
 - headless Chrome DOM 实际包含 `#app-container` / `bootstrap ok`，不再包含 `data-app-loading`；
 - 未引入 Router、Pinia、i18n、Naive UI 或 Elegant Router，开发服务验证后已停止。
 

@@ -79,7 +79,7 @@ interface ImportMetaEnv {
 
 临时用 `fetch('/proxy-default/auth/login', ...)` 或浏览器 Network 面板确认：
 
-1. 请求先到 9528 的 Vite server；
+1. 请求先到 19528 的 Vite server；
 2. path 中 proxy 前缀只出现一次；
 3. Mock 收到的 path 为 `/auth/login`；
 4. 正确与错误凭证都能得到结构化 JSON，而不是 CORS 错误页。

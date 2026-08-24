@@ -73,3 +73,11 @@
 - **原因**：当前环境可直连 npm，且用户明确不需要镜像源。
 - **验证**：R00 的 Bun 临时安装与 legacy pnpm frozen install 均通过；legacy 安装命令也显式覆盖为 `https://registry.npmjs.org/`。
 - **替代**：后续若网络环境变化，再评估项目级 `bunfig.toml`；不将凭证写入仓库。
+
+### D14 · 新项目改用 strict 高位端口 19528 / 19726
+
+- **日期**：2026-08-24
+- **决策**：Vite dev 使用 `19528`，preview 使用 `19726`，两者开启 `strictPort: true`。
+- **原因**：Windows TCP excluded ranges 包含 `9454–9553` 与 `9559–9658`，原 dev 端口 9528 在 WSL 中无法 bind；默认自动递增又会隐藏真实端口。
+- **验证**：19528/19726 不在 Windows excluded ranges 内，改动前 Linux/Windows 两侧均无 listener；strict dev HTTP 与 headless Chrome、strict preview 均通过。
+- **替代**：若未来冲突，显式更换为另一个已验证的高位端口；不恢复自动漂移。
