@@ -95,9 +95,18 @@ setupApp();
 
 ## 验收
 
-- [ ] 刷新时能看到 loading 至少一闪（若太快，在 `setupApp` 里临时 `await` 500ms 验证，验证完删掉）
-- [ ] mount 后 loading 被 Vue 替换
-- [ ] 你能向别人讲出：为什么 store 必须在 router 之前 `app.use`
+- [x] `setupLoading()` 在隔离 DOM 中实际注入 `data-app-loading` 与可见 loading 文案，且缺少 `#app` 时安全 no-op
+- [x] 真实 headless Chrome 中 mount 后 loading 标记消失，被 `#app-container` 与 `bootstrap ok` 替换
+- [x] 能讲出：store 必须在 router 之前 `app.use`，因为 router 初始导航/守卫可能在 mount 前就调用 store，尚未注册 Pinia 时会缺少活动实例
+
+R02 实际证据（2026-08-24）：
+
+- `src/plugins/assets.ts`、`index.ts`、`loading.ts` 与 `src/styles/reset.css` 已建立，reset 与 legacy 原文逐字一致；
+- `main.ts` 已改为异步 `setupApp()`，启动顺序为 assets → loading → createApp → mount，并留出 store → router → i18n 插入点；
+- `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 均通过，构建转换 15 个模块；
+- dev server 本次因 tmux 端口占用从 9528 回退到 9555；根 HTML、main、loading、assets、reset、App 和 favicon 均 HTTP 200；
+- headless Chrome DOM 实际包含 `#app-container` / `bootstrap ok`，不再包含 `data-app-loading`；
+- 未引入 Router、Pinia、i18n、Naive UI 或 Elegant Router，开发服务验证后已停止。
 
 ## 常见坑
 

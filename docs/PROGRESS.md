@@ -27,7 +27,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | --- | --- | --- | --- | --- |
 | R00 | 环境准备 | done | 2026-08-24 | Node 22.23.2、Bun 1.4.0、pnpm 11.21.0；legacy frozen install + Vite HTTP 200 + typecheck 通过；使用默认 npm registry，不建 `bunfig.toml` |
 | R01 | 脚手架 | done | 2026-08-24 | 手工创建 Vite + Vue + TS6 最小应用；`bun.lock`、typecheck、build 与 dev HTTP 烟雾全通过；本次因 tmux 端口占用由 9528 回退到 9554 |
-| R02 | 应用启动链 | pending | | |
+| R02 | 应用启动链 | done | 2026-08-24 | assets/reset/loading/plugins 与异步 `setupApp` 已建立；isolated loading + headless Chrome mount 替换 + typecheck/build 全通过 |
 | R03 | 样式系统 | pending | | |
 | R04 | 路由基础 | pending | | |
 | R05 | 布局骨架 | pending | | |
