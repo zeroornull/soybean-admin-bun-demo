@@ -2,6 +2,7 @@
 import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import LocaleSwitch from '@/components/locale-switch.vue';
+import ThemeControls from '@/components/theme-controls.vue';
 import { useAuthStore } from '@/store/auth';
 import { useRouteStore } from '@/store/route';
 
@@ -65,6 +66,7 @@ async function logout() {
     </div>
 
     <div v-if="authStore.isLogin" class="flex items-center gap-10px">
+      <ThemeControls />
       <LocaleSwitch />
       <span data-auth-user class="text-14px max-sm:hidden">{{ authStore.userInfo?.userName }}</span>
       <button

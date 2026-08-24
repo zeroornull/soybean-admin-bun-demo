@@ -67,13 +67,25 @@ document.documentElement.style.colorScheme = darkMode ? 'dark' : 'light';
 
 ## 验收
 
-- [ ] 切暗黑时 `html.dark`、布局 CSS 变量和 Naive UI 同时切换
-- [ ] 表单、菜单、面包屑、页签、弹层与页面背景在暗黑下无明显白块
-- [ ] 修改主题色后，Naive 主按钮的 default / hover / pressed 都有合理反馈
-- [ ] 刷新后保持主题选择，首屏不先亮后暗或先暗后亮
-- [ ] reset theme 会同时清理 storage 与 DOM 状态
-- [ ] R13 的语言切换在 `NConfigProvider` 改造后仍正常
-- [ ] `bun run typecheck` 通过
+- [x] 切暗黑时 `html.dark`、布局 CSS 变量和 Naive UI 同时切换
+- [x] 表单、菜单、面包屑、页签、弹层与页面背景在暗黑下无明显白块
+- [x] 修改主题色后，Naive 主按钮的 default / hover / pressed 都有合理反馈
+- [x] 刷新后保持主题选择，首屏不先亮后暗或先暗后亮
+- [x] reset theme 会同时清理 storage 与 DOM 状态
+- [x] R13 的语言切换在 `NConfigProvider` 改造后仍正常
+- [x] `bun run typecheck` 通过
+
+R14 实际证据（2026-08-24）：
+
+- theme store 实现 `light/dark/auto`、system media、darkMode、themeColor、Naive darkTheme/overrides、DOM/storage watch 与 reset；在 `setupStore` 阶段初始化，早于 router/i18n/mount；
+- `index.html` head 使用 `%VITE_STORAGE_PREFIX%` 预应用合法 scheme；生产构建确认替换成 `SOY_themeScheme`。dark 冷启动的首个 Home heading 快照已是 dark class，body 背景从暗色 rgba 收敛到 `rgb(17,24,39)`，未出现亮背景帧；
+- 显式 dark 实测 `html.dark=true`、`style.colorScheme=dark`、layout/card 分别为 `#111827/#1f2937`，Naive 全局文本与 NDatePicker 弹层为暗色；弹层背景 `rgb(72,72,78)`，无白块；
+- 主色改为 `#e11d48` 后，CSS/storage 与 Naive NButton vars 同步为 default `#e11d48`、hover `#e64165`、pressed `#b9183b`、suppl `#e32f57`，菜单 active 同为主色；
+- `auto` 在系统 light 下 `dark=false`，DevTools emulation 切 dark 后立即 `dark=true`，再切 light 恢复；storage 始终保留 `auto`。系统 light 时显式 dark 仍保持暗色，证明用户选择优先；
+- reset 从 dark + 自定义红色恢复 light + `#646cff`，DOM/Naive palette 同步，`SOY_themeScheme/SOY_themeColor` 均为 null，R13 的 `SOY_locale=en-US` 不受影响；
+- storage 写入 `sepia/not-a-color` 后刷新，回退并修正为 `light/#646cff`；纯函数校验默认 palette、大小写规范化、短 hex 拒绝与 fallback 全通过；
+- R13 语言切换在 dark/custom/provider 下仍同步页面、tabs、dayjs 与 DatePicker；DatePicker 关闭再打开后内置日历从中文切换为英文；
+- 360×800 下 header 仅保留 scheme 快捷键，颜色/reset 自动隐藏，locale/logout/tabs/content 无横向溢出；最终 frozen install/typecheck/build/diff check 无 warning 通过。
 
 ## 常见坑
 

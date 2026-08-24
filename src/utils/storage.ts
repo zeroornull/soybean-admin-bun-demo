@@ -3,6 +3,8 @@ const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX;
 export const tokenStorageKey = `${storagePrefix}token`;
 export const refreshTokenStorageKey = `${storagePrefix}refreshToken`;
 export const localeStorageKey = `${storagePrefix}locale`;
+export const themeSchemeStorageKey = `${storagePrefix}themeScheme`;
+export const themeColorStorageKey = `${storagePrefix}themeColor`;
 
 function getStorage() {
   return typeof localStorage === 'undefined' ? null : localStorage;
@@ -38,4 +40,25 @@ export function getLocaleSetting() {
 
 export function setLocaleSetting(locale: string) {
   getStorage()?.setItem(localeStorageKey, locale);
+}
+
+export function getThemeSchemeSetting() {
+  return getStorage()?.getItem(themeSchemeStorageKey) || null;
+}
+
+export function setThemeSchemeSetting(scheme: string) {
+  getStorage()?.setItem(themeSchemeStorageKey, scheme);
+}
+
+export function getThemeColorSetting() {
+  return getStorage()?.getItem(themeColorStorageKey) || null;
+}
+
+export function setThemeColorSetting(color: string) {
+  getStorage()?.setItem(themeColorStorageKey, color);
+}
+
+export function clearThemeSettings() {
+  getStorage()?.removeItem(themeSchemeStorageKey);
+  getStorage()?.removeItem(themeColorStorageKey);
 }

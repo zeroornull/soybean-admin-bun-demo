@@ -47,6 +47,16 @@ export const zhCN = {
     title: '受限路由',
     description: '只有静态超管角色可以绕过该路由的 R_NOBODY 要求。'
   },
+  theme: {
+    light: '亮色',
+    dark: '暗色',
+    auto: '跟随系统',
+    switchScheme: '切换主题模式，当前：{scheme}',
+    themeColor: '主题色',
+    reset: '重置主题',
+    currentTheme: '当前主题：{scheme} · {color}',
+    primaryAction: 'Naive 主按钮'
+  },
   error: {
     forbidden: '无访问权限',
     notFound: '页面不存在'

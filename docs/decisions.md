@@ -122,3 +122,11 @@
 - **启动**：创建 i18n 前先校验 storage；app store 在 `setupStore` 阶段初始化并同步 locale，之后才完成 router、i18n plugin 和 mount。无效 storage 回退 `zh-CN` 并写回合法值。
 - **路由投影**：RouteMeta、MenuItem、BreadcrumbItem 与 TabItem 保存 `i18nKey/labelKey`，组件渲染时翻译；fallback title/label 只用于缺 key 时兜底，不在切换语言时批量改写 store。
 - **消息完整性**：英文消息使用中文消息形状的深层字符串类型约束；最终再做运行时 flatten 键集对比，不通过静默 fallback 掩盖缺键。
+
+### D20 · theme store 持久化 scheme，darkMode 只做运行时派生
+
+- **日期**：2026-08-24
+- **决策**：持久化 `light/dark/auto` 原始选择与六位 hex 主色；`darkMode` 根据 scheme 和系统 media 计算，不把 auto 当时的布尔结果写回 storage。显式 light/dark 永远优先于系统变化。
+- **首屏**：theme store 在 `setupStore` 阶段同步 DOM；此外 `index.html` head 在 CSS/应用脚本前预读合法 scheme 并设置 `html.dark/colorScheme`，避免已持久化 dark 首屏从亮色过渡。
+- **颜色**：应用内纯函数只生成当前消费者需要的 primary default/hover/pressed/suppl，通过与白/黑的确定比例混色；同时写入 CSS vars 和 Naive common overrides。R19 锁输入输出，R20 再决定是否抽内部包。
+- **重置**：reset 恢复 `light/#646cff` 并清除两个 theme storage key；locale、auth 和其他 storage 不受影响。非法 scheme/color 启动时回退并写回合法值。

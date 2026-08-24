@@ -1,22 +1,28 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { NDatePicker } from 'naive-ui';
+import { computed, onMounted, ref } from 'vue';
+import { NButton, NDatePicker } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { dayjs } from '@/locales/dayjs';
+import { useThemeStore } from '@/store/theme';
 
 defineOptions({ name: 'Home' });
 
 const localCount = ref(0);
 const selectedDate = ref<number | null>(null);
+const datePickerRef = ref<InstanceType<typeof NDatePicker> | null>(null);
 const { t, locale } = useI18n();
+const themeStore = useThemeStore();
 const localizedDate = computed(() => {
   locale.value;
   return dayjs('2026-08-24').format('MMMM dddd');
 });
+const currentThemeSchemeLabel = computed(() => t(`theme.${themeStore.themeScheme}`));
 
-function setDarkMode(dark: boolean) {
-  document.documentElement.classList.toggle('dark', dark);
-}
+onMounted(() => {
+  const input = (datePickerRef.value?.$el as HTMLElement | undefined)?.querySelector('input');
+  input?.setAttribute('id', 'locale-date-picker');
+  input?.setAttribute('name', 'localeDate');
+});
 </script>
 
 <template>
@@ -35,27 +41,24 @@ function setDarkMode(dark: boolean) {
         </p>
         <label class="flex flex-col gap-6px text-13px">
           <span>{{ t('home.datePickerLabel') }}</span>
-          <NDatePicker v-model:value="selectedDate" data-naive-locale-demo type="date" clearable />
+          <NDatePicker
+            ref="datePickerRef"
+            v-model:value="selectedDate"
+            data-naive-locale-demo
+            type="date"
+            clearable
+          />
         </label>
       </div>
 
+      <div class="mt-12px flex flex-wrap items-center justify-between gap-10px rd-8px bg-[var(--layout-bg)] p-12px">
+        <p data-theme-summary class="m-0 text-13px">
+          {{ t('theme.currentTheme', { scheme: currentThemeSchemeLabel, color: themeStore.themeColor }) }}
+        </p>
+        <NButton data-naive-primary type="primary">{{ t('theme.primaryAction') }}</NButton>
+      </div>
+
       <div class="mt-20px flex flex-wrap justify-center gap-12px">
-        <button
-          data-theme-action="light"
-          class="rd-8px border border-[var(--border-color)] bg-transparent px-12px py-8px transition-opacity hover:(opacity-80)"
-          type="button"
-          @click="setDarkMode(false)"
-        >
-          {{ t('common.light') }}
-        </button>
-        <button
-          data-theme-action="dark"
-          class="rd-8px bg-primary px-12px py-8px text-white transition-opacity hover:(opacity-90)"
-          type="button"
-          @click="setDarkMode(true)"
-        >
-          {{ t('common.dark') }}
-        </button>
         <button
           data-local-counter="home"
           class="rd-8px border border-[var(--border-color)] bg-transparent px-12px py-8px transition-opacity hover:(opacity-80)"

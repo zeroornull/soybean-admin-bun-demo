@@ -5,6 +5,9 @@
   --text-color: #1f2937;
   --border-color: #dbe2ea;
   --primary: #646cff;
+  --primary-hover: #7d83ff;
+  --primary-pressed: #5259d1;
+  --primary-suppl: #7077ff;
 }
 
 html.dark {
@@ -13,7 +16,6 @@ html.dark {
   --card-bg: #1f2937;
   --text-color: #f3f4f6;
   --border-color: #4b5563;
-  --primary: #7c83ff;
 }
 
 html,
@@ -32,4 +34,5 @@ body {
 
 button {
   font: inherit;
+  color: inherit;
 }

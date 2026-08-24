@@ -49,6 +49,16 @@ export const enUS = {
     title: 'Restricted route',
     description: "Only the static super role can bypass this route's R_NOBODY requirement."
   },
+  theme: {
+    light: 'Light',
+    dark: 'Dark',
+    auto: 'Follow system',
+    switchScheme: 'Switch theme scheme, current: {scheme}',
+    themeColor: 'Theme color',
+    reset: 'Reset theme',
+    currentTheme: 'Current theme: {scheme} · {color}',
+    primaryAction: 'Naive primary button'
+  },
   error: {
     forbidden: 'No permission',
     notFound: 'Page not found'

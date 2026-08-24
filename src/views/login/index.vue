@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LocaleSwitch from '@/components/locale-switch.vue';
+import ThemeControls from '@/components/theme-controls.vue';
 import { useAuthStore } from '@/store/auth';
 
 defineOptions({ name: 'Login' });
@@ -40,7 +41,10 @@ async function submitLogin() {
 
 <template>
   <main data-page="login" class="min-h-screen grid place-items-center p-24px">
-    <LocaleSwitch class="fixed right-16px top-16px" />
+    <div class="fixed right-16px top-16px flex items-center gap-6px">
+      <ThemeControls />
+      <LocaleSwitch />
+    </div>
     <section class="card-wrapper w-full max-w-420px bg-[var(--card-bg)] p-24px">
       <h1 class="m-0 text-28px font-600">{{ t('login.title') }}</h1>
       <p class="mb-0 mt-8px">{{ t('login.description') }}</p>
