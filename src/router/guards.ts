@@ -1,6 +1,7 @@
 import type { RouteLocationNormalized, RouteLocationRaw, Router } from 'vue-router';
 import { useAuthStore } from '@/store/auth';
 import { hasRoutePermission, useRouteStore } from '@/store/route';
+import { useTabStore } from '@/store/tab';
 import { authRoutes } from './routes';
 
 function normalizePath(path: string) {
@@ -86,6 +87,9 @@ export function createRouterGuard(router: Router) {
   });
 
   router.afterEach(to => {
+    useRouteStore().syncCurrentRoute(to);
+    useTabStore().syncRoute(to, router);
+
     document.title = to.meta.title
       ? `${to.meta.title} | ${import.meta.env.VITE_APP_TITLE}`
       : import.meta.env.VITE_APP_TITLE;

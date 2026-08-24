@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { computed, h } from 'vue';
+import { NMenu, type MenuOption } from 'naive-ui';
+import { useRouter } from 'vue-router';
+import { useRouteStore, type MenuItem } from '@/store/route';
 
 defineOptions({ name: 'LayoutSider' });
 
@@ -7,15 +10,49 @@ const props = defineProps<{
   collapsed: boolean;
 }>();
 
-const route = useRoute();
+const router = useRouter();
+const routeStore = useRouteStore();
 
-const items = [
-  { to: '/home', label: 'Home', shortLabel: 'H' },
-  { to: '/login', label: 'Login', shortLabel: 'L' }
-];
+const menuThemeOverrides = {
+  borderRadius: '8px',
+  color: 'transparent',
+  itemColorActive: 'var(--primary)',
+  itemColorActiveCollapsed: 'var(--primary)',
+  itemColorActiveHover: 'var(--primary)',
+  itemColorHover: 'var(--layout-bg)',
+  itemIconColor: 'var(--text-color)',
+  itemIconColorActive: '#ffffff',
+  itemIconColorActiveHover: '#ffffff',
+  itemTextColor: 'var(--text-color)',
+  itemTextColorActive: '#ffffff',
+  itemTextColorActiveHover: '#ffffff'
+};
 
-function isActive(path: string) {
-  return route.path === path;
+function createMenuIcon(item: MenuItem) {
+  return () =>
+    h(
+      'span',
+      {
+        'aria-hidden': 'true',
+        class: 'w-22px inline-flex items-center justify-center text-17px font-700'
+      },
+      item.icon || item.label.slice(0, 1)
+    );
+}
+
+function transformMenuOption(item: MenuItem): MenuOption {
+  return {
+    key: item.key,
+    label: item.label,
+    icon: createMenuIcon(item),
+    children: item.children?.map(transformMenuOption)
+  };
+}
+
+const menuOptions = computed<MenuOption[]>(() => routeStore.menus.map(transformMenuOption));
+
+async function handleSelect(key: string | number) {
+  await router.push({ name: String(key) });
 }
 </script>
 
@@ -31,18 +68,18 @@ function isActive(path: string) {
       <strong v-if="!props.collapsed" class="whitespace-nowrap text-16px max-md:hidden">Soybean Admin</strong>
     </div>
 
-    <nav data-layout-nav class="flex flex-col gap-8px p-10px">
-      <RouterLink
-        v-for="item in items"
-        :key="item.to"
-        :data-nav-to="item.to"
-        :to="item.to"
-        class="h-40px flex items-center gap-10px rd-8px px-10px transition-colors duration-200"
-        :class="isActive(item.to) ? 'bg-primary text-white' : 'hover:bg-[var(--layout-bg)]'"
-      >
-        <span class="w-24px shrink-0 text-center font-600">{{ item.shortLabel }}</span>
-        <span v-if="!props.collapsed" class="whitespace-nowrap max-md:hidden">{{ item.label }}</span>
-      </RouterLink>
+    <nav data-layout-nav class="p-8px">
+      <NMenu
+        data-route-menu
+        :value="routeStore.selectedMenuKey"
+        :options="menuOptions"
+        :collapsed="props.collapsed"
+        :collapsed-width="48"
+        :collapsed-icon-size="22"
+        :indent="18"
+        :theme-overrides="menuThemeOverrides"
+        @update:value="handleSelect"
+      />
     </nav>
   </aside>
 </template>

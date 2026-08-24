@@ -106,3 +106,11 @@
 - **原因**：只启动 Vite 时，浏览器请求虽能到达 proxy，但目标端口没有 Mock 监听，登录会稳定失败并报 `ECONNREFUSED 127.0.0.1:19007`；默认命令应建立完整的本地开发依赖链。
 - **进程边界**：编排器只关闭自己启动的 Mock/Vite；预先存在的 Mock 不归它所有，退出时不得误杀。Mock 或 Vite 子进程意外退出时，清理另一条自有进程并以失败状态结束。
 - **实现**：使用 Bun/Node 内置的 `child_process`、`fetch` 与信号处理，不新增并发运行依赖。
+
+### D18 · 主线 Tab 不持久化，route name 与 component name 显式分工
+
+- **日期**：2026-08-24
+- **决策**：R12 使用 route name 作为唯一 tab id，route meta 的 `componentName` 作为 KeepAlive include 名称；Home 固定且不可普通关闭。tabs 不写 storage，浏览器刷新后只从当前授权路由重建 Home 与当前页。
+- **原因**：当前主线没有同一路由多 params 实例需求；提前使用 fullPath 作为无限多实例 id 会把 tab 唯一性和组件缓存唯一性混在一起。非持久化同时避免权限切换、路由删除和旧 query 造成过期 tab。
+- **局部重载**：先把 active component name 临时移出 cache include，等待 KeepAlive prune，再卸载内容；恢复 include 后重新挂载。保持固定 route key，不使用随机 key 累积旧缓存实例，也不调用 `window.location.reload()`。
+- **升级条件**：只有业务明确要求同一详情页同时打开多个 params/query 实例时，才把 tab id 升级为 name + params/query，并单独设计实例级缓存策略。

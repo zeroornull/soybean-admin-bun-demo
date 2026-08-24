@@ -36,8 +36,8 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R08 | HTTP 请求核心 | done | 2026-08-24 | Axios 1.19.0 flat union + token header + backend/http/network/cancelled 分类 + auth API + 会话码回调已落地；Chrome 全契约通过 |
 | R09 | 登录、会话恢复与登出 | done | 2026-08-24 | auth-store 登录链 + 双 token storage + userInfo + initSession 单飞 + 会话码 reset + Header Logout 已落地；Chrome 全流程通过 |
 | R10 | 导航守卫与静态权限 | done | 2026-08-24 | constant/auth 拆分 + roles 过滤 + add/remove + initSession/rematch/redirect/403/404 守卫已落地；匿名/超管/普通/刷新/切号 Chrome 矩阵全通过 |
-| R11 | 路由菜单与面包屑 | pending | | |
-| R12 | 多页签、缓存与重载 | pending | | |
+| R11 | 路由菜单与面包屑 | done | 2026-08-24 | Naive UI NMenu + filtered routes 菜单投影 + route.matched 面包屑 + name 选中态已落地；超管/普通/切号/刷新/前进后退 Chrome 矩阵通过 |
+| R12 | 多页签、缓存与重载 | done | 2026-08-24 | route-name tabs + pinned Home + component-name KeepAlive + prune/unmount/remount 局部重载已落地；切换/关闭/刷新/登出 Chrome 矩阵通过 |
 | R13 | 国际化与 locale 同步 | pending | | |
 | R14 | 暗黑与主题色 | pending | | |
 | R15 | 登录页交付 | pending | | |
@@ -82,7 +82,7 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | pinia | 4.0.3 | R06 |
 | @vue/devtools-api | 8.2.1 | R06 |
 | axios | 1.19.0 | R08 |
-| naive-ui | | R11 |
+| naive-ui | 2.45.2 | R11 |
 | vue-i18n | | R13 |
 | dayjs | | R13 |
 | echarts | | R16 |

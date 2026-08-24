@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 defineOptions({ name: 'Home' });
+
+const localCount = ref(0);
 
 function setDarkMode(dark: boolean) {
   document.documentElement.classList.toggle('dark', dark);
@@ -31,6 +35,14 @@ function setDarkMode(dark: boolean) {
           @click="setDarkMode(true)"
         >
           Dark
+        </button>
+        <button
+          data-local-counter="home"
+          class="rd-8px border border-[var(--border-color)] bg-transparent px-12px py-8px transition-opacity hover:(opacity-80)"
+          type="button"
+          @click="localCount += 1"
+        >
+          Local state: {{ localCount }}
         </button>
         <RouterLink
           data-nav="login"

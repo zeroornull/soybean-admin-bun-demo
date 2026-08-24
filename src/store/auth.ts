@@ -11,6 +11,7 @@ import {
 } from '@/utils/storage';
 import { SetupStoreId } from './ids';
 import { useRouteStore } from './route';
+import { useTabStore } from './tab';
 
 export interface UserInfo {
   userId: string;
@@ -69,9 +70,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     loading.value = false;
     authError.value = reason;
 
-    const { useTabStore } = await import('./tab');
+    useTabStore().clearTabs();
     useRouteStore().resetStore();
-    useTabStore().$reset();
 
     sessionInitialized.value = true;
 

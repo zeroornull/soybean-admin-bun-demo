@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui';
 import { useAuthStore } from '@/store/auth';
+import { useRouteStore } from '@/store/route';
 
 defineOptions({ name: 'LayoutHeader' });
 
@@ -13,9 +13,8 @@ const emit = defineEmits<{
   toggleSider: [];
 }>();
 
-const route = useRoute();
 const authStore = useAuthStore();
-const pageTitle = computed(() => String(route.meta.title ?? route.name ?? 'Soybean Admin'));
+const routeStore = useRouteStore();
 
 async function logout() {
   await authStore.resetStore();
@@ -37,7 +36,23 @@ async function logout() {
       >
         {{ props.collapsed ? '→' : '←' }}
       </button>
-      <strong data-layout-title class="truncate text-16px">{{ pageTitle }}</strong>
+      <NBreadcrumb v-if="routeStore.breadcrumbs.length" data-layout-breadcrumb class="min-w-0 overflow-hidden">
+        <NBreadcrumbItem
+          v-for="(item, index) in routeStore.breadcrumbs"
+          :key="item.key"
+          :data-breadcrumb-key="item.key"
+        >
+          <RouterLink
+            v-if="index < routeStore.breadcrumbs.length - 1"
+            :to="item.path"
+            class="transition-colors hover:text-primary"
+          >
+            {{ item.label }}
+          </RouterLink>
+          <strong v-else data-breadcrumb-current class="text-[var(--text-color)]">{{ item.label }}</strong>
+        </NBreadcrumbItem>
+      </NBreadcrumb>
+      <strong v-else data-layout-title class="truncate text-16px">Soybean Admin</strong>
     </div>
 
     <div v-if="authStore.isLogin" class="flex items-center gap-10px">

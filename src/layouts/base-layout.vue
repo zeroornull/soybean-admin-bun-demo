@@ -3,6 +3,7 @@ import { useAppStore } from '@/store/app';
 import LayoutContent from './modules/content.vue';
 import LayoutHeader from './modules/header.vue';
 import LayoutSider from './modules/sider.vue';
+import LayoutTabs from './modules/tabs.vue';
 
 defineOptions({ name: 'BaseLayout' });
 
@@ -19,6 +20,7 @@ const appStore = useAppStore();
 
     <section data-layout-main class="min-w-0 flex flex-1 flex-col">
       <LayoutHeader :collapsed="appStore.siderCollapse" @toggle-sider="appStore.toggleSider" />
+      <LayoutTabs />
       <LayoutContent />
     </section>
   </div>

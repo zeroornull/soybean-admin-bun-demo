@@ -44,7 +44,8 @@ export const authRoutes: RouteRecordRaw[] = [
     redirect: { name: 'home' },
     component: () => import('@/layouts/base-layout.vue'),
     meta: {
-      title: 'Root',
+      title: '',
+      hideInMenu: true,
       requiresAuth: true
     },
     children: [
@@ -54,6 +55,11 @@ export const authRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '首页',
+          icon: '⌂',
+          order: 1,
+          componentName: 'Home',
+          keepAlive: true,
+          pinned: true,
           requiresAuth: true
         }
       },
@@ -63,6 +69,10 @@ export const authRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/restricted/index.vue'),
         meta: {
           title: '受限页',
+          icon: '⚿',
+          order: 20,
+          componentName: 'Restricted',
+          keepAlive: true,
           requiresAuth: true,
           roles: ['R_NOBODY']
         }
