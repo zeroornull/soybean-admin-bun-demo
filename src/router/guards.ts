@@ -1,4 +1,5 @@
 import type { RouteLocationNormalized, RouteLocationRaw, Router } from 'vue-router';
+import { setDocumentTitle } from '@/locales';
 import { useAuthStore } from '@/store/auth';
 import { hasRoutePermission, useRouteStore } from '@/store/route';
 import { useTabStore } from '@/store/tab';
@@ -90,8 +91,6 @@ export function createRouterGuard(router: Router) {
     useRouteStore().syncCurrentRoute(to);
     useTabStore().syncRoute(to, router);
 
-    document.title = to.meta.title
-      ? `${to.meta.title} | ${import.meta.env.VITE_APP_TITLE}`
-      : import.meta.env.VITE_APP_TITLE;
+    setDocumentTitle(to.meta);
   });
 }

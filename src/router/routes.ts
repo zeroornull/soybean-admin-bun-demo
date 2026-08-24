@@ -12,6 +12,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/login/index.vue'),
         meta: {
           title: '登录',
+          i18nKey: 'route.login',
           constant: true
         }
       }
@@ -23,6 +24,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/_builtin/403/index.vue'),
     meta: {
       title: '无权限',
+      i18nKey: 'route.forbidden',
       constant: true
     }
   },
@@ -32,6 +34,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/_builtin/404/index.vue'),
     meta: {
       title: '页面不存在',
+      i18nKey: 'route.notFound',
       constant: true
     }
   }
@@ -55,6 +58,7 @@ export const authRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/home/index.vue'),
         meta: {
           title: '首页',
+          i18nKey: 'route.home',
           icon: '⌂',
           order: 1,
           componentName: 'Home',
@@ -69,6 +73,7 @@ export const authRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/restricted/index.vue'),
         meta: {
           title: '受限页',
+          i18nKey: 'route.restricted',
           icon: '⚿',
           order: 20,
           componentName: 'Restricted',

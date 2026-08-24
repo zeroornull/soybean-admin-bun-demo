@@ -1,6 +1,7 @@
 import type { App } from 'vue';
 import { createPinia } from 'pinia';
 import { setRequestSessionHandlers } from '@/service/request';
+import { useAppStore } from './app';
 import { useAuthStore } from './auth';
 import { resetSetupStore } from './plugins/reset';
 
@@ -11,6 +12,7 @@ pinia.use(resetSetupStore);
 export function setupStore(app: App) {
   app.use(pinia);
 
+  useAppStore(pinia);
   const authStore = useAuthStore(pinia);
   const resetSession = (reason: string) => authStore.resetStore({ reason });
 

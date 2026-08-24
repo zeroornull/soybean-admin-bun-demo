@@ -2,6 +2,7 @@ const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX;
 
 export const tokenStorageKey = `${storagePrefix}token`;
 export const refreshTokenStorageKey = `${storagePrefix}refreshToken`;
+export const localeStorageKey = `${storagePrefix}locale`;
 
 function getStorage() {
   return typeof localStorage === 'undefined' ? null : localStorage;
@@ -29,4 +30,12 @@ export function setRefreshToken(token: string) {
 
 export function clearRefreshToken() {
   getStorage()?.removeItem(refreshTokenStorageKey);
+}
+
+export function getLocaleSetting() {
+  return getStorage()?.getItem(localeStorageKey) || null;
+}
+
+export function setLocaleSetting(locale: string) {
+  getStorage()?.setItem(localeStorageKey, locale);
 }

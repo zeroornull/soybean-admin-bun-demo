@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
+import LocaleSwitch from '@/components/locale-switch.vue';
 import { useAuthStore } from '@/store/auth';
 import { useRouteStore } from '@/store/route';
 
@@ -15,6 +17,11 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore();
 const routeStore = useRouteStore();
+const { t } = useI18n();
+
+function getBreadcrumbLabel(item: (typeof routeStore.breadcrumbs)[number]) {
+  return item.i18nKey ? t(item.i18nKey) : item.label;
+}
 
 async function logout() {
   await authStore.resetStore();
@@ -31,7 +38,7 @@ async function logout() {
         data-layout-action="toggle-sider"
         class="size-36px shrink-0 rd-8px border border-[var(--border-color)] bg-transparent transition-opacity hover:(opacity-80)"
         type="button"
-        :aria-label="props.collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+        :aria-label="props.collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')"
         @click="emit('toggleSider')"
       >
         {{ props.collapsed ? '→' : '←' }}
@@ -47,15 +54,18 @@ async function logout() {
             :to="item.path"
             class="transition-colors hover:text-primary"
           >
-            {{ item.label }}
+            {{ getBreadcrumbLabel(item) }}
           </RouterLink>
-          <strong v-else data-breadcrumb-current class="text-[var(--text-color)]">{{ item.label }}</strong>
+          <strong v-else data-breadcrumb-current class="text-[var(--text-color)]">
+            {{ getBreadcrumbLabel(item) }}
+          </strong>
         </NBreadcrumbItem>
       </NBreadcrumb>
-      <strong v-else data-layout-title class="truncate text-16px">Soybean Admin</strong>
+      <strong v-else data-layout-title class="truncate text-16px">{{ t('common.appName') }}</strong>
     </div>
 
     <div v-if="authStore.isLogin" class="flex items-center gap-10px">
+      <LocaleSwitch />
       <span data-auth-user class="text-14px max-sm:hidden">{{ authStore.userInfo?.userName }}</span>
       <button
         data-auth-action="logout"
@@ -63,9 +73,9 @@ async function logout() {
         type="button"
         @click="logout"
       >
-        Logout
+        {{ t('common.logout') }}
       </button>
     </div>
-    <span v-else class="text-13px opacity-60 max-sm:hidden">Vertical layout</span>
+    <span v-else class="text-13px opacity-60 max-sm:hidden">{{ t('common.verticalLayout') }}</span>
   </header>
 </template>

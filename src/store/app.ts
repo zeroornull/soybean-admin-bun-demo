@@ -1,16 +1,30 @@
-import { nextTick, ref } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
+import { initialLocale, syncLocale, type AppLocale } from '@/locales';
 import { SetupStoreId } from './ids';
 import { useTabStore } from './tab';
 
 /** Global application shell state. */
 export const useAppStore = defineStore(SetupStoreId.App, () => {
+  const locale = ref<AppLocale>(initialLocale);
   const siderCollapse = ref(false);
   const reloadFlag = ref(true);
   const reloading = ref(false);
 
+  watch(locale, value => syncLocale(value), { flush: 'sync', immediate: true });
+
   function toggleSider() {
     siderCollapse.value = !siderCollapse.value;
+  }
+
+  function setLocale(nextLocale: AppLocale) {
+    if (locale.value === nextLocale) return;
+
+    locale.value = nextLocale;
+  }
+
+  function toggleLocale() {
+    setLocale(locale.value === 'zh-CN' ? 'en-US' : 'zh-CN');
   }
 
   async function reloadPage() {
@@ -44,9 +58,12 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   }
 
   return {
+    locale,
     siderCollapse,
     reloadFlag,
     reloading,
+    setLocale,
+    toggleLocale,
     toggleSider,
     reloadPage
   };

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, h } from 'vue';
 import { NMenu, type MenuOption } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useRouteStore, type MenuItem } from '@/store/route';
 
@@ -12,6 +13,7 @@ const props = defineProps<{
 
 const router = useRouter();
 const routeStore = useRouteStore();
+const { t } = useI18n();
 
 const menuThemeOverrides = {
   borderRadius: '8px',
@@ -28,7 +30,7 @@ const menuThemeOverrides = {
   itemTextColorActiveHover: '#ffffff'
 };
 
-function createMenuIcon(item: MenuItem) {
+function createMenuIcon(item: MenuItem, label: string) {
   return () =>
     h(
       'span',
@@ -36,15 +38,17 @@ function createMenuIcon(item: MenuItem) {
         'aria-hidden': 'true',
         class: 'w-22px inline-flex items-center justify-center text-17px font-700'
       },
-      item.icon || item.label.slice(0, 1)
+      item.icon || label.slice(0, 1)
     );
 }
 
 function transformMenuOption(item: MenuItem): MenuOption {
+  const label = item.i18nKey ? t(item.i18nKey) : item.label;
+
   return {
     key: item.key,
-    label: item.label,
-    icon: createMenuIcon(item),
+    label,
+    icon: createMenuIcon(item, label),
     children: item.children?.map(transformMenuOption)
   };
 }
@@ -65,7 +69,9 @@ async function handleSelect(key: string | number) {
   >
     <div class="h-56px flex items-center gap-10px border-b border-[var(--border-color)] px-14px">
       <span class="size-36px shrink-0 flex items-center justify-center rd-8px bg-primary font-700 text-white">SA</span>
-      <strong v-if="!props.collapsed" class="whitespace-nowrap text-16px max-md:hidden">Soybean Admin</strong>
+      <strong v-if="!props.collapsed" class="whitespace-nowrap text-16px max-md:hidden">
+        {{ t('common.appName') }}
+      </strong>
     </div>
 
     <nav data-layout-nav class="p-8px">

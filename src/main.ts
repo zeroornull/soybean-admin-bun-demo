@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { setupI18n } from './locales';
 import { setupLoading } from './plugins';
 import { router, setupRouter } from './router';
 import { setupStore } from './store';
@@ -23,7 +24,7 @@ async function setupApp() {
     await router.replace({ name: 'login', query });
   });
 
-  // R13: setupI18n(app)
+  setupI18n(app);
 
   app.mount('#app');
 }

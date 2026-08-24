@@ -38,7 +38,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R10 | 导航守卫与静态权限 | done | 2026-08-24 | constant/auth 拆分 + roles 过滤 + add/remove + initSession/rematch/redirect/403/404 守卫已落地；匿名/超管/普通/刷新/切号 Chrome 矩阵全通过 |
 | R11 | 路由菜单与面包屑 | done | 2026-08-24 | Naive UI NMenu + filtered routes 菜单投影 + route.matched 面包屑 + name 选中态已落地；超管/普通/切号/刷新/前进后退 Chrome 矩阵通过 |
 | R12 | 多页签、缓存与重载 | done | 2026-08-24 | route-name tabs + pinned Home + component-name KeepAlive + prune/unmount/remount 局部重载已落地；切换/关闭/刷新/登出 Chrome 矩阵通过 |
-| R13 | 国际化与 locale 同步 | pending | | |
+| R13 | 国际化与 locale 同步 | done | 2026-08-24 | Vue I18n + app locale + Naive/date locale + dayjs + html lang/storage 已同步；中英全投影、冷启动、无效值回退 Chrome 矩阵通过 |
 | R14 | 暗黑与主题色 | pending | | |
 | R15 | 登录页交付 | pending | | |
 | R16 | 首页看板与 ECharts | pending | | |
@@ -83,8 +83,8 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | @vue/devtools-api | 8.2.1 | R06 |
 | axios | 1.19.0 | R08 |
 | naive-ui | 2.45.2 | R11 |
-| vue-i18n | | R13 |
-| dayjs | | R13 |
+| vue-i18n | 11.4.9 | R13 |
+| dayjs | 1.11.23 | R13 |
 | echarts | | R16 |
 | oxlint / oxfmt | | R18 |
 | vitest | | R19 |

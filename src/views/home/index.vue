@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { NDatePicker } from 'naive-ui';
+import { useI18n } from 'vue-i18n';
+import { dayjs } from '@/locales/dayjs';
 
 defineOptions({ name: 'Home' });
 
 const localCount = ref(0);
+const selectedDate = ref<number | null>(null);
+const { t, locale } = useI18n();
+const localizedDate = computed(() => {
+  locale.value;
+  return dayjs('2026-08-24').format('MMMM dddd');
+});
 
 function setDarkMode(dark: boolean) {
   document.documentElement.classList.toggle('dark', dark);
@@ -16,8 +25,19 @@ function setDarkMode(dark: boolean) {
       data-theme-panel
       class="card-wrapper w-full max-w-560px bg-[var(--card-bg)] p-24px text-center transition-colors duration-200"
     >
-      <h1 class="m-0 text-28px font-600">Home</h1>
-      <p class="mb-0 mt-8px">The authenticated page currently uses the base layout.</p>
+      <h1 class="m-0 text-28px font-600">{{ t('home.title') }}</h1>
+      <p class="mb-0 mt-8px">{{ t('home.description') }}</p>
+
+      <div class="mt-18px rd-8px bg-[var(--layout-bg)] p-12px text-left">
+        <h2 class="m-0 text-15px font-600">{{ t('home.localeDemo') }}</h2>
+        <p data-dayjs-locale class="mb-10px mt-6px text-13px">
+          {{ t('home.dateLabel') }}：{{ localizedDate }}
+        </p>
+        <label class="flex flex-col gap-6px text-13px">
+          <span>{{ t('home.datePickerLabel') }}</span>
+          <NDatePicker v-model:value="selectedDate" data-naive-locale-demo type="date" clearable />
+        </label>
+      </div>
 
       <div class="mt-20px flex flex-wrap justify-center gap-12px">
         <button
@@ -26,7 +46,7 @@ function setDarkMode(dark: boolean) {
           type="button"
           @click="setDarkMode(false)"
         >
-          Light
+          {{ t('common.light') }}
         </button>
         <button
           data-theme-action="dark"
@@ -34,7 +54,7 @@ function setDarkMode(dark: boolean) {
           type="button"
           @click="setDarkMode(true)"
         >
-          Dark
+          {{ t('common.dark') }}
         </button>
         <button
           data-local-counter="home"
@@ -42,14 +62,14 @@ function setDarkMode(dark: boolean) {
           type="button"
           @click="localCount += 1"
         >
-          Local state: {{ localCount }}
+          {{ t('common.localState', { count: localCount }) }}
         </button>
         <RouterLink
           data-nav="login"
           class="rd-8px border border-[var(--border-color)] px-12px py-8px transition-opacity hover:(opacity-80)"
           to="/login"
         >
-          Open login
+          {{ t('common.openLogin') }}
         </RouterLink>
       </div>
     </section>

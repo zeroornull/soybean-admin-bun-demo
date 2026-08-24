@@ -114,3 +114,11 @@
 - **原因**：当前主线没有同一路由多 params 实例需求；提前使用 fullPath 作为无限多实例 id 会把 tab 唯一性和组件缓存唯一性混在一起。非持久化同时避免权限切换、路由删除和旧 query 造成过期 tab。
 - **局部重载**：先把 active component name 临时移出 cache include，等待 KeepAlive prune，再卸载内容；恢复 include 后重新挂载。保持固定 route key，不使用随机 key 累积旧缓存实例，也不调用 `window.location.reload()`。
 - **升级条件**：只有业务明确要求同一详情页同时打开多个 params/query 实例时，才把 tab id 升级为 name + params/query，并单独设计实例级缓存策略。
+
+### D19 · app-store locale 是多库语言状态的唯一写入口
+
+- **日期**：2026-08-24
+- **决策**：支持 `zh-CN` / `en-US`；app store 持有唯一可变 locale，组件只调用 `setLocale/toggleLocale`。同步 watch 统一更新 Vue I18n、dayjs、`<html lang>` 和 `SOY_locale`，Naive UI 通过根 `NConfigProvider` 响应同一状态。
+- **启动**：创建 i18n 前先校验 storage；app store 在 `setupStore` 阶段初始化并同步 locale，之后才完成 router、i18n plugin 和 mount。无效 storage 回退 `zh-CN` 并写回合法值。
+- **路由投影**：RouteMeta、MenuItem、BreadcrumbItem 与 TabItem 保存 `i18nKey/labelKey`，组件渲染时翻译；fallback title/label 只用于缺 key 时兜底，不在切换语言时批量改写 store。
+- **消息完整性**：英文消息使用中文消息形状的深层字符串类型约束；最终再做运行时 flatten 键集对比，不通过静默 fallback 掩盖缺键。

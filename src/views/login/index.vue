@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+import LocaleSwitch from '@/components/locale-switch.vue';
 import { useAuthStore } from '@/store/auth';
 
 defineOptions({ name: 'Login' });
@@ -8,6 +10,7 @@ defineOptions({ name: 'Login' });
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
+const { t } = useI18n();
 const userName = ref('Soybean');
 const password = ref('123456');
 
@@ -37,13 +40,14 @@ async function submitLogin() {
 
 <template>
   <main data-page="login" class="min-h-screen grid place-items-center p-24px">
+    <LocaleSwitch class="fixed right-16px top-16px" />
     <section class="card-wrapper w-full max-w-420px bg-[var(--card-bg)] p-24px">
-      <h1 class="m-0 text-28px font-600">Login</h1>
-      <p class="mb-0 mt-8px">Use the local Mock credentials to start a session.</p>
+      <h1 class="m-0 text-28px font-600">{{ t('login.title') }}</h1>
+      <p class="mb-0 mt-8px">{{ t('login.description') }}</p>
 
       <form data-auth-form class="mt-20px flex flex-col gap-14px" @submit.prevent="submitLogin">
         <label class="flex flex-col gap-6px">
-          <span class="text-14px font-600">User name</span>
+          <span class="text-14px font-600">{{ t('login.userName') }}</span>
           <input
             v-model="userName"
             data-auth-input="userName"
@@ -55,7 +59,7 @@ async function submitLogin() {
         </label>
 
         <label class="flex flex-col gap-6px">
-          <span class="text-14px font-600">Password</span>
+          <span class="text-14px font-600">{{ t('login.password') }}</span>
           <input
             v-model="password"
             data-auth-input="password"
@@ -77,7 +81,7 @@ async function submitLogin() {
           :disabled="authStore.loading"
           type="submit"
         >
-          {{ authStore.loading ? 'Signing in…' : 'Sign in' }}
+          {{ authStore.loading ? t('login.signingIn') : t('login.signIn') }}
         </button>
       </form>
 
@@ -86,7 +90,7 @@ async function submitLogin() {
         class="mt-16px inline-block text-14px text-primary transition-opacity hover:(opacity-80)"
         to="/home"
       >
-        Open protected Home
+        {{ t('login.openProtectedHome') }}
       </RouterLink>
     </section>
   </main>
