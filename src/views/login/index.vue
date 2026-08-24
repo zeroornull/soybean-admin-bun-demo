@@ -1,18 +1,92 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '@/store/auth';
+
 defineOptions({ name: 'Login' });
+
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const userName = ref('Soybean');
+const password = ref('123456');
+
+function getRedirectPath() {
+  const redirect = route.query.redirect;
+
+  if (
+    typeof redirect === 'string' &&
+    redirect.startsWith('/') &&
+    !redirect.startsWith('//') &&
+    !redirect.startsWith('/login')
+  ) {
+    return redirect;
+  }
+
+  return '/home';
+}
+
+async function submitLogin() {
+  const success = await authStore.login(userName.value, password.value);
+
+  if (success) {
+    await router.replace(getRedirectPath());
+  }
+}
 </script>
 
 <template>
   <main data-page="login" class="min-h-screen grid place-items-center p-24px">
-    <section class="card-wrapper w-full max-w-420px bg-[var(--card-bg)] p-24px text-center">
+    <section class="card-wrapper w-full max-w-420px bg-[var(--card-bg)] p-24px">
       <h1 class="m-0 text-28px font-600">Login</h1>
-      <p class="mb-0 mt-8px">The login form will be implemented in R09 and polished in R15.</p>
+      <p class="mb-0 mt-8px">Use the local Mock credentials to start a session.</p>
+
+      <form data-auth-form class="mt-20px flex flex-col gap-14px" @submit.prevent="submitLogin">
+        <label class="flex flex-col gap-6px">
+          <span class="text-14px font-600">User name</span>
+          <input
+            v-model="userName"
+            data-auth-input="userName"
+            class="h-40px rd-8px border border-[var(--border-color)] bg-transparent px-12px outline-none focus:border-primary"
+            autocomplete="username"
+            name="userName"
+            required
+          />
+        </label>
+
+        <label class="flex flex-col gap-6px">
+          <span class="text-14px font-600">Password</span>
+          <input
+            v-model="password"
+            data-auth-input="password"
+            class="h-40px rd-8px border border-[var(--border-color)] bg-transparent px-12px outline-none focus:border-primary"
+            autocomplete="current-password"
+            name="password"
+            required
+            type="password"
+          />
+        </label>
+
+        <p v-if="authStore.authError" data-auth-error class="m-0 text-14px text-red-500" role="alert">
+          {{ authStore.authError }}
+        </p>
+
+        <button
+          data-auth-action="login"
+          class="h-40px rd-8px bg-primary px-12px text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60 hover:(opacity-90)"
+          :disabled="authStore.loading"
+          type="submit"
+        >
+          {{ authStore.loading ? 'Signing in…' : 'Sign in' }}
+        </button>
+      </form>
+
       <RouterLink
         data-nav="home"
-        class="mt-20px inline-block rd-8px bg-primary px-12px py-8px text-white transition-opacity hover:(opacity-90)"
+        class="mt-16px inline-block text-14px text-primary transition-opacity hover:(opacity-80)"
         to="/home"
       >
-        Go home
+        Open protected Home
       </RouterLink>
     </section>
   </main>

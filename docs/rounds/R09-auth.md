@@ -23,8 +23,8 @@
 对齐这些字段和 action：
 
 - `token: ref('')`
-- `userInfo: reactive({ userId, userName, roles, buttons })`
-- `isLogin = computed(() => Boolean(token.value))`
+- `userInfo: ref<UserInfo | null>(null)`
+- `isLogin = computed(() => Boolean(token.value && userInfo.value))`
 - `login(userName, password)`
 - `initSession()`
 - `getUserInfo()`
@@ -62,18 +62,31 @@ request 层只上报协议事件；auth store 负责执行业务收尾：
 
 显示 `userInfo.userName`，并提供退出入口。退出必须走同一个 `resetStore()`，不在组件里分散地删 storage key。
 
-### 6. 临时页面保护
+### 6. 临时受保护路由跳转
 
-R10 守卫完成前，允许 home 在 mounted 时将未登录用户导向 login。R10 通过后必须删掉这个临时分支。
+R10 守卫完成前，`main.ts` 在 `router.isReady()` + `authStore.initSession()` 后检查初始 route；未登录且 `meta.requiresAuth` 时，mount 前导向带 redirect 的 login。R10 通过后必须删掉这个临时分支。
 
 ## 验收
 
-- [ ] 正确账号登录后 token 与 userInfo 同时就绪，header 显示用户名
-- [ ] 错误密码停留在登录页，不留残缺 token
-- [ ] 刷新 `/home` 会调用 getUserInfo 并恢复会话
-- [ ] 伪造或失效 token 最终被清理，不白屏、不死循环
-- [ ] 退出后 auth / route / tab 状态清空，token 从 localStorage 消失
-- [ ] `bun run typecheck` 通过
+- [x] `Soybean/123456` 登录后 access/refresh token 与 userInfo 同时就绪，roles 包含 `R_SUPER`，Header 显示 Soybean
+- [x] 错误密码停留 `/login?redirect=/home`，显示 `Invalid user name or password`，auth/storage 无任何残缺 token
+- [x] 刷新 `/home` 后内存 store 重建，`initSession()` 从 storage 恢复 token，请求 getUserInfo 后 Header 再次显示 Soybean
+- [x] 冷启动伪造 token 时 getUserInfo 返回 `8888/Session expired`，会话回调清理 storage/state 并进入 `/login?redirect=/home?invalid=1`，无白屏/循环
+- [x] 退出前人工写入 route menus/tab，点 Header Logout 后 auth/route/tab 恢复默认，access/refresh storage 均消失
+- [x] `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 通过，构建无 warning
+
+R09 实际证据（2026-08-24）：
+
+- auth-store 现包含 token/refreshToken/userInfo/loading/initializing/authError/isLogin 与 login/getUserInfo/initSession/resetStore；`isLogin` 要求 token + userInfo 同时完整；
+- login 顺序为 fetchLogin → 同步 Pinia/storage access+refresh token → fetchGetUserInfo → 确认完整会话；userInfo 失败会清理已写 token；
+- `setupStore()` 创建空默认 auth-store 后注册 R08 会话回调，logout/modal/expired 目前都收口到同一 `resetStore({ reason })`；R14/R15 提供 UI provider 后再区分弹窗交互；
+- resetStore 清理 auth memory + 双 storage key，在 action 体内延迟取 route/tab store 并 `$reset()`，然后导向 login；不存在 auth → route → tab → auth 递归；
+- `main.ts` 启动顺序为 setupStore → setupRouter/isReady → initSession → 临时 requiresAuth 跳转 → mount，未写 `beforeEach`；
+- 最小 Login 表单含用户名/密码/submit/loading/error，过滤外部、`//` 与 `/login` redirect，密码从不写入 storage；
+- Mock getUserInfo 现只接受 `Bearer mock-access-token` / `Bearer mock-refreshed-access-token`，其他/空 header 返回 `8888`；另加 `/test/echo-auth` 保留 R08 header 回显边界；
+- Chrome 完整流程实测：无 token 直达 Home → 错密码 → 正确登录 → 刷新恢复 → 写入 route/tab → Logout 全清 → 伪 token 冷启动清理，Runtime exception 监听为空；
+- 同一 tick 连续两次 `initSession()` 时，Pinia 会包装 action 返回 Promise，所以外层引用不相等；但 Mock 新日志只出现一次 `GET /auth/getUserInfo`，内部 initSessionPromise 单飞成立；
+- 生产构建转换 112 个模块，request/auth 已进入主应用；收窄 store barrel 与静态 router import 后构建无 `INEFFECTIVE_DYNAMIC_IMPORT` warning。
 
 ## 常见坑
 

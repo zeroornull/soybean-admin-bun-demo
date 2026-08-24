@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppStore } from '@/store';
+import { useAppStore } from '@/store/app';
 import LayoutContent from './modules/content.vue';
 import LayoutHeader from './modules/header.vue';
 import LayoutSider from './modules/sider.vue';

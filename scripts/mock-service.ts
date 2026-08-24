@@ -83,6 +83,20 @@ const server = createServer(async (request, response) => {
   }
 
   if (request.method === 'GET' && url.pathname === '/auth/getUserInfo') {
+    const authorization = request.headers.authorization || null;
+    const authenticated = ['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(
+      authorization || ''
+    );
+
+    if (!authenticated) {
+      sendJson(response, 200, {
+        code: '8888',
+        message: 'Session expired',
+        data: null
+      });
+      return;
+    }
+
     sendJson(response, 200, {
       code: '0000',
       message: 'ok',
@@ -91,6 +105,17 @@ const server = createServer(async (request, response) => {
         userName: 'Soybean',
         roles: ['R_SUPER'],
         buttons: ['B_CODE1', 'B_CODE2'],
+        authorization
+      }
+    });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/test/echo-auth') {
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: {
         authorization: request.headers.authorization || null
       }
     });

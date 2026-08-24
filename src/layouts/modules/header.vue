@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/store/auth';
 
 defineOptions({ name: 'LayoutHeader' });
 
@@ -13,7 +14,12 @@ const emit = defineEmits<{
 }>();
 
 const route = useRoute();
+const authStore = useAuthStore();
 const pageTitle = computed(() => String(route.meta.title ?? route.name ?? 'Soybean Admin'));
+
+async function logout() {
+  await authStore.resetStore();
+}
 </script>
 
 <template>
@@ -34,6 +40,17 @@ const pageTitle = computed(() => String(route.meta.title ?? route.name ?? 'Soybe
       <strong data-layout-title class="truncate text-16px">{{ pageTitle }}</strong>
     </div>
 
-    <span class="text-13px opacity-60 max-sm:hidden">Vertical layout</span>
+    <div v-if="authStore.isLogin" class="flex items-center gap-10px">
+      <span data-auth-user class="text-14px max-sm:hidden">{{ authStore.userInfo?.userName }}</span>
+      <button
+        data-auth-action="logout"
+        class="h-34px rd-8px border border-[var(--border-color)] bg-transparent px-10px text-13px transition-opacity hover:(opacity-80)"
+        type="button"
+        @click="logout"
+      >
+        Logout
+      </button>
+    </div>
+    <span v-else class="text-13px opacity-60 max-sm:hidden">Vertical layout</span>
   </header>
 </template>

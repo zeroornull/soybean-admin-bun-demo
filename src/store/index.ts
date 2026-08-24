@@ -1,13 +1,8 @@
 import type { App } from 'vue';
 import { createPinia } from 'pinia';
+import { setRequestSessionHandlers } from '@/service/request';
+import { useAuthStore } from './auth';
 import { resetSetupStore } from './plugins/reset';
-
-export * from './app';
-export * from './auth';
-export * from './ids';
-export * from './route';
-export * from './tab';
-export * from './theme';
 
 export const pinia = createPinia();
 
@@ -15,4 +10,13 @@ pinia.use(resetSetupStore);
 
 export function setupStore(app: App) {
   app.use(pinia);
+
+  const authStore = useAuthStore(pinia);
+  const resetSession = (reason: string) => authStore.resetStore({ reason });
+
+  setRequestSessionHandlers({
+    onLogout: error => resetSession(error.message),
+    onModalLogout: error => resetSession(error.message),
+    onTokenExpired: error => resetSession(error.message)
+  });
 }
