@@ -32,10 +32,7 @@ bun add axios
 ### 2. 先定义返回协议
 
 ```ts
-export interface FlatResult<T> {
-  data: T | null;
-  error: RequestError | null;
-}
+export type FlatResult<T> = { data: T; error: null } | { data: null; error: RequestError };
 
 export interface RequestError {
   kind: 'network' | 'http' | 'backend' | 'cancelled';
@@ -89,12 +86,24 @@ API 返回类型不要使用 `any`。
 
 ## 验收
 
-- [ ] 正确凭证返回 `{ data, error: null }`
-- [ ] 错误凭证返回 `{ data: null, error }`，页面不出现 Uncaught
-- [ ] 断网、500 和业务失败码能区分 `kind`
-- [ ] 有 token 时请求头正确，无 token 时不发空的 Authorization
-- [ ] request 核心不 import router 或 Vue 页面
-- [ ] `bun run typecheck` 通过
+- [x] `Soybean/123456` 返回 `{ data: { token, refreshToken }, error: null }`，互斥类型不允许 data/error 同时有值或同时为 null
+- [x] 错误凭证返回 `{ data: null, error: { kind: 'backend', code: '1001' } }`，Chrome Runtime 无 Uncaught
+- [x] 断网为 `network/ERR_NETWORK`，HTTP 500/404 为 `http` + status/code，业务失败为 `backend`，AbortController 为 `cancelled/ERR_CANCELED`
+- [x] 无 token/清理 token 时 Mock 收到 `authorization=null`，storage token 时收到 `Bearer storage-token`，调用方显式 `Authorization` 不被覆盖
+- [x] request 核心不 import Router、Pinia、store 或 Vue 页面，不调 `window.location`
+- [x] `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 通过
+
+R08 实际证据（2026-08-24）：
+
+- 安装 Axios `1.19.0`，未安装 axios-retry；`FlatResult<T>` 使用成功/失败联合类型，临时构造非法双值/双 null 时 vue-tsc 拒绝；
+- `createFlatRequest` 配置 baseURL/10s timeout/JSON header，请求拦截器仅在 token 非空且调用方没传 Authorization 时添加 `Bearer`；
+- 错误分类实测：backend `1001/1002/1234`、HTTP `500/404`、network `ERR_NETWORK`、cancelled `ERR_CANCELED`；所有失败都保持 `data=null`；
+- storage key 为 `SOY_token` / `SOY_refreshToken`，无 token 不发空 header，有 token 发 `Bearer storage-token`，显式 `Explicit token` 原样到达 Mock；
+- auth API 已提供 `fetchLogin`、`fetchGetUserInfo`、`fetchRefreshToken`、`fetchCustomBackendError`；refresh 正确凭证返回新 mock token，错误凭证为 backend `1002`；
+- 会话码回调实测：`8888 → onLogout`、`7777 → onModalLogout`、`9999 → onTokenExpired`，普通 `1234` 不触发；回调自身抛错时 `8889` 仍返回 backend flat error；
+- 本地 Mock 新增 getUserInfo/refresh/error/HTTP 500/delay 路由，日志确认请求路径均已去除 `/proxy-default`；
+- Chrome 动态 import API/request/storage 并执行全部契约，Runtime exception 监听为空；
+- 生产构建转换 55 个当前应用模块；request/API 尚未被页面 import，所以 Axios 代码按预期被 tree-shake，R09 接入 auth store 后进入主 bundle。
 
 ## 常见坑
 

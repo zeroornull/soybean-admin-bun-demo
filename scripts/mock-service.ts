@@ -82,6 +82,86 @@ const server = createServer(async (request, response) => {
     }
   }
 
+  if (request.method === 'GET' && url.pathname === '/auth/getUserInfo') {
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: {
+        userId: '1',
+        userName: 'Soybean',
+        roles: ['R_SUPER'],
+        buttons: ['B_CODE1', 'B_CODE2'],
+        authorization: request.headers.authorization || null
+      }
+    });
+    return;
+  }
+
+  if (request.method === 'POST' && url.pathname === '/auth/refreshToken') {
+    try {
+      const body = await readJson(request);
+
+      if (body.refreshToken === 'mock-refresh-token') {
+        sendJson(response, 200, {
+          code: '0000',
+          message: 'ok',
+          data: {
+            token: 'mock-refreshed-access-token',
+            refreshToken: 'mock-refreshed-token'
+          }
+        });
+        return;
+      }
+
+      sendJson(response, 200, {
+        code: '1002',
+        message: 'Invalid refresh token',
+        data: null
+      });
+      return;
+    } catch {
+      sendJson(response, 400, {
+        code: '4000',
+        message: 'Invalid JSON body',
+        data: null
+      });
+      return;
+    }
+  }
+
+  if (request.method === 'GET' && url.pathname === '/auth/error') {
+    const code = url.searchParams.get('code') || '1000';
+
+    sendJson(response, 200, {
+      code,
+      message: url.searchParams.get('message') || `Backend error ${code}`,
+      data: null
+    });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/test/http-500') {
+    sendJson(response, 500, {
+      code: '5000',
+      message: 'Mock HTTP 500',
+      data: null
+    });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/test/delay') {
+    const requestedDelay = Number(url.searchParams.get('ms') || 250);
+    const delay = Number.isFinite(requestedDelay) ? Math.min(Math.max(requestedDelay, 0), 5_000) : 250;
+
+    await new Promise(resolve => setTimeout(resolve, delay));
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: { delay }
+    });
+    return;
+  }
+
   sendJson(response, 404, {
     code: '4040',
     message: 'Mock route not found',
