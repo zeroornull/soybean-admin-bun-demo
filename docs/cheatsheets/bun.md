@@ -28,13 +28,14 @@
 ```json
 {
   "scripts": {
-    "dev": "vite --mode test",
+    "dev": "bun scripts/dev.ts",
+    "dev:app": "vite --mode test",
     "build": "vite build --mode prod"
   }
 }
 ```
 
-`bun run dev` 会找 `node_modules/.bin/vite`。不必写成 `bunx vite`。
+`bun run dev` 由仓库脚本先启动或复用本地 Mock，再从 `node_modules/.bin` 启动 Vite；`bun run dev:app` 只启动 Vite，供分步排障。不必写成 `bunx vite`。
 
 ## 不要做的事
 

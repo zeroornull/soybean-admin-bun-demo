@@ -28,9 +28,12 @@ pnpm dev
 
 ```bash
 bun install
-bun run mock # 终端 1：本地协议 Mock，默认 127.0.0.1:19007
-bun run dev  # 终端 2：Vite，通过 /proxy-default 转发
+bun run dev
 ```
+
+`bun run dev` 会先检查 `127.0.0.1:19007`：本地 Mock 未运行时自动启动，已经运行时直接复用；随后启动 Vite，并通过 `/proxy-default` 转发请求。按 `Ctrl+C` 时只清理本次命令创建的进程，不会关闭预先启动的 Mock。
+
+需要分开排查服务时，可在两个终端分别运行 `bun run mock` 与 `bun run dev:app`。
 
 开发端口从 `19528` 起步，preview 端口从 `19726` 起步。若起始端口被占用，Vite 按默认行为自动尝试后续端口，启动时以终端打印的 Local URL 为准。
 

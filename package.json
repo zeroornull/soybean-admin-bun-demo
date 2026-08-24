@@ -3,7 +3,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite --mode test",
+    "dev": "bun scripts/dev.ts",
+    "dev:app": "vite --mode test",
     "build": "vite build --mode prod",
     "mock": "bun scripts/mock-service.ts",
     "preview": "vite preview",

@@ -83,10 +83,12 @@ interface ImportMetaEnv {
 ### 5. 启动本地协议 Mock
 
 ```bash
-bun run mock
+bun run dev
 ```
 
-默认监听 `127.0.0.1:19007`，提供 `GET /health` 与 `POST /auth/login`。正确凭证为 `Soybean / 123456`，只返回明确的模拟 token，不包含任何真实 secret。
+默认开发命令会先检查 `127.0.0.1:19007/health`：Mock 未运行时自动启动，已经运行时复用；Mock 就绪后再启动 Vite。按 `Ctrl+C` 时只关闭本次命令创建的子进程。需要独立定位问题时，仍可在两个终端分别运行 `bun run mock` 与 `bun run dev:app`。
+
+Mock 默认监听 `127.0.0.1:19007`，提供 `GET /health` 与 `POST /auth/login`。正确凭证为 `Soybean / 123456`，只返回明确的模拟 token，不包含任何真实 secret。
 
 ### 6. 不经 Axios 验证连通性
 
@@ -117,11 +119,13 @@ R07 实际证据（2026-08-24）：
 - Chrome Fetch 实测 proxy correct/wrong 和跨源 direct health 全部成功，Performance Resource URL 明确为同源 `/proxy-default/auth/login`；
 - `ViteTypeOptions.strictImportMetaEnv` 已启用，未声明 env 产生 `Property 'VITE_NOT_DECLARED' does not exist on type 'ImportMetaEnv'`；
 - 生产构建转换 55 个模块，`bun install --frozen-lockfile`、typecheck、build 通过，未引入 Axios、未将 secret 写入 env。
+- 登录实测发现只启动 Vite 时 proxy 会因 `19007` 无监听而报 `ECONNREFUSED`；后续新增 `scripts/dev.ts`，让 `bun run dev` 自动启动或复用 Mock，再启动 Vite，决定见 D17。
 
 ## 常见坑
 
 - **proxy 前缀重复**：baseURL 与 API path 都拼了 `/proxy-default`。
-- **Mock 失效当成代码错**：先直接访问 Mock 域名验证外部状态，再查 Vite proxy。
+- **单独启动 Vite 导致 `ECONNREFUSED 127.0.0.1:19007`**：默认使用 `bun run dev`；只有分步排障时才单独运行 `bun run dev:app`，并先确认 `bun run mock` 已启动。
+- **Mock 失效当成代码错**：先直接访问 Mock 的 `/health` 验证服务状态，再查 Vite proxy。
 - **将 secret 放进 `VITE_*`**：它会被打包到浏览器代码中。
 - **mode 与 `NODE_ENV` 混淆**：`--mode test` 决定 Vite env 文件，不等于把整个运行时变成 Node test 环境。
 

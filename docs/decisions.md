@@ -98,3 +98,11 @@
 - **协议**：`GET /health`；`POST /auth/login`，`Soybean/123456` 返回 `0000`，其他凭证返回 `1001`；允许 CORS，只使用明确的 mock token 文字。
 - **验证**：Vite test proxy target/rewrite、curl direct/proxy、Chrome 同源 proxy/跨源 direct fetch 均通过，Mock 日志收到的是去前缀后的 `/auth/login`。
 - **后续**：R08 在该协议上建 request 层；R09 扩展 userInfo/refresh 接口；R21 再决定真实生产 baseURL，不将 19008 当成最终部署地址。
+
+### D17 · `bun run dev` 自动编排本地 Mock 与 Vite
+
+- **日期**：2026-08-24
+- **决策**：默认开发命令先探测 `127.0.0.1:19007/health`；服务不存在时启动仓库内 Mock，存在时复用，然后启动 Vite。保留 `bun run mock` 与 `bun run dev:app` 供分步排障。
+- **原因**：只启动 Vite 时，浏览器请求虽能到达 proxy，但目标端口没有 Mock 监听，登录会稳定失败并报 `ECONNREFUSED 127.0.0.1:19007`；默认命令应建立完整的本地开发依赖链。
+- **进程边界**：编排器只关闭自己启动的 Mock/Vite；预先存在的 Mock 不归它所有，退出时不得误杀。Mock 或 Vite 子进程意外退出时，清理另一条自有进程并以失败状态结束。
+- **实现**：使用 Bun/Node 内置的 `child_process`、`fetch` 与信号处理，不新增并发运行依赖。

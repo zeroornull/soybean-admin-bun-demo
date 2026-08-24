@@ -73,7 +73,7 @@ Pinia 4 是 ESM-only，并要求 `@vue/devtools-api` 作为 peer。原项目的 
 | 能力 | 决策 |
 | --- | --- |
 | 包管理 | **换成 Bun**。lockfile 用 `bun.lock`（文本）。 |
-| 运行 dev/build | `bun run dev` 调 Vite，不必用 `bun --bun vite` 强行换 runtime。 |
+| 运行 dev/build | `bun run dev` 用 Bun 脚本编排本地 Mock，再按常规 Node 路径启动 Vite；不必用 `bun --bun vite` 强行换 runtime。 |
 | UI | **保留 Naive UI** |
 | CSS | **保留 UnoCSS** |
 | 路由库 | vue-router 5；**Elegant Router 第 9 轮以后可选** |
