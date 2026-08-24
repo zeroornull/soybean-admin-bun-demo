@@ -1,0 +1,21 @@
+{
+  "name": "soybean-admin",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite --mode test",
+    "build": "vite build --mode prod",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "vue": "^3.5.41"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "typescript": "6",
+    "vite": "^8.2.2",
+    "vue-tsc": "^3.3.11"
+  }
+}
