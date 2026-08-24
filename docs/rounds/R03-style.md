@@ -114,9 +114,19 @@ App.vue 上放两个按钮：给 `document.documentElement` 加/删 `dark`。R14
 
 ## 验收
 
-- [ ] 工具类（padding、flex、圆角）生效
-- [ ] 切 `html.dark` 后面板背景变化
-- [ ] 未引入任何 `.vue` 的 `<style scoped>` 也能给布局类名
+- [x] 工具类生效：真实 Chrome 计算得到 `display:grid`、`place-items:center`、`padding:24px`、`border-radius:8px`，flex/gap 也已生成规则
+- [x] 点击 Dark 后 `html.dark` 生效，布局/面板计算背景切为 `rgb(17, 24, 39)` / `rgb(31, 41, 55)`，点击 Light 可恢复
+- [x] `.vue` 中未引入 `<style scoped>`，布局、间距、圆角、阴影和主题色均由 UnoCSS + global CSS 变量提供
+
+R03 实际证据（2026-08-24）：
+
+- 安装 UnoCSS `66.8.1`，Vite 使用 `unocss/vite`，assets 引入 `virtual:uno.css` → reset → global；
+- `uno.config.ts` 启用 `presetWind3({ dark: 'class' })`、directives/variant-group transformers，并排除 `node_modules/dist/legacy/docs`；
+- `primary` 映射到 `var(--primary)`，`card-wrapper` 生成 8px 圆角与阴影；
+- 亮色变量为 layout `#f6f9fb`、card `#ffffff`、primary `#646cff`；暗色为 `#111827`、`#1f2937`、`#7c83ff`；
+- 生产构建转换 17 个模块，生成约 5.31 kB CSS，其中已检出 padding/grid/place-items/radius/shadow/primary 规则；
+- Chrome DevTools Protocol 实际点击 Dark/Light，并读取 `html.dark`、CSS 变量与 computed style，三段状态全部通过；
+- `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 均通过，未引入 Sass/Naive/Pinia/Router/i18n。
 
 ## 常见坑
 

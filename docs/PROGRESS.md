@@ -28,7 +28,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R00 | 环境准备 | done | 2026-08-24 | Node 22.23.2、Bun 1.4.0、pnpm 11.21.0；legacy frozen install + Vite HTTP 200 + typecheck 通过；使用默认 npm registry，不建 `bunfig.toml` |
 | R01 | 脚手架 | done | 2026-08-24 | 手工创建 Vite + Vue + TS6 最小应用；`bun.lock`、typecheck、build 与 dev HTTP 烟雾全通过；D14/D15 后 dev/preview 改为高位起点 19528/19726，允许自动递增 |
 | R02 | 应用启动链 | done | 2026-08-24 | assets/reset/loading/plugins 与异步 `setupApp` 已建立；isolated loading + headless Chrome mount 替换 + typecheck/build 全通过；已在高位端口复验 |
-| R03 | 样式系统 | in-progress | | 正在接入 UnoCSS、global CSS 变量与 `html.dark` 亮暗切换 |
+| R03 | 样式系统 | done | 2026-08-24 | UnoCSS 66.8.1 + reset/global/CSS 变量 + `html.dark` 已接入；build CSS 规则与 Chrome Dark/Light 计算样式全验证 |
 | R04 | 路由基础 | pending | | |
 | R05 | 布局骨架 | pending | | |
 | R06 | Pinia 状态基座 | pending | | |
@@ -77,7 +77,7 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | vite | 8.2.2 | R01 |
 | @vitejs/plugin-vue | 6.0.8 | R01 |
 | vue-tsc | 3.3.11 | R01 |
-| unocss | | R03 |
+| unocss | 66.8.1 | R03 |
 | vue-router | | R04 |
 | pinia | | R06 |
 | axios | | R08 |
