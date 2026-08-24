@@ -1,28 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useAppStore } from '@/store';
 import LayoutContent from './modules/content.vue';
 import LayoutHeader from './modules/header.vue';
 import LayoutSider from './modules/sider.vue';
 
 defineOptions({ name: 'BaseLayout' });
 
-const siderCollapsed = ref(false);
-
-function toggleSider() {
-  siderCollapsed.value = !siderCollapsed.value;
-}
+const appStore = useAppStore();
 </script>
 
 <template>
   <div
     data-layout="base"
-    :data-sider-collapsed="siderCollapsed"
+    :data-sider-collapsed="appStore.siderCollapse"
     class="h-screen flex overflow-hidden bg-[var(--layout-bg)] text-[var(--text-color)]"
   >
-    <LayoutSider :collapsed="siderCollapsed" />
+    <LayoutSider :collapsed="appStore.siderCollapse" />
 
     <section data-layout-main class="min-w-0 flex flex-1 flex-col">
-      <LayoutHeader :collapsed="siderCollapsed" @toggle-sider="toggleSider" />
+      <LayoutHeader :collapsed="appStore.siderCollapse" @toggle-sider="appStore.toggleSider" />
       <LayoutContent />
     </section>
   </div>

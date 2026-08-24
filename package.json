@@ -9,6 +9,8 @@
     "typecheck": "vue-tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
+    "@vue/devtools-api": "^8.2.1",
+    "pinia": "^4.0.3",
     "vue": "^3.5.41",
     "vue-router": "^5.2.0"
   },

@@ -83,10 +83,21 @@ context.store.$reset = () => {
 
 ## 验收
 
-- [ ] 点击折叠，侧栏变化
-- [ ] 在 Vue DevTools 里能看到 app-store
-- [ ] 在控制台 `useAppStore().$reset()` 后折叠恢复默认（需在组件外先拿到 pinia 实例，或临时做个按钮）
-- [ ] 五个 store 文件都在，职责注释写清
+- [x] 点击折叠后 app-store 变为 true，侧栏 220→64px；进入 Login 卸载 BaseLayout 后状态仍保留，返回 Home 仍是 64px
+- [x] 真实 Chrome 中 `pinia.state.value` 先出现 `app-store`，实例化五个 store 后包含 app/auth/theme/route/tab 全部 store ID
+- [x] 浏览器控制边界动态 import `useAppStore()` 并调用 `$reset()` 后，state 恢复 false，UI 同步回到 220px
+- [x] `app.ts`、`auth.ts`、`theme.ts`、`route.ts`、`tab.ts` 五个 setup store 都已建立，仅 app 有本轮所需 action，其余只定义状态与后续职责
+
+R06 实际证据（2026-08-24）：
+
+- 安装 Pinia `4.0.3` 与 peer `@vue/devtools-api 8.2.1`，当前 Vue 3.5.41 / TypeScript 6.0.3 满足 peer 约束；
+- `src/store/ids.ts` 定义 `app-store/auth-store/theme-store/route-store/tab-store`，reset 插件只对这五个 ID 生效；
+- `resetSetupStore` 在 store 创建时 JSON clone 初始 `$state`，每次 `$reset()` 再 clone 并 `$patch`，避免默认数组/对象被后续修改；
+- `main.ts` 启动顺序已变为 `createApp → setupStore → await setupRouter → mount`；BaseLayout 不再有本地 collapse ref，只消费 `useAppStore()`；
+- Chrome 实测跨路由保留 app-store：Home 折叠 64px → Login 仍 true → Home 仍 64px；
+- 五 store 实测修改 token/user/themeColor/menus/tabs 等状态后逐一 `$reset()`，恢复 `false/''/null/#646cff/[]/[]`；menus/tabs 二次修改再 reset 仍恢复空数组；
+- 生产构建转换 55 个模块，`bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 均通过；
+- 本轮未做 localStorage 持久化，未写登录/API/路由/tab/theme 未来 action，未使用 `throw new Error('Rxx')` 占位。
 
 ## 常见坑
 
