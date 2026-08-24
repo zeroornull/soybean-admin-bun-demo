@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R06 已完成，下一轮为 R07 环境变量、代理与 Mock 连通。**
+当前进度：**R00–R07 已完成，下一轮为 R08 HTTP 请求核心。**
 
 ## 对照运行原项目
 
@@ -28,7 +28,8 @@ pnpm dev
 
 ```bash
 bun install
-bun run dev
+bun run mock # 终端 1：本地协议 Mock，默认 127.0.0.1:19007
+bun run dev  # 终端 2：Vite，通过 /proxy-default 转发
 ```
 
 开发端口从 `19528` 起步，preview 端口从 `19726` 起步。若起始端口被占用，Vite 按默认行为自动尝试后续端口，启动时以终端打印的 Local URL 为准。

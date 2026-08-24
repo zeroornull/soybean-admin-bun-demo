@@ -89,3 +89,12 @@
 - **原因**：高位端口已避开当前 Windows excluded ranges，但未来仍可能被其他开发服务或 IDE 转发占用；自动递增能提高启动容错性。
 - **验证**：19528 已有开发服务、Windows Cursor 又监听 19529 时，第二个 dev 连续跳过两个端口，自动选择 19530 并 HTTP 200；临时占用 19726 时，preview 自动选择 19727，HTML 与生产 JS 均 HTTP 200。
 - **运行约定**：实际 URL 以 Vite 启动时打印的 `Local` 地址为准，不在脚本或文档中假设必然是起始端口。
+
+### D16 · 放弃需 Token 的 Apifox 云 Mock，改用本地协议 Mock
+
+- **日期**：2026-08-24
+- **决策**：`.env.test` 指向 `127.0.0.1:19007`，`.env.prod` 暂指向 `127.0.0.1:19008` 并关闭 dev proxy；使用 `bun run mock` 启动仓库内的 Node HTTP 协议服务。
+- **原因**：legacy Apifox 项目已开启 Token 鉴权，正确/错误登录都返回 HTTP 500 + `apifoxError 401`；不将云 Mock token 写入仓库或 `VITE_*`。
+- **协议**：`GET /health`；`POST /auth/login`，`Soybean/123456` 返回 `0000`，其他凭证返回 `1001`；允许 CORS，只使用明确的 mock token 文字。
+- **验证**：Vite test proxy target/rewrite、curl direct/proxy、Chrome 同源 proxy/跨源 direct fetch 均通过，Mock 日志收到的是去前缀后的 `/auth/login`。
+- **后续**：R08 在该协议上建 request 层；R09 扩展 userInfo/refresh 接口；R21 再决定真实生产 baseURL，不将 19008 当成最终部署地址。

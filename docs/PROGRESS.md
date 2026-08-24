@@ -32,7 +32,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R04 | 路由基础 | done | 2026-08-24 | vue-router 5.2.0 + history/hash + base/blank 父子 RouterView + Home/Login/404 已落地；两种模式真实 Chrome 全路径通过 |
 | R05 | 布局骨架 | done | 2026-08-24 | header/sider/content vertical shell + 本地 220/64px 折叠 + Home/Login 硬编码导航已落地；桌面/blank/360px 真实 Chrome 全通过 |
 | R06 | Pinia 状态基座 | done | 2026-08-24 | Pinia 4.0.3 + devtools peer + 五 setup store + 受限 `$reset` 已落地；侧栏跨路由保留与五 store 双次 reset 真实 Chrome 全通过 |
-| R07 | 环境变量、代理与 Mock | pending | | |
+| R07 | 环境变量、代理与 Mock | done | 2026-08-24 | strict env + test/prod loadEnv + `/proxy-default` rewrite + 本地 19007 Mock 已落地；curl/Chrome direct+proxy correct/wrong/CORS 全通过 |
 | R08 | HTTP 请求核心 | pending | | |
 | R09 | 登录、会话恢复与登出 | pending | | |
 | R10 | 导航守卫与静态权限 | pending | | |

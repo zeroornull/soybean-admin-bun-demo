@@ -36,13 +36,18 @@ VITE_SERVICE_EXPIRED_TOKEN_CODES=9999,9998,3333
 VITE_STORAGE_PREFIX=SOY_
 ```
 
-`.env.test` / `.env.prod` 只放环境差异：
+`.env.test` / `.env.prod` 只放环境差异。当前学习仓库使用本地协议 Mock：
 
 ```ini
-VITE_SERVICE_BASE_URL=https://mock.apifox.cn/m1/3109515-0-default
+# .env.test
+VITE_SERVICE_BASE_URL=http://127.0.0.1:19007
+
+# .env.prod（R21 再定最终部署地址）
+VITE_SERVICE_BASE_URL=http://127.0.0.1:19008
+VITE_HTTP_PROXY=N
 ```
 
-Mock 地址可能失效。实际动手时以 legacy 当时能用的地址为准，若替换了服务，记到 `docs/decisions.md`。
+legacy 的 Apifox 地址目前强制 Token 鉴权，不能在仓库里写凭证。替换为本地 Mock 的原因、端口和协议见 `docs/decisions.md` D16。
 
 ### 2. 给环境变量建类型边界
 
@@ -75,7 +80,15 @@ interface ImportMetaEnv {
 
 先只做单服务；多服务 baseURL 是加分项，不要在这一轮将配置抽象成复杂的通用系统。
 
-### 5. 不经 Axios 验证连通性
+### 5. 启动本地协议 Mock
+
+```bash
+bun run mock
+```
+
+默认监听 `127.0.0.1:19007`，提供 `GET /health` 与 `POST /auth/login`。正确凭证为 `Soybean / 123456`，只返回明确的模拟 token，不包含任何真实 secret。
+
+### 6. 不经 Axios 验证连通性
 
 临时用 `fetch('/proxy-default/auth/login', ...)` 或浏览器 Network 面板确认：
 
@@ -88,11 +101,22 @@ interface ImportMetaEnv {
 
 ## 验收
 
-- [ ] `bun run dev` 实际加载 `.env.test`，不误读 `.env.prod`
-- [ ] `/proxy-default/auth/login` 能到达 Mock，Network 面板无 CORS 错误
-- [ ] 关闭 proxy 时能说清直连 baseURL 与代理 baseURL 的差别
-- [ ] 未声明的 `import.meta.env.VITE_XXX` 会在类型检查中报错
-- [ ] `bun run typecheck` 通过
+- [x] `loadEnv('test')` 实际得到 `19007/Y`，`loadEnv('prod')` 得到 `19008/N`，共享成功码/路由/存储变量一致
+- [x] Chrome 从 19528 请求 `/proxy-default/auth/login`，正确/错误凭证均 HTTP 200 + JSON，无 CORS 异常，Mock 实际日志只收到 `/auth/login`
+- [x] 直连 `19007/health` 为跨源请求，依赖 Mock CORS；代理请求从浏览器看是同源 `19528/proxy-default/*`，由 Vite 转发并 rewrite
+- [x] 临时访问 `import.meta.env.VITE_NOT_DECLARED` 时 vue-tsc 报 TS2339，删除临时文件后正常 typecheck 恢复通过
+- [x] `bun run typecheck` 与 `bun run build` 通过，prod bundle 未注入未使用的 service URL
+
+R07 实际证据（2026-08-24）：
+
+- 直连 legacy Apifox 域名的正确/错误登录都返回 HTTP 500，正文为 `apifoxError.code=401` 且明确要求 Token；域名/TLS/DNS 可达，是服务鉴权政策变更，不是代理或 CORS 故障；
+- 新增 `scripts/mock-service.ts`，使用 Node `http` 协议 API，无新 runtime 依赖；`bun run mock` 启动 test Mock，prod 预留端口 19008；
+- 正确登录返回 `code=0000` + mock access/refresh token，错误登录返回 `code=1001` + `data=null`，非法 JSON 为 HTTP 400，未知路径为 404 协议 JSON；
+- `resolveConfig` 实测 test proxy 只有 `/proxy-default`，target 为 19007，rewrite 将 `/proxy-default/auth/login` 变为 `/auth/login`；prod `server.proxy` 为 `undefined`；
+- curl direct/proxy health/correct/wrong 全部返回结构化 JSON，响应保留 `Content-Type: application/json` 与 `Access-Control-Allow-Origin: *`；
+- Chrome Fetch 实测 proxy correct/wrong 和跨源 direct health 全部成功，Performance Resource URL 明确为同源 `/proxy-default/auth/login`；
+- `ViteTypeOptions.strictImportMetaEnv` 已启用，未声明 env 产生 `Property 'VITE_NOT_DECLARED' does not exist on type 'ImportMetaEnv'`；
+- 生产构建转换 55 个模块，`bun install --frozen-lockfile`、typecheck、build 通过，未引入 Axios、未将 secret 写入 env。
 
 ## 常见坑
 

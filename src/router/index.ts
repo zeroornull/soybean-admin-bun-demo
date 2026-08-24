@@ -1,11 +1,20 @@
 import type { App } from 'vue';
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import {
+  type RouterHistory,
+  createMemoryHistory,
+  createRouter,
+  createWebHashHistory,
+  createWebHistory
+} from 'vue-router';
 import { routes } from './routes';
 
-const history =
-  import.meta.env.VITE_ROUTER_HISTORY_MODE === 'hash'
-    ? createWebHashHistory(import.meta.env.VITE_BASE_URL)
-    : createWebHistory(import.meta.env.VITE_BASE_URL);
+const historyCreatorMap: Record<ImportMetaEnv['VITE_ROUTER_HISTORY_MODE'], (base?: string) => RouterHistory> = {
+  hash: createWebHashHistory,
+  history: createWebHistory,
+  memory: createMemoryHistory
+};
+
+const history = historyCreatorMap[import.meta.env.VITE_ROUTER_HISTORY_MODE](import.meta.env.VITE_BASE_URL);
 
 export const router = createRouter({
   history,
