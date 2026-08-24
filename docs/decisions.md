@@ -130,3 +130,20 @@
 - **首屏**：theme store 在 `setupStore` 阶段同步 DOM；此外 `index.html` head 在 CSS/应用脚本前预读合法 scheme 并设置 `html.dark/colorScheme`，避免已持久化 dark 首屏从亮色过渡。
 - **颜色**：应用内纯函数只生成当前消费者需要的 primary default/hover/pressed/suppl，通过与白/黑的确定比例混色；同时写入 CSS vars 和 Naive common overrides。R19 锁输入输出，R20 再决定是否抽内部包。
 - **重置**：reset 恢复 `light/#646cff` 并清除两个 theme storage key；locale、auth 和其他 storage 不受影响。非法 scheme/color 启动时回退并写回合法值。
+
+### D21 · 登录失败保留当前表单值，但不持久化用户名或密码
+
+- **日期**：2026-08-24
+- **决策**：登录 model 只存在 Login 组件内存；错误凭证和网络失败后保留用户名与密码，便于用户修正/重试；成功离开页面或重新创建 Login 组件时自然销毁。主线不做 remember username，绝不写 password storage。
+- **原因**：请求失败时清空密码会增加重试成本，而明文持久化会扩大泄露边界。当前本地 Mock 默认值仅用于学习演示，不改变“用户输入不持久化”的边界。
+- **提交状态**：NForm 先完成 required 校验；auth store 的 `loading` 继续是实际登录请求的单一防重入状态，页面只投影为 NButton loading/disabled。页面不复制 token、request 或 redirect 逻辑。
+- **错误呈现**：已知错误凭证映射为明确的双语消息，其他 backend/http/network 统一为可操作的网络/Mock 提示；原始 request error 仍由 auth/request 层保留，不把英文后端消息直接当 UI 文案。
+
+### D22 · KeepAlive 切换保留 ECharts，真正 unmount 才 dispose
+
+- **日期**：2026-08-24
+- **决策**：Home 被 KeepAlive deactivated 时保留 ECharts instance 与页面局部状态，activated 后 nextTick resize；R12 局部重载、登出或 BaseLayout unmount 时 disconnect ResizeObserver、取消 rAF 并 dispose。
+- **原因**：tab 往返频繁，保留实例可避免重复 init 与状态丢失；但真正卸载若不 dispose 会产生 observer/instance 泄漏。`getInstanceByDom` 作为同一容器的最后防重复边界。
+- **尺寸**：以容器 ResizeObserver 为主，因为侧栏宽度过渡不触发 window resize；容器宽高为 0 时延后 init/resize。仅在浏览器缺少 ResizeObserver 时回退 window resize。
+- **主题与语言**：不因 dark/locale/themeColor 改变而 re-init；计算 option 后 setOption 更新轴线、tooltip、legend、series 与星期文本，保持同一实例。
+- **构建证据**：使用 ECharts core 按需注册后 Home 仍为 `722.90 kB / gzip 225.81 kB` 并触发 Vite 500kB warning。R16 不抬高 warning 阈值、不假装消除体积；R21 再评估 vendor/manual chunk、缓存与真实部署收益。

@@ -59,13 +59,26 @@ bun add echarts
 
 ## 验收
 
-- [ ] home 至少有 2 张统计卡与 1 张真实图表
-- [ ] 侧栏折叠/展开后图表自适应，不截断
-- [ ] 浏览器尺寸变化、tab 切走再切回、页面局部重载均不崩溃
-- [ ] 反复进出 home 不出现 ECharts duplicate instance 警告
-- [ ] 亮暗切换后轴线、tooltip 和数据都可读
-- [ ] 360px 宽度下单列显示，内容区无横向溢出
-- [ ] `bun run typecheck` 通过
+- [x] home 至少有 2 张统计卡与 1 张真实图表
+- [x] 侧栏折叠/展开后图表自适应，不截断
+- [x] 浏览器尺寸变化、tab 切走再切回、页面局部重载均不崩溃
+- [x] 反复进出 home 不出现 ECharts duplicate instance 警告
+- [x] 亮暗切换后轴线、tooltip 和数据都可读
+- [x] 360px 宽度下单列显示，内容区无横向溢出
+- [x] `bun run typecheck` 通过
+
+R16 实际证据（2026-08-24）：
+
+- 安装 `echarts@6.1.0`，使用 core + Line/Bar/Grid/Legend/Tooltip/Canvas 按需注册；Home 包含 4 张指标卡、访问折线 + 订单柱状双轴图和 4 个渠道进度；
+- `useEcharts` 在非零容器 mounted 后 init，ResizeObserver + rAF 合并 resize，option 深度更新，activated resize，beforeUnmount disconnect/dispose；`getInstanceByDom` 防止同容器重复 init；
+- 首次桌面 chart ready=true、1 个 canvas，容器/canvas 均 1053px；侧栏折叠后同一 id 宽度 1077px，展开回 1053px，canvas 始终只有 1 个；
+- viewport 1000px 时图表宽 706px、渠道卡移到下一行，content scrollWidth=clientWidth=780；360px 时 chart/canvas 238px、4 张统计卡单列、document scrollWidth=360；
+- ECharts media 在 maxWidth 420 时隐藏双轴 name、收紧 grid、x 轴隔项显示，窄屏图例/刻度不再拥挤；chart 容器有 `role=img` 与双语 aria-label；
+- light/中文切换到 dark/英文后同一 chart id 更新标题、legend、星期、轴色与 tooltip；暗色 tooltip 背景/文字/边框为 `#1f2937/#e5e7eb/#4b5563`；
+- 主色改 `#e11d48` 后同一实例更新 line/bar/legend，渠道进度也为 `rgb(225,29,72)`；无 dispose/re-init；
+- Home→Restricted→Home 保持同一 ECharts id 与 refresh count；连续往返 5 次仍单 canvas。R12 局部重载后 id 变化且 count 归零，证明旧实例 dispose；登出/登录后再次生成新 id；
+- Console 无 ECharts duplicate/disposed/resize 警告；DatePicker input 保留 id/name，chart aria 与 R12/R13/R14 回归控件继续可用；
+- frozen install、typecheck、build、90-key 中英键集和 diff check 通过。生产 Home chunk `722.90 kB / gzip 225.81 kB` 触发 500kB 提示；当前已按需引入，不抬阈值掩盖，R21 结合 manual chunk/部署缓存再处理。
 
 ## 常见坑
 

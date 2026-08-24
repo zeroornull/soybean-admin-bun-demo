@@ -40,8 +40,8 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R12 | 多页签、缓存与重载 | done | 2026-08-24 | route-name tabs + pinned Home + component-name KeepAlive + prune/unmount/remount 局部重载已落地；切换/关闭/刷新/登出 Chrome 矩阵通过 |
 | R13 | 国际化与 locale 同步 | done | 2026-08-24 | Vue I18n + app locale + Naive/date locale + dayjs + html lang/storage 已同步；中英全投影、冷启动、无效值回退 Chrome 矩阵通过 |
 | R14 | 暗黑与主题色 | done | 2026-08-24 | light/dark/auto + system media + CSS/Naive palette + pre-mount storage + reset 已落地；暗色弹层/主色/冷启动/移动端 Chrome 矩阵通过 |
-| R15 | 登录页交付 | pending | | |
-| R16 | 首页看板与 ECharts | pending | | |
+| R15 | 登录页交付 | done | 2026-08-24 | Naive Form + 双栏品牌页 + 校验/loading/NAlert/Enter/Tab/防重入已落地；错误/正确/离线/中英/亮暗/360px Chrome 矩阵通过 |
+| R16 | 首页看板与 ECharts | done | 2026-08-24 | 4 指标卡 + ECharts 双轴趋势 + 渠道卡 + ResizeObserver/KeepAlive/dispose 生命周期已落地；resize/tab/reload/theme/360px Chrome 矩阵通过 |
 | R17 | 内置异常页与边界状态 | pending | | |
 | R18 | 工程化质量门 | pending | | |
 | R19 | 自动化回归测试 | pending | | |
@@ -85,7 +85,7 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | naive-ui | 2.45.2 | R11 |
 | vue-i18n | 11.4.9 | R13 |
 | dayjs | 1.11.23 | R13 |
-| echarts | | R16 |
+| echarts | 6.1.0 | R16 |
 | oxlint / oxfmt | | R18 |
 | vitest | | R19 |
 | @vue/test-utils | | R19 |

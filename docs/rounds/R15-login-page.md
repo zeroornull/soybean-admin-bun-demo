@@ -63,13 +63,26 @@
 
 ## 验收
 
-- [ ] 空表单不发请求，校验信息清晰
-- [ ] 错误凭证有可见反馈，正确凭证只发一次请求并进 home
-- [ ] 连续快速点击不会并发多次登录
-- [ ] Enter 可提交，不刷新页面
-- [ ] 中英文与亮暗主题完整覆盖页面
-- [ ] 360px 宽度可用，无横向溢出
-- [ ] Tab 键可按正确顺序完成登录
+- [x] 空表单不发请求，校验信息清晰
+- [x] 错误凭证有可见反馈，正确凭证只发一次请求并进 home
+- [x] 连续快速点击不会并发多次登录
+- [x] Enter 可提交，不刷新页面
+- [x] 中英文与亮暗主题完整覆盖页面
+- [x] 360px 宽度可用，无横向溢出
+- [x] Tab 键可按正确顺序完成登录
+
+R15 实际证据（2026-08-24）：
+
+- 登录草稿替换为 `NForm/NFormItem/NInput/NButton/NAlert/NCard`；model 只留页面，提交仍调用 `authStore.login`，redirect/guard/token 流程未改；
+- 桌面为品牌渐变区 + 表单区，品牌区消费 R14 primary palette；小于 lg 隐藏品牌区并显示移动 logo。360×800 实测 card 320px、document/body scrollWidth 都为 360；
+- 清空用户名/密码点击提交，NForm 显示双语 required feedback，Performance `/auth/login` 数量保持不变；
+- 错误凭证实测 NAlert 含图标、标题和 `role=alert`，中文为“用户名或密码错误”，切英文后同一 alert 立即变为可理解英文；
+- DevTools Offline 下正确表单显示双语通用网络/Mock 错误；用户名与 6 位密码仍在组件内存，localStorage 中无 pass/pwd key，页面也明确提示不持久化；
+- 同一任务内调用登录按钮 12 次，`/auth/login` 只从 2 增至 3；auth store loading 防重入与 NButton disabled/loading 同时生效；
+- 修正正确密码后在密码 input 按 Enter，`/auth/login` 只增加 1 次并进入 `/home`，Performance navigation entry 仍为 1，证明没有浏览器刷新；
+- 首个 Tab 焦点是 `login-username`，后续依次 `login-password`、submit button；两个 NForm label 的原生 `for` 都能找到对应 id；
+- 中文亮色、英文暗色桌面截图与中文亮色、英文暗色 360px 截图均通过；主题/语言控件位于表单后方 DOM，不抢占登录表单首个 Tab；
+- Chrome 最终 Console/Issues 为空；frozen install、typecheck、build、消息键集和 diff check 通过。
 
 ## 常见坑
 

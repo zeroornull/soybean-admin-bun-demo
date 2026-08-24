@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
+import { NAlert, NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import type { FormInst, FormRules } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LocaleSwitch from '@/components/locale-switch.vue';
@@ -12,8 +14,36 @@ const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const { t } = useI18n();
-const userName = ref('Soybean');
-const password = ref('123456');
+const formRef = ref<FormInst | null>(null);
+const showAuthError = ref(false);
+const formModel = reactive({
+  userName: 'Soybean',
+  password: '123456'
+});
+const formRules = computed<FormRules>(() => ({
+  userName: [
+    {
+      required: true,
+      whitespace: true,
+      message: t('login.userNameRequired'),
+      trigger: ['input', 'blur']
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: t('login.passwordRequired'),
+      trigger: ['input', 'blur']
+    }
+  ]
+}));
+const localizedAuthError = computed(() => {
+  if (!authStore.authError) return '';
+
+  return /invalid user name or password/i.test(authStore.authError)
+    ? t('login.invalidCredentials')
+    : t('login.requestFailed');
+});
 
 function getRedirectPath() {
   const redirect = route.query.redirect;
@@ -31,71 +61,151 @@ function getRedirectPath() {
 }
 
 async function submitLogin() {
-  const success = await authStore.login(userName.value, password.value);
+  if (authStore.loading || !formRef.value) return;
+
+  showAuthError.value = false;
+
+  try {
+    await formRef.value.validate();
+  } catch {
+    return;
+  }
+
+  const success = await authStore.login(formModel.userName.trim(), formModel.password);
 
   if (success) {
     await router.replace(getRedirectPath());
+  } else if (authStore.authError) {
+    showAuthError.value = true;
   }
+}
+
+function hideAuthError() {
+  showAuthError.value = false;
 }
 </script>
 
 <template>
-  <main data-page="login" class="min-h-screen grid place-items-center p-24px">
-    <div class="fixed right-16px top-16px flex items-center gap-6px">
-      <ThemeControls />
-      <LocaleSwitch />
-    </div>
-    <section class="card-wrapper w-full max-w-420px bg-[var(--card-bg)] p-24px">
-      <h1 class="m-0 text-28px font-600">{{ t('login.title') }}</h1>
-      <p class="mb-0 mt-8px">{{ t('login.description') }}</p>
+  <main data-page="login" class="min-h-screen flex overflow-hidden bg-[var(--layout-bg)]">
+    <aside
+      data-login-brand
+      class="relative hidden min-h-screen flex-1 overflow-hidden p-56px text-white lg:flex lg:items-center"
+      style="background: linear-gradient(135deg, var(--primary-pressed), var(--primary), var(--primary-hover))"
+    >
+      <div class="absolute -right-120px -top-120px size-360px rd-full border-50px border-white/10" />
+      <div class="absolute -bottom-160px -left-100px size-420px rd-full border-60px border-white/10" />
+      <div class="relative z-1 max-w-560px">
+        <div class="size-54px flex items-center justify-center rd-14px bg-white/18 text-22px font-800 shadow-lg">SA</div>
+        <p class="mb-0 mt-28px text-14px font-700 tracking-2px uppercase opacity-75">Soybean Admin</p>
+        <h1 class="mb-0 mt-10px text-42px font-750 leading-tight">{{ t('login.brandTagline') }}</h1>
+        <ul class="mb-0 mt-32px grid gap-14px p-0 text-15px list-none">
+          <li class="flex items-center gap-10px"><span aria-hidden="true">✓</span>{{ t('login.brandPointRoute') }}</li>
+          <li class="flex items-center gap-10px"><span aria-hidden="true">✓</span>{{ t('login.brandPointState') }}</li>
+          <li class="flex items-center gap-10px"><span aria-hidden="true">✓</span>{{ t('login.brandPointTheme') }}</li>
+        </ul>
+      </div>
+    </aside>
 
-      <form data-auth-form class="mt-20px flex flex-col gap-14px" @submit.prevent="submitLogin">
-        <label class="flex flex-col gap-6px">
-          <span class="text-14px font-600">{{ t('login.userName') }}</span>
-          <input
-            v-model="userName"
-            data-auth-input="userName"
-            class="h-40px rd-8px border border-[var(--border-color)] bg-transparent px-12px outline-none focus:border-primary"
-            autocomplete="username"
-            name="userName"
-            required
-          />
-        </label>
-
-        <label class="flex flex-col gap-6px">
-          <span class="text-14px font-600">{{ t('login.password') }}</span>
-          <input
-            v-model="password"
-            data-auth-input="password"
-            class="h-40px rd-8px border border-[var(--border-color)] bg-transparent px-12px outline-none focus:border-primary"
-            autocomplete="current-password"
-            name="password"
-            required
-            type="password"
-          />
-        </label>
-
-        <p v-if="authStore.authError" data-auth-error class="m-0 text-14px text-red-500" role="alert">
-          {{ authStore.authError }}
-        </p>
-
-        <button
-          data-auth-action="login"
-          class="h-40px rd-8px bg-primary px-12px text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60 hover:(opacity-90)"
-          :disabled="authStore.loading"
-          type="submit"
-        >
-          {{ authStore.loading ? t('login.signingIn') : t('login.signIn') }}
-        </button>
-      </form>
-
-      <RouterLink
-        data-nav="home"
-        class="mt-16px inline-block text-14px text-primary transition-opacity hover:(opacity-80)"
-        to="/home"
+    <section data-login-form-panel class="relative min-w-0 flex flex-1 items-center justify-center p-20px sm:p-36px">
+      <NCard
+        data-login-card
+        class="w-full max-w-460px shadow-[0_24px_80px_rgba(15,23,42,0.12)]"
+        size="large"
       >
-        {{ t('login.openProtectedHome') }}
-      </RouterLink>
+        <div class="mb-22px lg:hidden">
+          <div class="size-44px flex items-center justify-center rd-11px bg-primary text-18px font-800 text-white">SA</div>
+        </div>
+
+        <h1 class="m-0 text-30px font-700">{{ t('login.title') }}</h1>
+        <p class="mb-0 mt-8px opacity-72">{{ t('login.description') }}</p>
+
+        <NForm
+          ref="formRef"
+          data-auth-form
+          class="mt-24px"
+          :model="formModel"
+          :rules="formRules"
+          label-placement="top"
+          size="large"
+          @submit.prevent="submitLogin"
+        >
+          <NFormItem :label="t('login.userName')" :label-props="{ for: 'login-username' }" path="userName">
+            <NInput
+              v-model:value="formModel.userName"
+              data-auth-input="userName"
+              clearable
+              :input-props="{
+                id: 'login-username',
+                name: 'userName',
+                autocomplete: 'username',
+                'aria-label': t('login.userName')
+              }"
+              :placeholder="t('login.userNamePlaceholder')"
+              @update:value="hideAuthError"
+            />
+          </NFormItem>
+
+          <NFormItem :label="t('login.password')" :label-props="{ for: 'login-password' }" path="password">
+            <NInput
+              v-model:value="formModel.password"
+              data-auth-input="password"
+              type="password"
+              show-password-on="click"
+              :input-props="{
+                id: 'login-password',
+                name: 'password',
+                autocomplete: 'current-password',
+                'aria-label': t('login.password')
+              }"
+              :placeholder="t('login.passwordPlaceholder')"
+              @update:value="hideAuthError"
+            />
+          </NFormItem>
+
+          <NAlert
+            v-if="showAuthError && localizedAuthError"
+            data-auth-error
+            class="mb-18px"
+            :title="t('login.loginFailed')"
+            type="error"
+            role="alert"
+          >
+            {{ localizedAuthError }}
+          </NAlert>
+
+          <NButton
+            data-auth-action="login"
+            block
+            :loading="authStore.loading"
+            :disabled="authStore.loading"
+            type="primary"
+            attr-type="submit"
+            :aria-busy="authStore.loading"
+          >
+            {{ authStore.loading ? t('login.signingIn') : t('login.signIn') }}
+          </NButton>
+        </NForm>
+
+        <div data-login-demo class="mt-22px rd-10px bg-[var(--layout-bg)] p-12px text-12px leading-20px">
+          <strong>{{ t('login.demoAccounts') }}</strong>
+          <p class="m-0 mt-4px">{{ t('login.superAccount') }}</p>
+          <p class="m-0">{{ t('login.regularAccount') }}</p>
+          <p class="mb-0 mt-5px opacity-65">{{ t('login.passwordMemoryOnly') }}</p>
+        </div>
+
+        <RouterLink
+          data-nav="home"
+          class="mt-16px inline-block text-13px text-primary transition-opacity hover:opacity-80"
+          to="/home"
+        >
+          {{ t('login.openProtectedHome') }}
+        </RouterLink>
+      </NCard>
+
+      <div class="absolute right-16px top-16px flex items-center gap-6px">
+        <ThemeControls />
+        <LocaleSwitch />
+      </div>
     </section>
   </main>
 </template>
