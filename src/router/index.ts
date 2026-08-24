@@ -6,6 +6,7 @@ import {
   createWebHashHistory,
   createWebHistory
 } from 'vue-router';
+import { createRouterGuard } from './guards';
 import { routes } from './routes';
 
 const historyCreatorMap: Record<ImportMetaEnv['VITE_ROUTER_HISTORY_MODE'], (base?: string) => RouterHistory> = {
@@ -22,6 +23,7 @@ export const router = createRouter({
 });
 
 export async function setupRouter(app: App) {
+  createRouterGuard(router);
   app.use(router);
   await router.isReady();
 }

@@ -52,15 +52,17 @@ const server = createServer(async (request, response) => {
   if (request.method === 'POST' && url.pathname === '/auth/login') {
     try {
       const body = await readJson(request);
-      const authenticated = body.userName === 'Soybean' && body.password === '123456';
+      const passwordValid = body.password === '123456';
+      const isSuperUser = body.userName === 'Soybean';
+      const isRegularUser = body.userName === 'User';
 
-      if (authenticated) {
+      if (passwordValid && (isSuperUser || isRegularUser)) {
         sendJson(response, 200, {
           code: '0000',
           message: 'ok',
           data: {
-            token: 'mock-access-token',
-            refreshToken: 'mock-refresh-token'
+            token: isSuperUser ? 'mock-access-token' : 'mock-user-access-token',
+            refreshToken: isSuperUser ? 'mock-refresh-token' : 'mock-user-refresh-token'
           }
         });
         return;
@@ -84,11 +86,12 @@ const server = createServer(async (request, response) => {
 
   if (request.method === 'GET' && url.pathname === '/auth/getUserInfo') {
     const authorization = request.headers.authorization || null;
-    const authenticated = ['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(
+    const isSuperUser = ['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(authorization || '');
+    const isRegularUser = ['Bearer mock-user-access-token', 'Bearer mock-user-refreshed-access-token'].includes(
       authorization || ''
     );
 
-    if (!authenticated) {
+    if (!isSuperUser && !isRegularUser) {
       sendJson(response, 200, {
         code: '8888',
         message: 'Session expired',
@@ -101,10 +104,10 @@ const server = createServer(async (request, response) => {
       code: '0000',
       message: 'ok',
       data: {
-        userId: '1',
-        userName: 'Soybean',
-        roles: ['R_SUPER'],
-        buttons: ['B_CODE1', 'B_CODE2'],
+        userId: isSuperUser ? '1' : '2',
+        userName: isSuperUser ? 'Soybean' : 'User',
+        roles: isSuperUser ? ['R_SUPER'] : ['R_USER'],
+        buttons: isSuperUser ? ['B_CODE1', 'B_CODE2'] : ['B_CODE1'],
         authorization
       }
     });
@@ -133,6 +136,18 @@ const server = createServer(async (request, response) => {
           data: {
             token: 'mock-refreshed-access-token',
             refreshToken: 'mock-refreshed-token'
+          }
+        });
+        return;
+      }
+
+      if (body.refreshToken === 'mock-user-refresh-token') {
+        sendJson(response, 200, {
+          code: '0000',
+          message: 'ok',
+          data: {
+            token: 'mock-user-refreshed-access-token',
+            refreshToken: 'mock-user-refreshed-token'
           }
         });
         return;

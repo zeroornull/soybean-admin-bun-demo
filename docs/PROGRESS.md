@@ -35,7 +35,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R07 | 环境变量、代理与 Mock | done | 2026-08-24 | strict env + test/prod loadEnv + `/proxy-default` rewrite + 本地 19007 Mock 已落地；curl/Chrome direct+proxy correct/wrong/CORS 全通过 |
 | R08 | HTTP 请求核心 | done | 2026-08-24 | Axios 1.19.0 flat union + token header + backend/http/network/cancelled 分类 + auth API + 会话码回调已落地；Chrome 全契约通过 |
 | R09 | 登录、会话恢复与登出 | done | 2026-08-24 | auth-store 登录链 + 双 token storage + userInfo + initSession 单飞 + 会话码 reset + Header Logout 已落地；Chrome 全流程通过 |
-| R10 | 导航守卫与静态权限 | pending | | |
+| R10 | 导航守卫与静态权限 | done | 2026-08-24 | constant/auth 拆分 + roles 过滤 + add/remove + initSession/rematch/redirect/403/404 守卫已落地；匿名/超管/普通/刷新/切号 Chrome 矩阵全通过 |
 | R11 | 路由菜单与面包屑 | pending | | |
 | R12 | 多页签、缓存与重载 | pending | | |
 | R13 | 国际化与 locale 同步 | pending | | |

@@ -1,6 +1,5 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { router } from '@/router';
 import { fetchGetUserInfo, fetchLogin } from '@/service/api';
 import {
   clearAccessToken,
@@ -11,6 +10,7 @@ import {
   setRefreshToken
 } from '@/utils/storage';
 import { SetupStoreId } from './ids';
+import { useRouteStore } from './route';
 
 export interface UserInfo {
   userId: string;
@@ -24,6 +24,14 @@ export interface ResetAuthOptions {
   redirect?: boolean;
 }
 
+type AuthNavigator = () => Promise<void> | void;
+
+let authNavigator: AuthNavigator | undefined;
+
+export function setAuthNavigator(navigator: AuthNavigator) {
+  authNavigator = navigator;
+}
+
 /** Authentication session state and lifecycle. */
 export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const token = ref('');
@@ -31,6 +39,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const userInfo = ref<UserInfo | null>(null);
   const loading = ref(false);
   const initializing = ref(false);
+  const sessionInitialized = ref(false);
   const authError = ref<string | null>(null);
   const isLogin = computed(() => Boolean(token.value && userInfo.value));
 
@@ -60,18 +69,15 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     loading.value = false;
     authError.value = reason;
 
-    const [{ useRouteStore }, { useTabStore }] = await Promise.all([import('./route'), import('./tab')]);
-    useRouteStore().$reset();
+    const { useTabStore } = await import('./tab');
+    useRouteStore().resetStore();
     useTabStore().$reset();
+
+    sessionInitialized.value = true;
 
     if (options.redirect === false) return;
 
-    const currentRoute = router.currentRoute.value;
-
-    if (currentRoute.name === 'login') return;
-
-    const query = currentRoute.meta.requiresAuth ? { redirect: currentRoute.fullPath } : undefined;
-    await router.replace({ name: 'login', query });
+    await authNavigator?.();
   }
 
   async function login(userName: string, password: string) {
@@ -102,6 +108,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
         return false;
       }
 
+      sessionInitialized.value = true;
+
       return true;
     } finally {
       loading.value = false;
@@ -109,6 +117,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   }
 
   function initSession() {
+    if (sessionInitialized.value) return Promise.resolve(isLogin.value);
     if (initSessionPromise) return initSessionPromise;
 
     initSessionPromise = (async () => {
@@ -132,6 +141,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
         return initialized;
       } finally {
         initializing.value = false;
+        sessionInitialized.value = true;
         initSessionPromise = null;
       }
     })();
@@ -145,6 +155,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     userInfo,
     loading,
     initializing,
+    sessionInitialized,
     authError,
     isLogin,
     login,

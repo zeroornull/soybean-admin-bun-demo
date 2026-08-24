@@ -1,23 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-export const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    name: 'root',
-    redirect: { name: 'home' },
-    component: () => import('@/layouts/base-layout.vue'),
-    children: [
-      {
-        path: 'home',
-        name: 'home',
-        component: () => import('@/views/home/index.vue'),
-        meta: {
-          title: '首页',
-          requiresAuth: true
-        }
-      }
-    ]
-  },
+export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'login-layout',
@@ -35,6 +18,15 @@ export const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/403',
+    name: 'forbidden',
+    component: () => import('@/views/_builtin/403/index.vue'),
+    meta: {
+      title: '无权限',
+      constant: true
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('@/views/_builtin/404/index.vue'),
@@ -44,3 +36,39 @@ export const routes: RouteRecordRaw[] = [
     }
   }
 ];
+
+export const authRoutes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: 'root',
+    redirect: { name: 'home' },
+    component: () => import('@/layouts/base-layout.vue'),
+    meta: {
+      title: 'Root',
+      requiresAuth: true
+    },
+    children: [
+      {
+        path: 'home',
+        name: 'home',
+        component: () => import('@/views/home/index.vue'),
+        meta: {
+          title: '首页',
+          requiresAuth: true
+        }
+      },
+      {
+        path: 'restricted',
+        name: 'restricted',
+        component: () => import('@/views/restricted/index.vue'),
+        meta: {
+          title: '受限页',
+          requiresAuth: true,
+          roles: ['R_NOBODY']
+        }
+      }
+    ]
+  }
+];
+
+export const routes = constantRoutes;
