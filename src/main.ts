@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { setupLoading } from './plugins';
+import { setupRouter } from './router';
 import App from './App.vue';
 import './plugins/assets';
 
@@ -9,7 +10,7 @@ async function setupApp() {
   const app = createApp(App);
 
   // R06: setupStore(app)
-  // R04: await setupRouter(app)
+  await setupRouter(app);
   // R13: setupI18n(app)
 
   app.mount('#app');

@@ -82,7 +82,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('@/views/_builtin/404.vue'),
+    component: () => import('@/views/_builtin/404/index.vue'),
     meta: { constant: true }
   }
 ];
@@ -122,10 +122,21 @@ export async function setupRouter(app: App) {
 
 ## 验收
 
-- [ ] `/login` 不带侧栏（blank）
-- [ ] `/home` 带侧栏占位（base）
-- [ ] 访问 `/this-does-not-exist` 看到 404
-- [ ] 改 `VITE_ROUTER_HISTORY_MODE=hash` 后 URL 带 `#`
+- [x] `/login` 只渲染 `data-layout="blank"`，不带 base/sider
+- [x] `/` 命名重定向 `/home`，Home 渲染 `data-layout="base"` 与侧栏占位
+- [x] 直达 `/this-does-not-exist` 命中全局 catch-all，渲染 `data-page="not-found"` 与 404
+- [x] 临时以 `VITE_ROUTER_HISTORY_MODE=hash` 启动后，root 为 `#/home`，Login 为 `#/login`，未知 hash 也命中 404
+
+R04 实际证据（2026-08-24）：
+
+- 安装 vue-router `5.2.0`，`.env` 默认 `VITE_ROUTER_HISTORY_MODE=history`，环境类型限制为 `history | hash`；
+- `src/router/index.ts` 根据环境选择 `createWebHistory` / `createWebHashHistory`，`setupRouter()` 执行 `app.use(router)` 后等待 `router.isReady()`；
+- 路由表为 root → base layout → home、login layout → blank layout → login、全局 catch-all → 404；root 使用 `{ name: 'home' }` 命名重定向；
+- R03 主题面板已迁入 Home，`App.vue` 只保留根 `RouterView`，`main.ts` 在 mount 前 `await setupRouter(app)`；
+- history Chrome 实测：`/` → `/home`（base+sider）、`/login`（blank）、`/this-does-not-exist`（404）、从 404 点 RouterLink 回 Home 全通过；
+- hash Chrome 实测：`#/home`、`#/login`、`#/missing-in-hash` 分别渲染 Home/Login/404，`location.pathname` 保持 `/`；
+- 生产构建转换 40 个模块，生成 base/blank/home/login/404 独立 lazy chunks；
+- `bun install --frozen-lockfile`、`bun run typecheck`、`bun run build` 均通过，未实现 `beforeEach`、`addRoute`、Pinia 或 Elegant Router。
 
 ## 常见坑
 
