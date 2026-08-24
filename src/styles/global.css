@@ -1,0 +1,35 @@
+:root {
+  color-scheme: light;
+  --layout-bg: #f6f9fb;
+  --card-bg: #ffffff;
+  --text-color: #1f2937;
+  --border-color: #dbe2ea;
+  --primary: #646cff;
+}
+
+html.dark {
+  color-scheme: dark;
+  --layout-bg: #111827;
+  --card-bg: #1f2937;
+  --text-color: #f3f4f6;
+  --border-color: #4b5563;
+  --primary: #7c83ff;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  background: var(--layout-bg);
+  color: var(--text-color);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+button {
+  font: inherit;
+}
