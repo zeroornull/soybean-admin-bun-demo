@@ -11,6 +11,7 @@ interface ImportMetaEnv {
   readonly VITE_STATIC_SUPER_ROLE: string;
   readonly VITE_HTTP_PROXY: 'Y' | 'N';
   readonly VITE_SERVICE_BASE_URL: string;
+  readonly VITE_OTHER_SERVICE_BASE_URL: string;
   readonly VITE_SERVICE_SUCCESS_CODE: string;
   readonly VITE_SERVICE_LOGOUT_CODES: string;
   readonly VITE_SERVICE_MODAL_LOGOUT_CODES: string;

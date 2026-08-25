@@ -9,7 +9,8 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*'
 };
 
-const knownAuthPaths = new Set(['/', '/home', '/restricted']);
+const knownAuthPaths = new Set(['/', '/home', '/restricted', '/iframe-page']);
+const otherPort = Number(process.env.MOCK_OTHER_SERVICE_PORT || 19008);
 
 function identityFromAuthorization(authorization: string | null) {
   if (authorization === 'Bearer mock-expired-access-token') return 'expired';
@@ -56,6 +57,23 @@ function restrictedRoute() {
   };
 }
 
+function iframePageRoute() {
+  return {
+    name: 'iframe-page',
+    path: 'iframe-page/:url?',
+    component: 'iframe-page',
+    meta: {
+      title: '外链页面',
+      i18nKey: 'route.iframe-page',
+      icon: '⧉',
+      order: 15,
+      componentName: 'IframePage',
+      keepAlive: true,
+      requiresAuth: true
+    }
+  };
+}
+
 function userRoutes(isSuper: boolean) {
   return {
     home: 'home',
@@ -70,7 +88,7 @@ function userRoutes(isSuper: boolean) {
           hideInMenu: true,
           requiresAuth: true
         },
-        children: isSuper ? [homeRoute(), restrictedRoute()] : [homeRoute()]
+        children: isSuper ? [homeRoute(), iframePageRoute(), restrictedRoute()] : [homeRoute(), iframePageRoute()]
       }
     ]
   };
@@ -427,11 +445,12 @@ const server = createServer(async (request, response) => {
   if (request.method === 'GET' && url.pathname === '/route/isRouteExist') {
     const path = url.searchParams.get('path') || '';
     const normalized = path === '/' ? path : path.replace(/\/+$/, '');
+    const exists = knownAuthPaths.has(normalized) || normalized.startsWith('/iframe-page/');
 
     sendJson(response, 200, {
       code: '0000',
       message: 'ok',
-      data: knownAuthPaths.has(normalized)
+      data: exists
     });
     return;
   }
@@ -465,12 +484,51 @@ const server = createServer(async (request, response) => {
   });
 });
 
+const otherServer = createServer((request, response) => {
+  const url = new URL(request.url || '/', `http://${request.headers.host || `${host}:${otherPort}`}`);
+
+  console.log(`[mock-other] ${request.method} ${url.pathname}`);
+
+  if (request.method === 'OPTIONS') {
+    response.writeHead(204, corsHeaders);
+    response.end();
+    return;
+  }
+
+  if (request.method === 'GET' && (url.pathname === '/health' || url.pathname === '/ping')) {
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: { service: 'soybean-other-mock' }
+    });
+    return;
+  }
+
+  sendJson(response, 404, {
+    code: '4040',
+    message: 'Mock route not found',
+    data: null
+  });
+});
+
 server.listen(port, host, () => {
   console.log(`[mock] listening on http://${host}:${port}`);
 });
 
+otherServer.listen(otherPort, host, () => {
+  console.log(`[mock] other service listening on http://${host}:${otherPort}`);
+});
+
 function closeServer() {
-  server.close(() => process.exit(0));
+  let remaining = 2;
+
+  function done() {
+    remaining -= 1;
+    if (remaining <= 0) process.exit(0);
+  }
+
+  server.close(done);
+  otherServer.close(done);
 }
 
 process.on('SIGINT', closeServer);

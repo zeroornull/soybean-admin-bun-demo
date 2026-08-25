@@ -113,7 +113,7 @@ R00–R22 已满足三个停止条件：
 | A06 | [高级页签](./rounds/A06-advanced-tabs.md) | 拖拽、Chrome 外观、更完整持久化 |
 | A07 | [全局搜索](./rounds/A07-global-search.md) | 命令盘与路由搜索 |
 | A08 | [其他登录模块](./rounds/A08-login-modules.md) | 验证码、注册、重置、微信 |
-| A09 | iframe 与多服务请求 | iframe page、other service baseURL |
+| A09 | [iframe 与多服务请求](./rounds/A09-iframe-other-service.md) | iframe page、other service baseURL |
 | A10 | 图标/插件自动化 | SVG sprite、组件自动导入、版本更新提示 |
 
 进阶轮应在开始时再写自己的完整文档和验收；本路线只固定边界，不预先把可选实现写成假主线。

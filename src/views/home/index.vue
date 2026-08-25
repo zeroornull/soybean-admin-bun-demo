@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import type { EChartsCoreOption } from 'echarts/core';
 import { useEcharts } from '@/composables/use-echarts';
 import { dayjs } from '@/locales/dayjs';
-import { fetchDashboardServiceStatus, fetchProtectedServiceStatus } from '@/service/api';
+import { fetchDashboardServiceStatus, fetchOtherServiceStatus, fetchProtectedServiceStatus } from '@/service/api';
 import { useAuthStore } from '@/store/auth';
 import { useThemeStore } from '@/store/theme';
 import { setAccessToken } from '@/utils/storage';
@@ -16,6 +16,8 @@ const reportDate = ref<number | null>(dayjs('2026-08-24').valueOf());
 const refreshCount = ref(0);
 const serviceState = ref<'loading' | 'success' | 'error'>('loading');
 const serviceName = ref('');
+const otherServiceState = ref<'loading' | 'success' | 'error'>('loading');
+const otherServiceName = ref('');
 const datePickerRef = ref<InstanceType<typeof NDatePicker> | null>(null);
 const trafficChartRef = ref<HTMLElement | null>(null);
 const { t, locale } = useI18n();
@@ -158,6 +160,19 @@ async function loadServiceStatus(simulateError = false) {
   serviceState.value = 'success';
 }
 
+async function loadOtherServiceStatus() {
+  otherServiceState.value = 'loading';
+  const { data, error } = await fetchOtherServiceStatus();
+
+  if (error || !data) {
+    otherServiceState.value = 'error';
+    return;
+  }
+
+  otherServiceName.value = data.service;
+  otherServiceState.value = 'success';
+}
+
 async function simulateExpiredToken() {
   authStore.token = 'mock-expired-access-token';
   setAccessToken('mock-expired-access-token');
@@ -179,6 +194,7 @@ onMounted(() => {
   input?.setAttribute('id', 'dashboard-report-date');
   input?.setAttribute('name', 'reportDate');
   void loadServiceStatus();
+  void loadOtherServiceStatus();
 });
 </script>
 
@@ -238,6 +254,23 @@ onMounted(() => {
           {{ t('dashboard.simulateExpiredToken') }}
         </NButton>
       </div>
+    </section>
+
+    <section
+      data-other-service
+      :data-state="otherServiceState"
+      class="mt-10px flex flex-wrap items-center justify-between gap-8px rd-8px border border-[var(--border-color)] bg-[var(--card-bg)] px-12px py-9px text-12px"
+    >
+      <span v-if="otherServiceState === 'success'" data-other-service-ready>
+        {{ t('dashboard.otherServiceReady', { service: otherServiceName }) }}
+      </span>
+      <span v-else-if="otherServiceState === 'error'" data-other-service-error>
+        {{ t('dashboard.otherServiceUnavailable') }}
+      </span>
+      <span v-else>{{ t('dashboard.loadingService') }}</span>
+      <NButton data-other-service-action="ping" size="tiny" tertiary @click="loadOtherServiceStatus">
+        {{ t('dashboard.requestOtherService') }}
+      </NButton>
     </section>
 
     <section data-dashboard-stats class="mt-20px grid grid-cols-1 gap-14px sm:grid-cols-2 xl:grid-cols-4">

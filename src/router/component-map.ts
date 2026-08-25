@@ -4,7 +4,8 @@ import { layouts, views } from './elegant/imports';
 export const routeComponentMap = {
   'layout.base': layouts.base,
   home: views.home,
-  restricted: views.restricted
+  restricted: views.restricted,
+  'iframe-page': views['iframe-page']
 } as const;
 
 export type RouteComponentKey = keyof typeof routeComponentMap;

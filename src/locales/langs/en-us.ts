@@ -38,6 +38,7 @@ export const enUS = {
     login: 'Login',
     home: 'Home',
     restricted: 'Restricted',
+    'iframe-page': 'Iframe',
     forbidden: 'Forbidden',
     notFound: 'Page not found',
     serverError: 'Service error'
@@ -124,6 +125,9 @@ export const enUS = {
     serviceReady: 'Local data service is ready: {service}',
     simulateServiceError: 'Simulate service error',
     simulateExpiredToken: 'Simulate expired token',
+    otherServiceReady: 'Other service is ready: {service}',
+    otherServiceUnavailable: 'Other service is temporarily unavailable',
+    requestOtherService: 'Request other service',
     loadingService: 'Checking the local data service…',
     serviceUnavailable: 'Data service is temporarily unavailable',
     serviceErrorDescription: 'The dashboard request failed. Check the network or local Mock service and try again.',
@@ -135,6 +139,12 @@ export const enUS = {
     friday: 'Fri',
     saturday: 'Sat',
     sunday: 'Sun'
+  },
+  iframe: {
+    title: 'Iframe page',
+    description: 'Use a same-origin demo page to see how an iframe sits in the layout content.',
+    openEncoded: 'Open encoded URL',
+    invalidUrl: 'This address cannot be embedded in an iframe.'
   },
   restricted: {
     title: 'Restricted route',

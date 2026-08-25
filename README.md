@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R22 主线已完成；A01–A07（到全局搜索）已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
+当前进度：**R00–R22 主线已完成；A01–A09 已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
 
 ## 对照运行原项目
 
@@ -31,7 +31,7 @@ bun install
 bun run dev
 ```
 
-`bun run dev` 会先检查 `127.0.0.1:19007`：本地 Mock 未运行时自动启动，已经运行时直接复用；随后启动 Vite，并通过 `/proxy-default` 转发请求。按 `Ctrl+C` 时只清理本次命令创建的进程，不会关闭预先启动的 Mock。
+`bun run dev` 会先检查 `127.0.0.1:19007`：本地 Mock 未运行时自动启动，已经运行时直接复用；随后启动 Vite，并通过 `/proxy-default` 转发默认 API、`/proxy-demo` 转发其它服务（`127.0.0.1:19008`）。按 `Ctrl+C` 时只清理本次命令创建的进程，不会关闭预先启动的 Mock。
 
 需要分开排查服务时，可在两个终端分别运行 `bun run mock` 与 `bun run dev:app`。
 
@@ -48,7 +48,7 @@ bun run build            # vite build --mode prod，产物在 dist/
 bun run preview          # 编排本地 Mock + vite preview --mode prod
 ```
 
-生产请求**不走** `/proxy-default`，而是直连 `.env.prod` 的 `VITE_SERVICE_BASE_URL`（本地预览默认为 `http://127.0.0.1:19007`）。把应用部署到真实环境时，把该地址换成实际 API，不要把 Mock 主机名带上线。
+生产请求**不走**开发代理，而是直连 `.env.prod` 的 `VITE_SERVICE_BASE_URL`（本地预览默认为 `http://127.0.0.1:19007`）和 `VITE_OTHER_SERVICE_BASE_URL` 里的其它服务（默认 `http://127.0.0.1:19008`）。把应用部署到真实环境时，把这些地址换成实际 API，不要把 Mock 主机名带上线。
 
 默认 public path 为 `/`（D12）。若要挂在子路径，构建前设置 `VITE_BASE_URL=/admin/`（建议带首尾斜杠），然后重建。Vite asset、favicon 与 Vue Router `history` base 都读这个值。
 

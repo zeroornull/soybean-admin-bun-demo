@@ -209,6 +209,14 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D34 · A09 iframe 用同源演示，其它服务另绑 19008
+
+- **日期**：2026-08-25（A09）
+- **iframe**：`/iframe-page/:url?`。缺省加载 `public/iframe-demo.html`。param 只接受同源路径或 `http:`/`https:`，拒绝 `javascript:` / `data:` / `//`。vue-router 自己编码 param，调用方不要预编码。
+- **其它服务**：`VITE_OTHER_SERVICE_BASE_URL` 是 JSON 对象，不装 json5。开发 `/proxy-demo` → `127.0.0.1:19008`；生产直连。同一 Mock 进程另听 19008，`GET /ping` 返回 `soybean-other-mock`。
+- **白名单**：动态路由必须显式加入 `iframe-page`。生成器给带连字符的 view key 加引号。
+- **不引入**：json5、外站 SDK、业务 CRUD。
+
 ### D33 · A08 登录模块用 URL 切换，微信只做演示
 
 - **日期**：2026-08-25（A08）

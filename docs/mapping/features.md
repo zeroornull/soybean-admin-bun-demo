@@ -61,10 +61,10 @@
 | 页签拖拽、Chrome 风格页签 | 原生 DnD + 本地 chrome 壳（未装 materials） | ☑ A06 |
 | 全局搜索命令盘 | `global-search` | ☑ A07 |
 | 验证码/注册/重置/微信登录 | login modules | ☑ A08（Mock 验证码/演示微信，不接真实 SDK） |
-| iframe 页 | `_builtin/iframe-page` | ☐ |
+| iframe 页 | `_builtin/iframe-page` | ☑ A09（同源演示 HTML，拒绝 javascript/data） |
 | 本地 SVG 图标雪碧图 | vite-plugin-svg-icons | ☐ |
 | 组件自动导入 | unplugin-vue-components | ☐ |
-| 多服务 baseURL | `VITE_OTHER_SERVICE_BASE_URL` | ☐ |
+| 多服务 baseURL | `VITE_OTHER_SERVICE_BASE_URL` | ☑ A09（JSON 对象，不装 json5；`/proxy-demo` → 19008） |
 | 版本更新提示 | `plugins/app.ts` | ☐ |
 | `@sa/*` workspace 全套 | R20 主线只要求稳定子集 | ☐ |
 | git commit 规范 CLI | `@sa/scripts` | ☐ |

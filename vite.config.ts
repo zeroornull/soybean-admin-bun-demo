@@ -6,8 +6,7 @@ import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 import { elegantRouterPlugin } from './scripts/elegant-router-plugin.ts';
 import { normalizePublicBase } from './src/utils/public-base.ts';
-
-const proxyPrefix = '/proxy-default';
+import { getProxyTargets } from './src/utils/service.ts';
 
 export function createSrcAlias() {
   return {
@@ -39,13 +38,16 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 19528,
       proxy: proxyEnabled
-        ? {
-            [proxyPrefix]: {
-              target: env.VITE_SERVICE_BASE_URL,
-              changeOrigin: true,
-              rewrite: path => path.replace(new RegExp(`^${proxyPrefix}`), '')
-            }
-          }
+        ? Object.fromEntries(
+            getProxyTargets(env).map(({ prefix, target }) => [
+              prefix,
+              {
+                target,
+                changeOrigin: true,
+                rewrite: (path: string) => path.replace(new RegExp(`^${prefix}`), '')
+              }
+            ])
+          )
         : undefined
     },
     preview: {

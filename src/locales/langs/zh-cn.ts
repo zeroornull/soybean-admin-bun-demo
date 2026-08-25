@@ -36,6 +36,7 @@ export const zhCN = {
     login: '登录',
     home: '首页',
     restricted: '受限页',
+    'iframe-page': '外链页面',
     forbidden: '无权限',
     notFound: '页面不存在',
     serverError: '服务异常'
@@ -122,6 +123,9 @@ export const zhCN = {
     serviceReady: '本地数据服务已就绪：{service}',
     simulateServiceError: '模拟服务异常',
     simulateExpiredToken: '模拟 token 过期',
+    otherServiceReady: '其它服务已就绪：{service}',
+    otherServiceUnavailable: '其它服务暂时不可用',
+    requestOtherService: '请求其它服务',
     loadingService: '正在检查本地数据服务…',
     serviceUnavailable: '数据服务暂时不可用',
     serviceErrorDescription: '看板数据请求失败，请检查网络或本地 Mock 服务后重试。',
@@ -133,6 +137,12 @@ export const zhCN = {
     friday: '周五',
     saturday: '周六',
     sunday: '周日'
+  },
+  iframe: {
+    title: '外链页面',
+    description: '用同源演示页观察 iframe 如何嵌在布局内容区。',
+    openEncoded: '用编码地址打开',
+    invalidUrl: '这个地址不能嵌进 iframe。'
   },
   restricted: {
     title: '受限路由',

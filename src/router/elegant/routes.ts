@@ -34,6 +34,21 @@ export const generatedRoutes: ElegantConstRoute[] = [
     component: 'layout.base$view.home'
   },
   {
+    name: 'iframe-page',
+    path: '/iframe-page/:url?',
+    meta: {
+      title: '外链页面',
+      i18nKey: 'route.iframe-page',
+      requiresAuth: true,
+      icon: '⧉',
+      order: 15,
+      componentName: 'IframePage',
+      keepAlive: true
+    },
+    component: 'layout.base$view.iframe-page',
+    props: true
+  },
+  {
     name: 'login',
     path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
     meta: {

@@ -46,6 +46,7 @@
 | `src/service/api` | `src/service/api` | R08 |
 | `src/views/_builtin/login` | `src/views/login` | R09/R15 |
 | `src/views/_builtin/403,404,500` | `src/views/_builtin/*` | R17 |
+| `src/views/_builtin/iframe-page` | `src/views/_builtin/iframe-page` | A09 |
 | `src/views/home` | `src/views/home` | R04/R16 |
 | `src/locales` | `src/locales` | R13 |
 | `src/theme` | `src/theme` | R14 |

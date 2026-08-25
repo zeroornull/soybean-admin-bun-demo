@@ -10,15 +10,15 @@
 
 | 项 | 现状 |
 | --- | --- |
-| 主线位置 | **R00–R22 全部 done**。进阶 **A01–A08 done**，下一可选 **A09** |
+| 主线位置 | **R00–R22 全部 done**。进阶 **A01–A09 done**，下一可选 **A10** |
 | 包形态 | Bun workspaces：`@sa/utils`、`@sa/color`、`@sa/axios`；应用组装 token/env/session |
 | 运行时 | Bun 1.4.0、Node 22.23.2；默认 npm registry，无 `bunfig.toml` |
-| 质量门 | frozen install + typecheck + lint + 79 tests + format + build 全绿；CI 含 test/build |
+| 质量门 | frozen install + typecheck + lint + 85 tests + format + build 全绿；CI 含 test/build |
 | 终验 | 生产 preview 完整手工路径 + 360px 通过；[features.md](./mapping/features.md) 必须项落地/终验均勾 |
-| 请求 | 开发走 `/proxy-default`；生产直连 `http://127.0.0.1:19007` |
+| 请求 | 开发走 `/proxy-default` 与 `/proxy-demo`；生产直连 `19007` / `19008` |
 | 部署 | 默认 `VITE_BASE_URL=/`；SPA fallback 已写入 README |
 
-主线已结束。进阶轮 **A01–A08 已完成**，下一可选轮为 A09 iframe 与多服务请求。
+主线已结束。进阶轮 **A01–A09 已完成**，下一可选轮为 A10 图标/插件自动化。
 
 ## 轮次重核结论
 
@@ -90,7 +90,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | 生产构建可预览、不依赖 dev proxy | R21 | 是 | 是 |
 | 必须清单、文档与实际版本收口 | R22 | 是 | 是 |
 
-加分项默认不阻塞主线。A01–A08 已做；其余仍走 A 系列。
+加分项默认不阻塞主线。A01–A09 已做；其余仍走 A 系列。
 
 ## 进阶轮
 
@@ -104,12 +104,12 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | A06 | 高级页签 | done | 2026-08-25 | 原生拖拽 + chrome 外观 + globalTabs；70 tests；Chrome 刷新恢复/中键关闭/登出清空 |
 | A07 | 全局搜索 | done | 2026-08-25 | 命令盘搜菜单叶子；Ctrl+K；75 tests；Chrome 超管进受限页、User 搜不到 |
 | A08 | 其他登录模块 | done | 2026-08-25 | `/login/:module?` 五模块；Mock 验证码 123456；微信仅演示扫码；79 tests；Chrome 账密/验证码 User/微信超管 |
-| A09 | iframe 与多服务请求 | pending | | |
+| A09 | iframe 与多服务请求 | done | 2026-08-25 | 同源 iframe + 19008 其它服务；`/proxy-demo`；85 tests；Chrome 外链正文与 other-mock |
 | A10 | 图标/插件自动化 | pending | | |
 
 ## 下一轮入口
 
-可选：A09 iframe 与多服务请求（开始时再写轮次文档）。主线不再增加 R 编号。
+可选：A10 图标/插件自动化（开始时再写轮次文档）。主线不再增加 R 编号。
 
 ## 剩余主线
 
@@ -174,7 +174,7 @@ bun pm ls
 
 ## 决策填写
 
-已拍板并写入 [decisions.md](./decisions.md)：D1–D33。D12 为 `VITE_BASE_URL=/`。A01 见 D27，A02 见 D10 追加，A03 见 D28，A04 见 D29，A05 见 D30，A06 见 D31，A07 见 D32，A08 见 D33。
+已拍板并写入 [decisions.md](./decisions.md)：D1–D34。D12 为 `VITE_BASE_URL=/`。A01 见 D27，A02 见 D10 追加，A03 见 D28，A04 见 D29，A05 见 D30，A06 见 D31，A07 见 D32，A08 见 D33，A09 见 D34。
 
 ## 已知边界（不是漏做的主线）
 
@@ -185,5 +185,5 @@ bun pm ls
 - **权限**：默认 static；dynamic 见 A02。`/restricted`（`R_NOBODY`）保留为 403 演示页。
 - **路由生成**：A03 用本地生成器，不装 `@elegant-router/vue`。
 - **生产 API**：本地 preview 直连 `127.0.0.1:19007`；真实上线需改 `.env.prod`，不要把 Mock 主机带上线。
-- **布局 / 主题**：A04–A07 已有多 layout、主题抽屉、高级页签、全局搜索。A08 已补验证码/注册/重置/微信演示登录。
+- **布局 / 主题**：A04–A07 已有多 layout、主题抽屉、高级页签、全局搜索。A08 已补登录模块；A09 已补 iframe 与其它服务。
 - **本地产物**：`dist/`、`legacy/`、`node_modules/` 均 gitignore；`legacy/` 只作对照。

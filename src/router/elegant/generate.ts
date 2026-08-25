@@ -71,7 +71,7 @@ function serialize(value: unknown, indent = 0): string {
 }
 
 function renderViewImport(file: PageFile) {
-  const key = /^\d/.test(file.routeName) ? `'${file.routeName}'` : file.routeName;
+  const key = /^[A-Za-z_$][\w$]*$/.test(file.routeName) ? file.routeName : `'${file.routeName}'`;
   return `  ${key}: () => import('${file.importPath}')`;
 }
 

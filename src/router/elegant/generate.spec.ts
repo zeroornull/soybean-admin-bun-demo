@@ -30,6 +30,8 @@ describe('generated elegant routes', () => {
       meta: { componentName: 'Home', keepAlive: true, pinned: true }
     });
     expect(byName.restricted?.meta?.roles).toEqual(['R_NOBODY']);
+    expect(byName['iframe-page']?.path).toBe('/iframe-page/:url?');
+    expect(byName['iframe-page']?.component).toBe('layout.base$view.iframe-page');
   });
 
   it('assembles a shared auth root so home and restricted keep the same layout instance', () => {
@@ -42,7 +44,7 @@ describe('generated elegant routes', () => {
 
     expect(vueAuth).toHaveLength(1);
     expect(vueAuth[0]?.name).toBe('root');
-    expect(vueAuth[0]?.children?.map(child => child.name)).toEqual(['home', 'restricted']);
+    expect(vueAuth[0]?.children?.map(child => child.name)).toEqual(['home', 'iframe-page', 'restricted']);
     expect(vueConstant.at(-1)?.path).toBe('/:pathMatch(.*)*');
     expect(vueConstant.map(route => route.path)).toEqual(
       expect.arrayContaining([

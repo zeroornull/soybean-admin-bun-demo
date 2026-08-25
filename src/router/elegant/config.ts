@@ -92,6 +92,18 @@ export const elegantRouterConfig = {
         requiresAuth: true,
         roles: ['R_NOBODY']
       }
+    },
+    'iframe-page': {
+      path: '/iframe-page/:url?',
+      meta: {
+        title: '外链页面',
+        i18nKey: 'route.iframe-page',
+        icon: '⧉',
+        order: 15,
+        componentName: 'IframePage',
+        keepAlive: true,
+        requiresAuth: true
+      }
     }
   } as Record<string, RouteOverride>
 };

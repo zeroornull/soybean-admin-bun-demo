@@ -1,4 +1,5 @@
 import { createFlatRequest, type RequestSessionHandlers } from '@sa/axios';
+import { getServiceBaseURL } from '@/utils/service';
 import { getAccessToken } from '@/utils/storage';
 
 function parseCodes(value: string) {
@@ -9,19 +10,26 @@ function parseCodes(value: string) {
 }
 
 const proxyEnabled = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
-const baseURL = proxyEnabled ? '/proxy-default' : import.meta.env.VITE_SERVICE_BASE_URL;
+const { baseURL, otherBaseURL } = getServiceBaseURL(import.meta.env, proxyEnabled);
 
-const flatRequest = createFlatRequest({
-  baseURL,
-  successCode: import.meta.env.VITE_SERVICE_SUCCESS_CODE,
-  logoutCodes: parseCodes(import.meta.env.VITE_SERVICE_LOGOUT_CODES),
-  modalLogoutCodes: parseCodes(import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES),
-  expiredTokenCodes: parseCodes(import.meta.env.VITE_SERVICE_EXPIRED_TOKEN_CODES),
-  getToken: getAccessToken
-});
+function createAppRequest(serviceBaseURL: string) {
+  return createFlatRequest({
+    baseURL: serviceBaseURL,
+    successCode: import.meta.env.VITE_SERVICE_SUCCESS_CODE,
+    logoutCodes: parseCodes(import.meta.env.VITE_SERVICE_LOGOUT_CODES),
+    modalLogoutCodes: parseCodes(import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES),
+    expiredTokenCodes: parseCodes(import.meta.env.VITE_SERVICE_EXPIRED_TOKEN_CODES),
+    getToken: getAccessToken
+  });
+}
+
+const flatRequest = createAppRequest(baseURL);
+const demoFlatRequest = otherBaseURL.demo ? createAppRequest(otherBaseURL.demo) : null;
 
 export const request = flatRequest.request;
+export const demoRequest = demoFlatRequest?.request;
 
 export function setRequestSessionHandlers(handlers: RequestSessionHandlers) {
   flatRequest.setSessionHandlers(handlers);
+  demoFlatRequest?.setSessionHandlers(handlers);
 }
