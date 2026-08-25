@@ -15,7 +15,9 @@
     "noUnusedLocals": false,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src/**/*.ts",

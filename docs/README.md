@@ -30,7 +30,7 @@
 
 ## 仓库布局（当前）
 
-主线已做到 R20，下一轮是 R21。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
+主线已做到 R21，下一轮是 R22。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
 
 ```text
 .

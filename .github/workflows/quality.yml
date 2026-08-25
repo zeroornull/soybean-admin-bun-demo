@@ -27,3 +27,6 @@ jobs:
 
       - name: Run tests
         run: bun run test
+
+      - name: Run production build
+        run: bun run build

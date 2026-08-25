@@ -1,6 +1,6 @@
 import { runWithLocalMock } from './local-stack';
 
 void runWithLocalMock({
-  label: 'dev',
-  viteArgs: ['--mode', 'test']
+  label: 'preview',
+  viteArgs: ['preview', '--mode', 'prod']
 });

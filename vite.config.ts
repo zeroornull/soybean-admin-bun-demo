@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import UnoCSS from 'unocss/vite';
 import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
+import { normalizePublicBase } from './src/utils/public-base.ts';
 
 const proxyPrefix = '/proxy-default';
 
@@ -16,9 +17,14 @@ export function createSrcAlias() {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const proxyEnabled = env.VITE_HTTP_PROXY === 'Y';
+  const publicBase = normalizePublicBase(env.VITE_BASE_URL);
 
   return {
     plugins: [vue(), UnoCSS()],
+    base: publicBase,
+    build: {
+      sourcemap: false
+    },
     resolve: {
       alias: createSrcAlias()
     },

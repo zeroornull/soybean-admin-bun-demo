@@ -74,13 +74,22 @@ preview 不代表真实 Web 服务配置已正确；它只验证 Vite 产物与�
 
 ## 验收
 
-- [ ] typecheck、lint、test、build 全部通过
-- [ ] preview 中核心用户路径可完整走通
-- [ ] 生产请求不依赖 `/proxy-default` 开发代理
-- [ ] 根路径与一个子路径配置都做过构建演练
-- [ ] history fallback 要求已写入 README
-- [ ] `dist/` 不含 secret、本地绝对路径或 legacy 依赖
-- [ ] D12 的最终 public path 已记录
+- [x] typecheck、lint、test、build 全部通过
+- [x] preview 中核心用户路径可完整走通
+- [x] 生产请求不依赖 `/proxy-default` 开发代理
+- [x] 根路径与一个子路径配置都做过构建演练
+- [x] history fallback 要求已写入 README
+- [x] `dist/` 不含 secret、本地绝对路径或 legacy 依赖
+- [x] D12 的最终 public path 已记录
+
+R21 实际证据（2026-08-25）：
+
+- `.env.prod` 明确 `VITE_BASE_URL=/`、`history`、`VITE_HTTP_PROXY=N`、API `http://127.0.0.1:19007`；废弃 19008；
+- Vite `base` 与 `import.meta.env.BASE_URL` 对齐；favicon 使用 `%BASE_URL%favicon.svg`；`build.sourcemap=false`；
+- `quality` 22 tests 全绿后 `vite build --mode prod` 通过；产物无 `proxy-default` / `legacy/` / 绝对路径 / sourcemap，API 为 19007；
+- preview：冷启动登录、刷新恢复、菜单/tab、404 保留原 URL、中英切换、登出后再进 `/home` 带 redirect；XHR 直连 `127.0.0.1:19007`；
+- 子路径：临时 `.env.prod.local` `VITE_BASE_URL=/admin/`，asset/favicon 为 `/admin/...`，登录进入 `/admin/home`，刷新仍可用；演练后删除 local 文件并恢复根路径构建；
+- CI 增加 `bun run build`；Home chunk `724.32 kB / gzip 226.27 kB` 的 500kB warning 仍按 D22 保留。
 
 ## 常见坑
 
@@ -88,6 +97,7 @@ preview 不代表真实 Web 服务配置已正确；它只验证 Vite 产物与�
 - **asset base 改了，router base 没改**：子路径资源能加载但路由错位。
 - **preview 通过就宣称可部署**：真实 Nginx/CDN 还需要 history fallback 与缓存配置。
 - **为消除 chunk 警告盲目 manualChunks**：可能制造更差的缓存与依赖图。
+- **Bun 预加载 `.env` 盖住 `.env.prod`**：preview 子进程若继承 `VITE_*`，子路径 base 会对不齐，`/admin/assets/*` 全部变成 HTML。
 
 ## 思考题
 

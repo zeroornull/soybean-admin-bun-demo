@@ -74,13 +74,13 @@
 - **依赖方向**：应用 → `@sa/*`；`@sa/axios` → `axios`；`@sa/utils` 与 `@sa/color` 无互相依赖。包内不引用 `@/` 或 Pinia。
 - **不做**：`@sa/hooks`、`@sa/materials`、`@sa/scripts`、`@sa/alova`、`@sa/uno-preset`。
 
-## 待对应轮次填最终值
+### D12 · 部署 public path
 
-### D12 · 部署 public path（R21 演练后填）
-
-- **当前**：`.env` 中 `VITE_BASE_URL=/`；未做子路径构建演练。
-- **最终值**：R21 根路径与一个子路径都演练后再填。
-- `VITE_BASE_URL=`
+- **日期**：2026-08-25
+- **决策**：默认 `VITE_BASE_URL=/`。子路径已用临时 `.env.prod.local` 演练 `/admin/`，不把子路径留作仓库默认。
+- **验证**：根路径 preview 核心路径通过；`/admin/` 构建后 favicon/JS 为 `/admin/...`，router 进入 `/admin/home`，刷新 `/admin/home` 依赖 SPA fallback。
+- **原因**：本仓库作为学习默认部署在站点根；真实子路径部署改 env 后重建即可。
+- `VITE_BASE_URL=/`
 
 ### D13 · 使用默认 npm registry，不创建 `bunfig.toml`
 
@@ -115,6 +115,13 @@
 - **验证**：Vite test proxy target/rewrite、curl direct/proxy、Chrome 同源 proxy/跨源 direct fetch 均通过，Mock 日志收到的是去前缀后的 `/auth/login`。
 - **后续**：R08 在该协议上建 request 层；R09 扩展 userInfo/refresh 接口；R21 再决定真实生产 baseURL，不将 19008 当成最终部署地址。
 
+### D16 追加 · R21 本地生产 API
+
+- **日期**：2026-08-25
+- **决策**：`.env.prod` 的 `VITE_SERVICE_BASE_URL` 改为 `http://127.0.0.1:19007`，`VITE_HTTP_PROXY=N`。放弃 19008 占位。生产构建直连 Mock（CORS），不走 `/proxy-default`。
+- **原因**：本仓库没有真实后端；本地 preview 必须能登录。真实上线时替换该 URL，不要把 19007 写进对外环境。
+- **验证**：preview 中 login/getUserInfo/health 的请求主机为 `127.0.0.1:19007`，产物不含 `proxy-default`。
+
 ### D17 · `bun run dev` 自动编排本地 Mock 与 Vite
 
 - **日期**：2026-08-24
@@ -122,6 +129,12 @@
 - **原因**：只启动 Vite 时，浏览器请求虽能到达 proxy，但目标端口没有 Mock 监听，登录会稳定失败并报 `ECONNREFUSED 127.0.0.1:19007`；默认命令应建立完整的本地开发依赖链。
 - **进程边界**：编排器只关闭自己启动的 Mock/Vite；预先存在的 Mock 不归它所有，退出时不得误杀。Mock 或 Vite 子进程意外退出时，清理另一条自有进程并以失败状态结束。
 - **实现**：使用 Bun/Node 内置的 `child_process`、`fetch` 与信号处理，不新增并发运行依赖。
+
+### D17 追加 · preview 同样编排 Mock，且必须 `--mode prod`
+
+- **日期**：2026-08-25
+- **决策**：`bun run preview` 复用 Mock 编排；Vite 以 `--mode prod` 启动，与 `vite build --mode prod` 读同一组 env。子进程启动前去掉继承来的 `VITE_*`，避免 Bun 预加载的 `.env` 盖住 `.env.prod` / `.env.prod.local`。保留 `bun run preview:app` 作分步排障。
+- **原因**：默认 `vite preview` 的 mode 是 `production` 不是 `prod`，base 会对不齐；Bun 预加载 `.env` 后，子路径 `.env.prod.local` 会被 `process.env` 盖掉，preview 把 `/admin/assets/*` 当成 SPA HTML。
 
 ### D18 · 主线 Tab 不持久化，route name 与 component name 显式分工
 
@@ -179,4 +192,4 @@
 - **命令契约**：`lint`/`format` 永远只检查；只有显式 `lint:fix`/`format:write` 才修改文件。`quality` 组合 typecheck、lint、format，不包含产品 build；R19 再加 test，R21 才把 build 纳入最终 CI 门。
 - **范围**：R18 明确扫描 src、scripts、Vite/Uno 配置与必要 JSON；legacy/docs/dist/node_modules/coverage/.omx 不进入代码检查。R20 出现 packages 后再显式扩 scope，不用宽泛 `.` 把教学 Markdown 当源码。
 - **本地 hook**：simple-git-hooks pre-commit 只执行 quality；失败后由开发者显式修复并重新 stage，不在 hook 中静默 write/fix，也不跑耗时产品 build。
-- **CI**：GitHub Actions 固定 Bun 1.4.0，frozen install 后运行同一组脚本。R19 起本地 `quality` 含 test；CI 把 typecheck/lint/format 与 `bun run test` 分成两步，方便定位失败。R21 再加 build。
+- **CI**：GitHub Actions 固定 Bun 1.4.0，frozen install 后运行同一组脚本。R19 起本地 `quality` 含 test；CI 把 typecheck/lint/format、`bun run test` 与 `bun run build` 分成三步。pre-commit 仍不跑产品 build。

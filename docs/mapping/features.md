@@ -12,7 +12,7 @@
 | 功能 | legacy 锚点 | 轮次 | 落地 | 终验 |
 | --- | --- | --- | --- | --- |
 | Bun 安装与启动 | `package.json` scripts | R00–R01 | ☑ | ☐ |
-| Vite 开发 / 构建 / 预览 | `vite.config.ts` | R01/R21 | △ 开发与 `build` 已有，prod preview 演练待 R21 | ☐ |
+| Vite 开发 / 构建 / 预览 | `vite.config.ts` | R01/R21 | ☑ | ☐ |
 | TypeScript 严格检查 | `vue-tsc` | R01/R18 | ☑ | ☐ |
 | 首屏 loading | `src/plugins/loading.ts` | R02 | ☑ | ☐ |
 | UnoCSS 工具类 | `uno.config.ts` | R03 | ☑ | ☐ |
@@ -45,7 +45,7 @@
 | typecheck/lint/format/CI 质量门 | scripts + workflow | R18 | ☑ | ☐ |
 | request/permission/menu/tabs/auth reset 自动化回归 | Vitest | R19 | ☑ | ☐ |
 | Bun workspace 子集边界正确，抽包后回归仍绿 | `packages/*` | R20 | ☑ | ☐ |
-| 生产构建可预览，不依赖 dev proxy | `vite build --mode prod` | R21 | ☐ | ☐ |
+| 生产构建可预览，不依赖 dev proxy | `vite build --mode prod` | R21 | ☑ | ☐ |
 | 必须清单、产品路径、文档与实际版本收口 | R22 最终验收 | R22 | ☐ | ☐ |
 
 ## 加分

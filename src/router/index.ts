@@ -15,7 +15,7 @@ const historyCreatorMap: Record<ImportMetaEnv['VITE_ROUTER_HISTORY_MODE'], (base
   memory: createMemoryHistory
 };
 
-const history = historyCreatorMap[import.meta.env.VITE_ROUTER_HISTORY_MODE](import.meta.env.VITE_BASE_URL);
+const history = historyCreatorMap[import.meta.env.VITE_ROUTER_HISTORY_MODE](import.meta.env.BASE_URL);
 
 export const router = createRouter({
   history,

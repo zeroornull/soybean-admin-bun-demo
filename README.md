@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R20 已完成，下一轮为 R21 生产构建与部署演练。**
+当前进度：**R00–R21 已完成，下一轮为 R22 功能对等与最终验收。**
 
 ## 对照运行原项目
 
@@ -37,6 +37,28 @@ bun run dev
 
 开发端口从 `19528` 起步，preview 端口从 `19726` 起步。若起始端口被占用，Vite 按默认行为自动尝试后续端口，启动时以终端打印的 Local URL 为准。
 
+## 生产构建与预览
+
+前置：Bun 1.4.x、Node 20.19+（当前验证为 Node 22.23.2）。
+
+```bash
+bun install --frozen-lockfile
+bun run quality          # typecheck + lint + format + test
+bun run build            # vite build --mode prod，产物在 dist/
+bun run preview          # 编排本地 Mock + vite preview --mode prod
+```
+
+生产请求**不走** `/proxy-default`，而是直连 `.env.prod` 的 `VITE_SERVICE_BASE_URL`（本地预览默认为 `http://127.0.0.1:19007`）。把应用部署到真实环境时，把该地址换成实际 API，不要把 Mock 主机名带上线。
+
+默认 public path 为 `/`（D12）。若要挂在子路径，构建前设置 `VITE_BASE_URL=/admin/`（建议带首尾斜杠），然后重建。Vite asset、favicon 与 Vue Router `history` base 都读这个值。
+
+History 模式部署必须配置 SPA fallback：
+
+- 根路径：未知路径回退到 `/index.html`（Nginx 例：`try_files $uri $uri/ /index.html;`）
+- 子路径 `/admin/`：回退到 `/admin/index.html`（`try_files $uri $uri/ /admin/index.html;`）
+
+`vite preview` 只证明产物和客户端路由能跑，不代替 Nginx/CDN 的 fallback 与缓存配置。当前关闭 sourcemap。Home 的 ECharts chunk 会触发 Vite 500kB warning，这是已知体积，不是构建失败。
+
 本地 Mock 账号：
 
 ```text
@@ -55,10 +77,12 @@ bun run format:write # 显式写入格式化结果
 bun run test         # Vitest 单次运行，不进入 watch
 bun run test:watch   # Vitest watch
 bun run quality      # typecheck + lint + format + test
-bun run build        # 生产构建（R21 纳入最终 CI 交付门）
+bun run build        # 生产构建（CI 交付门）
+bun run preview      # Mock + 生产预览
+bun run preview:app  # 只启动 vite preview --mode prod
 ```
 
-pre-commit 执行 `bun run quality`，不会自动改文件，也不会运行产品 build。GitHub Actions 使用 Bun `1.4.0`、frozen lockfile，并分开跑 quality 检查与 `bun run test`。
+pre-commit 执行 `bun run quality`，不会自动改文件，也不会运行产品 build。GitHub Actions 使用 Bun `1.4.0`、frozen lockfile，并分开跑 quality 检查、`bun run test` 与 `bun run build`。
 
 ## 许可
 
