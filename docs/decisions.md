@@ -209,6 +209,20 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D36 · 第二波加分走 B 系列，不发明 A11
+
+- **日期**：2026-08-25
+- **编号**：A01–A10 封闭。剩余加分用 B01–B02，地图见 [B-series.md](./rounds/B-series.md)。
+- **B01**：`7777`/`7778` 先对话框再登出。当前 `onModalLogout` 与直接登出相同，这是内核协议缺口。
+- **B02**：本地 Conventional Commits 脚本。不新建 `@sa/scripts`，不装 bumpp / changelog / ncu。
+- **skipped**：features 中的「`@sa/*` workspace 全套」。R20 已有 utils/color/axios。永不抽 `@sa/materials`、`@sa/uno-preset`、`@sa/hooks` 全量、`@sa/alova`。
+- **不排期**：nprogress、@vueuse/core、@iconify/vue、Naive 自动导入、vite-plugin-vue-devtools。
+
+### D26 追加 · A 系列已做完
+
+- **日期**：2026-08-25（A10 收口）
+- **结果**：D26 列出的加分项里，除弹窗登出码、全套 `@sa/*`、`@sa/scripts` 外，均已在 A01–A10 落地。后两项改走 D36 的 B 系列 / skipped，不升格为主线 R 编号。
+
 ### D35 · A10 用本地插件，不装官方 svg-icons / vue-components
 
 - **日期**：2026-08-25（A10）

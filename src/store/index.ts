@@ -13,14 +13,16 @@ pinia.use(resetSetupStore);
 export function setupStore(app: App) {
   app.use(pinia);
 
-  useAppStore(pinia);
+  const appStore = useAppStore(pinia);
   useThemeStore(pinia);
   const authStore = useAuthStore(pinia);
   const resetSession = (reason: string) => authStore.resetStore({ reason });
 
   setRequestSessionHandlers({
     onLogout: error => resetSession(error.message),
-    onModalLogout: error => resetSession(error.message),
+    onModalLogout: async error => {
+      await appStore.handleModalLogout(error.message, () => resetSession(error.message));
+    },
     onTokenExpired: error => resetSession(error.message),
     refreshSession: () => authStore.refreshSession()
   });

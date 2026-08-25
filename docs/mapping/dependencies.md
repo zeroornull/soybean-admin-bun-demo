@@ -64,7 +64,7 @@
 | @sa/color | 是（登录、主题） | R20 已抽 palette |
 | @sa/materials | 是 | 不抽 |
 | @sa/uno-preset | 是（dev） | 不抽 |
-| @sa/scripts | 是（dev CLI） | 不做 |
+| @sa/scripts | 是（dev CLI） | B02 只做本地 commit 脚本，不建该包 |
 | @sa/alova | 否（应用未作为默认） | 不做 |
 
 ## 不要装来「对齐原项目」的东西

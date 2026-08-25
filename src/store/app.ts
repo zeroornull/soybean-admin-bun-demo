@@ -2,6 +2,7 @@ import { nextTick, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { initialLocale, syncLocale, type AppLocale } from '@/locales';
 import { SetupStoreId } from './ids';
+import { createModalLogoutController } from './modal-logout';
 import { useTabStore } from './tab';
 
 /** Global application shell state. */
@@ -12,6 +13,7 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   const reloadFlag = ref(true);
   const reloading = ref(false);
   const updateAvailable = ref(false);
+  const modalLogout = createModalLogoutController();
 
   watch(locale, value => syncLocale(value), { flush: 'sync', immediate: true });
 
@@ -78,6 +80,12 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
     reloadFlag,
     reloading,
     updateAvailable,
+    modalLogoutVisible: modalLogout.visible,
+    modalLogoutReason: modalLogout.reason,
+    requestModalLogout: modalLogout.request,
+    handleModalLogout: modalLogout.handle,
+    confirmModalLogout: modalLogout.confirm,
+    cancelModalLogout: modalLogout.cancel,
     markUpdateAvailable,
     dismissUpdate,
     openThemeDrawer,

@@ -5,7 +5,12 @@ import { useI18n } from 'vue-i18n';
 import type { EChartsCoreOption } from 'echarts/core';
 import { useEcharts } from '@/composables/use-echarts';
 import { dayjs } from '@/locales/dayjs';
-import { fetchDashboardServiceStatus, fetchOtherServiceStatus, fetchProtectedServiceStatus } from '@/service/api';
+import {
+  fetchCustomBackendError,
+  fetchDashboardServiceStatus,
+  fetchOtherServiceStatus,
+  fetchProtectedServiceStatus
+} from '@/service/api';
 import { useAppStore } from '@/store/app';
 import { useAuthStore } from '@/store/auth';
 import { useThemeStore } from '@/store/theme';
@@ -175,6 +180,10 @@ async function loadOtherServiceStatus() {
   otherServiceState.value = 'success';
 }
 
+async function simulateModalLogout() {
+  await fetchCustomBackendError('7777', 'Modal logout required');
+}
+
 async function simulateExpiredToken() {
   authStore.token = 'mock-expired-access-token';
   setAccessToken('mock-expired-access-token');
@@ -254,6 +263,9 @@ onMounted(() => {
         </NButton>
         <NButton data-dashboard-action="simulate-expired-token" size="tiny" tertiary @click="simulateExpiredToken">
           {{ t('dashboard.simulateExpiredToken') }}
+        </NButton>
+        <NButton data-dashboard-action="simulate-modal-logout" size="tiny" tertiary @click="simulateModalLogout">
+          {{ t('dashboard.simulateModalLogout') }}
         </NButton>
       </div>
     </section>

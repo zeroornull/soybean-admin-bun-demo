@@ -5,7 +5,7 @@
 - **落地**：对应轮次已有代码，并且那一轮的验收（命令或 Chrome）已通过。见 [PROGRESS.md](../PROGRESS.md)。
 - **终验**：R22 用生产 preview 按完整手工路径重新勾选。未勾不代表没实现。
 
-加分项不做不影响主线结束。终验日 2026-08-25；加分项见 D26，留 A 系列。
+加分项不做不影响主线结束。终验日 2026-08-25；A 系列见 D26，已全部落地。剩余见 [B-series.md](../rounds/B-series.md) 与 D36。
 
 ## 必须
 
@@ -54,7 +54,7 @@
 | --- | --- | --- |
 | 动态路由（后端下发） | `VITE_AUTH_ROUTE_MODE=dynamic` | ☑ A02（默认仍 static） |
 | token 刷新单飞与重放 | `EXPIRED_TOKEN_CODES` | ☑ A01 |
-| 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☐ |
+| 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☐ B01 |
 | Elegant Router | 文件即路由 | ☑ A03（本地生成器，未装官方插件） |
 | 6 种 layout mode | mix / hybrid | ☑ A04（壳投影，未装 materials） |
 | 主题设置抽屉全量 | 圆角、水印、各块开关 | ☑ A05 |
@@ -66,8 +66,8 @@
 | 组件自动导入 | unplugin-vue-components | ☑ A10（只覆盖 `src/components`，Naive 仍手写 import） |
 | 多服务 baseURL | `VITE_OTHER_SERVICE_BASE_URL` | ☑ A09（JSON 对象，不装 json5；`/proxy-demo` → 19008） |
 | 版本更新提示 | `plugins/app.ts` | ☑ A10（`buildTime` meta；生产轮询；开发可模拟） |
-| `@sa/*` workspace 全套 | R20 主线只要求稳定子集 | ☐ |
-| git commit 规范 CLI | `@sa/scripts` | ☐ |
+| `@sa/*` workspace 全套 | R20 主线只要求稳定子集 | skipped（D36：不抽 materials/alova/hooks 表格/uno-preset） |
+| git commit 规范 CLI | `@sa/scripts` | ☐ B02（本地脚本，不装官方全家桶） |
 
 ## 明确不做（默认）
 

@@ -101,7 +101,7 @@ R00–R22 已满足三个停止条件：
 
 再继续加主线轮次，就不再是「把必须项拆清」，而是「将加分项升级为主线范围」。这会破坏 [00-overview.md](./00-overview.md) 的非目标。
 
-如果 R22 后仍想继续，用独立的 **A 系列进阶轮**，不让它们阻塞主线 done：
+R22 后的第一波加分是独立的 **A 系列**，不阻塞主线 done：
 
 | 进阶轮 | 主题 | 对应加分项 |
 | --- | --- | --- |
@@ -115,5 +115,16 @@ R00–R22 已满足三个停止条件：
 | A08 | [其他登录模块](./rounds/A08-login-modules.md) | 验证码、注册、重置、微信 |
 | A09 | [iframe 与多服务请求](./rounds/A09-iframe-other-service.md) | iframe page、other service baseURL |
 | A10 | [图标/插件自动化](./rounds/A10-icons-plugins.md) | SVG sprite、组件自动导入、版本更新提示 |
+
+A01–A10 是封闭集合，已全部完成。不要发明 A11。
+
+若仍有剩余加分，走独立的 **B 系列**，地图见 [B-series.md](./rounds/B-series.md)：
+
+| 第二波 | 主题 | 对应加分项 |
+| --- | --- | --- |
+| B01 | 弹窗登出码 | `MODAL_LOGOUT_CODES` 先确认再登出 |
+| B02 | 提交信息规范 | 本地 commit CLI，不装官方 `@sa/scripts` 全家桶 |
+
+「`@sa/*` workspace 全套」不再单开轮次：R20 子集已经够用，materials / alova / hooks 表格 / uno-preset 明确不抽。
 
 进阶轮应在开始时再写自己的完整文档和验收；本路线只固定边界，不预先把可选实现写成假主线。

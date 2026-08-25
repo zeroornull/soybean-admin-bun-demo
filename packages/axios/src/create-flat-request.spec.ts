@@ -191,6 +191,29 @@ describe('expired token refresh', () => {
   });
 });
 
+describe('modal logout codes', () => {
+  it('calls onModalLogout for 7777 and does not call onLogout', async () => {
+    const { request, setSessionHandlers } = createClient();
+    const onModalLogout = vi.fn(async () => undefined);
+    const onLogout = vi.fn();
+
+    setSessionHandlers({ onModalLogout, onLogout });
+
+    const result = await request({
+      url: '/auth/error',
+      adapter: successAdapter({
+        code: '7777',
+        message: 'Modal logout required',
+        data: null
+      })
+    });
+
+    expect(onModalLogout).toHaveBeenCalledTimes(1);
+    expect(onLogout).not.toHaveBeenCalled();
+    expect(result.error).toMatchObject({ kind: 'backend', code: '7777' });
+  });
+});
+
 describe('createFlatRequest', () => {
   it('maps a success backend code to data and a null error', async () => {
     const { request } = createClient();

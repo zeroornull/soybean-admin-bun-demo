@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
-import { NAlert, NButton, NConfigProvider, NGlobalStyle, NWatermark } from 'naive-ui';
+import { NAlert, NButton, NCard, NConfigProvider, NGlobalStyle, NModal, NWatermark } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import ThemeDrawer from '@/layouts/modules/theme-drawer.vue';
@@ -22,6 +22,10 @@ watch([() => appStore.locale, () => route.meta], ([, meta]) => setDocumentTitle(
 
 function reloadApp() {
   window.location.reload();
+}
+
+function onModalLogoutShow(show: boolean) {
+  if (!show) appStore.cancelModalLogout();
 }
 </script>
 
@@ -61,5 +65,26 @@ function reloadApp() {
       :z-index="9999"
     />
     <ThemeDrawer />
+    <NModal :show="appStore.modalLogoutVisible" data-modal-logout @update:show="onModalLogoutShow">
+      <NCard
+        :bordered="false"
+        class="w-420px max-w-[calc(100vw-32px)]"
+        size="small"
+        :title="t('system.modalLogoutTitle')"
+      >
+        <p class="m-0">{{ t('system.modalLogoutContent') }}</p>
+        <p v-if="appStore.modalLogoutReason" class="mb-0 mt-8px text-12px opacity-68">
+          {{ appStore.modalLogoutReason }}
+        </p>
+        <div class="mt-16px flex justify-end gap-8px">
+          <NButton data-modal-logout-action="cancel" @click="appStore.cancelModalLogout()">
+            {{ t('system.modalLogoutCancel') }}
+          </NButton>
+          <NButton data-modal-logout-action="confirm" type="error" @click="appStore.confirmModalLogout()">
+            {{ t('system.modalLogoutConfirm') }}
+          </NButton>
+        </div>
+      </NCard>
+    </NModal>
   </NConfigProvider>
 </template>

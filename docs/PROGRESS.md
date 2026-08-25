@@ -10,7 +10,7 @@
 
 | 项 | 现状 |
 | --- | --- |
-| 主线位置 | **R00–R22 全部 done**。进阶 **A01–A10 全部 done** |
+| 主线位置 | **R00–R22 全部 done**。进阶 **A01–A10 done**。下一可选 **B01** |
 | 包形态 | Bun workspaces：`@sa/utils`、`@sa/color`、`@sa/axios`；应用组装 token/env/session |
 | 运行时 | Bun 1.4.0、Node 22.23.2；默认 npm registry，无 `bunfig.toml` |
 | 质量门 | frozen install + typecheck + lint + 91 tests + format + build 全绿；CI 含 test/build |
@@ -18,7 +18,7 @@
 | 请求 | 开发走 `/proxy-default` 与 `/proxy-demo`；生产直连 `19007` / `19008` |
 | 部署 | 默认 `VITE_BASE_URL=/`；SPA fallback 已写入 README |
 
-主线已结束。进阶轮 **A01–A10 已完成**。剩余加分项（弹窗登出码、全套 `@sa/*`、`@sa/scripts`）见 [features.md](./mapping/features.md)，不再增加 A 编号。
+主线已结束。进阶 **A01–A10 已完成**。第二波加分走 **B 系列**（[B-series.md](./rounds/B-series.md)），下一轮 **B01 弹窗登出码**。不发明 A11。
 
 ## 轮次重核结论
 
@@ -90,7 +90,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | 生产构建可预览、不依赖 dev proxy | R21 | 是 | 是 |
 | 必须清单、文档与实际版本收口 | R22 | 是 | 是 |
 
-加分项默认不阻塞主线。A01–A10 已做。剩余未做项见 features 加分表。
+加分项默认不阻塞主线。A01–A10 已做。剩余会话码/提交规范走 B 系列；全套 `@sa/*` 按 D36 skipped。
 
 ## 进阶轮
 
@@ -107,9 +107,18 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | A09 | iframe 与多服务请求 | done | 2026-08-25 | 同源 iframe + 19008 其它服务；`/proxy-demo`；85 tests；Chrome 外链正文与 other-mock |
 | A10 | 图标/插件自动化 | done | 2026-08-25 | 本地 SVG 雪碧图 + components 自动导入 + buildTime 提示；91 tests；Chrome 菜单 SVG 与模拟更新 |
 
+### B 系列
+
+| 轮 | 标题 | 状态 | 完成日 | 证据 / 笔记 |
+| --- | --- | --- | --- | --- |
+| B01 | 弹窗登出码 | pending | | 7777/7778 先对话框再登出 |
+| B02 | 提交信息规范 | pending | | 本地 commit CLI；不装官方 scripts 全家桶 |
+
+地图：[B-series.md](./rounds/B-series.md)。开始 B01 时再写轮次文档。
+
 ## 下一轮入口
 
-进阶 A01–A10 已全部完成。主线不再增加 R 编号。剩余加分项若继续，另开文档，不要发明 A11。
+可选：B01 弹窗登出码。主线不再增加 R 编号，也不发明 A11。
 
 ## 剩余主线
 
@@ -174,14 +183,15 @@ bun pm ls
 
 ## 决策填写
 
-已拍板并写入 [decisions.md](./decisions.md)：D1–D35。D12 为 `VITE_BASE_URL=/`。A01 见 D27，A02 见 D10 追加，A03 见 D28，A04 见 D29，A05 见 D30，A06 见 D31，A07 见 D32，A08 见 D33，A09 见 D34，A10 见 D35。
+已拍板并写入 [decisions.md](./decisions.md)：D1–D36。D12 为 `VITE_BASE_URL=/`。A01 见 D27，A02 见 D10 追加，A03 见 D28，A04 见 D29，A05 见 D30，A06 见 D31，A07 见 D32，A08 见 D33，A09 见 D34，A10 见 D35。B 系列见 D36。
 
 ## 已知边界（不是漏做的主线）
 
 这些是已记录的范围选择，不是未完成的主线：
 
 - **ECharts 体积**：Home 约 `724.32 kB / gzip 226.27 kB`，Vite 500kB warning 按 D22 保留，本轮不拆包。
-- **会话码**：expired 码走 A01 单飞刷新；弹窗登出码仍未做。
+- **会话码**：expired 码走 A01 单飞刷新；弹窗登出码排 B01。
+- **第二波加分**：B 系列。全套 `@sa/*` 不抽；提交规范排 B02。
 - **权限**：默认 static；dynamic 见 A02。`/restricted`（`R_NOBODY`）保留为 403 演示页。
 - **路由生成**：A03 用本地生成器，不装 `@elegant-router/vue`。
 - **生产 API**：本地 preview 直连 `127.0.0.1:19007`；真实上线需改 `.env.prod`，不要把 Mock 主机带上线。

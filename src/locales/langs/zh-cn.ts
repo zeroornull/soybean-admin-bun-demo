@@ -26,7 +26,11 @@ export const zhCN = {
     updateTitle: '发现新版本',
     updateContent: '检测到应用已更新，刷新页面以加载最新资源。',
     updateCancel: '稍后',
-    updateConfirm: '刷新'
+    updateConfirm: '刷新',
+    modalLogoutTitle: '登录已失效',
+    modalLogoutContent: '当前会话需要重新登录。确认后将退出并返回登录页。',
+    modalLogoutCancel: '取消',
+    modalLogoutConfirm: '退出登录'
   },
   search: {
     title: '搜索',
@@ -133,6 +137,7 @@ export const zhCN = {
     otherServiceUnavailable: '其它服务暂时不可用',
     requestOtherService: '请求其它服务',
     simulateAppUpdate: '模拟发现新版本',
+    simulateModalLogout: '模拟弹窗登出',
     loadingService: '正在检查本地数据服务…',
     serviceUnavailable: '数据服务暂时不可用',
     serviceErrorDescription: '看板数据请求失败，请检查网络或本地 Mock 服务后重试。',

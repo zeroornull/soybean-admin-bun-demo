@@ -28,7 +28,11 @@ export const enUS = {
     updateTitle: 'New version available',
     updateContent: 'The app has been updated. Refresh to load the latest assets.',
     updateCancel: 'Later',
-    updateConfirm: 'Refresh'
+    updateConfirm: 'Refresh',
+    modalLogoutTitle: 'Session expired',
+    modalLogoutContent: 'This session needs to sign in again. Confirm to log out and return to the login page.',
+    modalLogoutCancel: 'Cancel',
+    modalLogoutConfirm: 'Log out'
   },
   search: {
     title: 'Search',
@@ -135,6 +139,7 @@ export const enUS = {
     otherServiceUnavailable: 'Other service is temporarily unavailable',
     requestOtherService: 'Request other service',
     simulateAppUpdate: 'Simulate a new version',
+    simulateModalLogout: 'Simulate modal logout',
     loadingService: 'Checking the local data service…',
     serviceUnavailable: 'Data service is temporarily unavailable',
     serviceErrorDescription: 'The dashboard request failed. Check the network or local Mock service and try again.',
