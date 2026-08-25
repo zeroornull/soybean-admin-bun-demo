@@ -147,3 +147,11 @@
 - **尺寸**：以容器 ResizeObserver 为主，因为侧栏宽度过渡不触发 window resize；容器宽高为 0 时延后 init/resize。仅在浏览器缺少 ResizeObserver 时回退 window resize。
 - **主题与语言**：不因 dark/locale/themeColor 改变而 re-init；计算 option 后 setOption 更新轴线、tooltip、legend、series 与星期文本，保持同一实例。
 - **构建证据**：使用 ECharts core 按需注册后 Home 仍为 `722.90 kB / gzip 225.81 kB` 并触发 Vite 500kB warning。R16 不抬高 warning 阈值、不假装消除体积；R21 再评估 vendor/manual chunk、缓存与真实部署收益。
+
+### D23 · wildcard 404 保留原 URL，模块 API 错误不跳全页 500
+
+- **日期**：2026-08-24
+- **路由**：提供显式 `/404` 便于手动访问，同时保留 wildcard 组件并维持用户原始 path/query/hash，不 replace 成 `/404`。这有利于调试与分享错误地址，也避免额外 redirect；403/404/500 均为 constant，不进 menu/tab。
+- **恢复**：异常页 Home action 在 auth route 已注册时按 name 跳转；匿名冷启动尚无 home name 时改走 `/home`，让既有守卫安全转 login。Back/Retry 优先使用 Vue Router history state，无 back 时回 Home，不依赖 `window.history.length` 猜测。
+- **500 边界**：全页 500 只用于页面级服务异常；普通 Dashboard request error 在模块内保留指标/图表，显示 NAlert 和 Retry。不会把所有 Axios/HTTP/backend error 粗暴重定向到 `/500`。
+- **复用**：403/404/500 只提供 code、i18n key、illustration、actions 与 handler；共同 DOM、主题、响应式和可访问性全部由 ExceptionBase 负责。

@@ -18,14 +18,17 @@ export const zhCN = {
     dark: '暗色',
     localState: '局部状态：{count}',
     openLogin: '打开登录页',
-    backHome: '返回首页'
+    backHome: '返回首页',
+    goBack: '返回上一页',
+    retry: '重试'
   },
   route: {
     login: '登录',
     home: '首页',
     restricted: '受限页',
     forbidden: '无权限',
-    notFound: '页面不存在'
+    notFound: '页面不存在',
+    serverError: '服务异常'
   },
   login: {
     title: '登录',
@@ -78,6 +81,11 @@ export const zhCN = {
     socialMedia: '社交媒体',
     directVisit: '直接访问',
     emailCampaign: '邮件活动',
+    serviceReady: '本地数据服务已就绪：{service}',
+    simulateServiceError: '模拟服务异常',
+    loadingService: '正在检查本地数据服务…',
+    serviceUnavailable: '数据服务暂时不可用',
+    serviceErrorDescription: '看板数据请求失败，请检查网络或本地 Mock 服务后重试。',
     chartAriaLabel: '近七日访问量折线和订单量柱状组合图',
     monday: '周一',
     tuesday: '周二',
@@ -103,7 +111,11 @@ export const zhCN = {
   },
   error: {
     forbidden: '无访问权限',
-    notFound: '页面不存在'
+    forbiddenDescription: '当前账号没有访问该页面的权限。你可以返回上一页或回到首页。',
+    notFound: '页面不存在',
+    notFoundDescription: '没有找到你访问的地址。原始 URL 已保留，方便检查和分享问题。',
+    serverError: '服务暂时不可用',
+    serverErrorDescription: '页面服务遇到异常。请返回上一页重试当前操作，或回到首页继续使用。'
   }
 } as const;
 

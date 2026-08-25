@@ -29,6 +29,26 @@ export const constantRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/404',
+    name: 'not-found-page',
+    component: () => import('@/views/_builtin/404/index.vue'),
+    meta: {
+      title: '页面不存在',
+      i18nKey: 'route.notFound',
+      constant: true
+    }
+  },
+  {
+    path: '/500',
+    name: 'server-error',
+    component: () => import('@/views/_builtin/500/index.vue'),
+    meta: {
+      title: '服务异常',
+      i18nKey: 'route.serverError',
+      constant: true
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('@/views/_builtin/404/index.vue'),

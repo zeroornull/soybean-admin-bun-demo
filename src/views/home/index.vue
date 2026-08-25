@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { NButton, NCard, NDatePicker, NProgress } from 'naive-ui';
+import { NAlert, NButton, NCard, NDatePicker, NProgress } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import type { EChartsCoreOption } from 'echarts/core';
 import { useEcharts } from '@/composables/use-echarts';
 import { dayjs } from '@/locales/dayjs';
+import { fetchDashboardServiceStatus } from '@/service/api';
 import { useThemeStore } from '@/store/theme';
 
 defineOptions({ name: 'Home' });
 
 const reportDate = ref<number | null>(dayjs('2026-08-24').valueOf());
 const refreshCount = ref(0);
+const serviceState = ref<'loading' | 'success' | 'error'>('loading');
+const serviceName = ref('');
 const datePickerRef = ref<InstanceType<typeof NDatePicker> | null>(null);
 const trafficChartRef = ref<HTMLElement | null>(null);
 const { t, locale } = useI18n();
@@ -135,10 +138,26 @@ const trafficOption = computed<EChartsCoreOption>(() => {
 });
 const { chart, isReady } = useEcharts(trafficChartRef, trafficOption);
 
+async function loadServiceStatus(simulateError = false) {
+  if (serviceState.value === 'loading' && simulateError) return;
+
+  serviceState.value = 'loading';
+  const { data, error } = await fetchDashboardServiceStatus(simulateError);
+
+  if (error) {
+    serviceState.value = 'error';
+    return;
+  }
+
+  serviceName.value = data.service;
+  serviceState.value = 'success';
+}
+
 onMounted(() => {
   const input = (datePickerRef.value?.$el as HTMLElement | undefined)?.querySelector('input');
   input?.setAttribute('id', 'dashboard-report-date');
   input?.setAttribute('name', 'reportDate');
+  void loadServiceStatus();
 });
 </script>
 
@@ -172,6 +191,41 @@ onMounted(() => {
         </NButton>
       </div>
     </header>
+
+    <section data-dashboard-boundary :data-state="serviceState" class="mt-14px">
+      <NAlert v-if="serviceState === 'loading'" type="info">
+        {{ t('dashboard.loadingService') }}
+      </NAlert>
+      <NAlert
+        v-else-if="serviceState === 'error'"
+        data-dashboard-error
+        :title="t('dashboard.serviceUnavailable')"
+        type="error"
+        role="alert"
+      >
+        <p class="m-0">{{ t('dashboard.serviceErrorDescription') }}</p>
+        <NButton
+          data-dashboard-action="retry"
+          class="mt-10px"
+          size="small"
+          type="primary"
+          @click="loadServiceStatus(false)"
+        >
+          {{ t('common.retry') }}
+        </NButton>
+      </NAlert>
+      <div
+        v-else
+        class="flex flex-wrap items-center justify-between gap-8px rd-8px border border-[var(--border-color)] bg-[var(--card-bg)] px-12px py-9px text-12px"
+      >
+        <span data-dashboard-service-ready>
+          {{ t('dashboard.serviceReady', { service: serviceName }) }}
+        </span>
+        <NButton data-dashboard-action="simulate-error" size="tiny" tertiary @click="loadServiceStatus(true)">
+          {{ t('dashboard.simulateServiceError') }}
+        </NButton>
+      </div>
+    </section>
 
     <section data-dashboard-stats class="mt-20px grid grid-cols-1 gap-14px sm:grid-cols-2 xl:grid-cols-4">
       <NCard v-for="item in dashboardStats" :key="item.key" :data-stat-key="item.key" size="small">

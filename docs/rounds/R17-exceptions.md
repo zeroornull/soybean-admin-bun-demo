@@ -58,13 +58,26 @@
 
 ## 验收
 
-- [ ] 手动打开 `/403`、`/404`、`/500` 都能看到对应内容
-- [ ] 任意未知 path 进 404，不白屏、不重定向循环
-- [ ] 受限路由进 403，不误进 404
-- [ ] 三页复用同一个 ExceptionBase，只传差异配置
-- [ ] 主操作能回到可用页，新标签直达也有兜底
-- [ ] 中英、亮暗与 360px 宽度全部可用
-- [ ] 至少一个业务区能可见地展示网络错误并重试
+- [x] 手动打开 `/403`、`/404`、`/500` 都能看到对应内容
+- [x] 任意未知 path 进 404，不白屏、不重定向循环
+- [x] 受限路由进 403，不误进 404
+- [x] 三页复用同一个 ExceptionBase，只传差异配置
+- [x] 主操作能回到可用页，新标签直达也有兜底
+- [x] 中英、亮暗与 360px 宽度全部可用
+- [x] 至少一个业务区能可见地展示网络错误并重试
+
+R17 实际证据（2026-08-24）：
+
+- 新增 `ExceptionBase`，统一状态码、title/description key、装饰插图、primary/secondary action、主题/语言控件；插图 `aria-hidden=true`，阅读顺序为 code→h1→description→actions；
+- 403/404/500 页面只导入基座、选择 illustration/action key 并绑定 navigation handler；生产各页 chunk 约 `0.54–0.55 kB`，共享 navigation/base chunk；
+- 新增显式 `/404`、`/500` constant route，wildcard `not-found` 仍保留。匿名手动打开 403/404/500 均直接显示，不被登录守卫抢走；
+- 未知 `/does-not-exist/r17?x=1#abc` 与登录态 `/r17-unknown-logged?case=loop` 都保留原 URL 显示 404；完整刷新后仍是相同 URL/页面，没有 redirect loop；
+- Regular `User` 登录后直达 `/restricted` 最终 URL/title 为 `/403 / Forbidden`，没有误入 wildcard 404；403 的 Go back 返回可访问 Home；
+- 匿名新标签直达 403 首次点击 Home 暴露“home name 尚未注册”边界；修复为有 route name 则按 name，否则导航 `/home` 交给既有 guard 转 `login?redirect=/home`；500 新标签 Retry 同样有 Home fallback；
+- 360×800 dark/en 500 实测 document scrollWidth=360，code/title/description/actions 可读，装饰不撑宽；中文亮色 403 桌面与英文暗色 500 手机截图通过；
+- Dashboard mounted 后真实请求 `/health` 显示 success；点击 Simulate 调 `/test/http-500` 得到 HTTP 500，页面内 NAlert `role=alert` 显示 error，URL 仍 `/home` 且图表 ready；Retry 再调 `/health` 恢复 success；
+- 模块请求错误没有跳全页 500、没有清空指标/图表；全页 500 只表达页面级服务异常，二者责任分离；
+- Chrome 最终 Console/Issues 为空；frozen install/typecheck/build/102-key 中英键集/diff check 通过。R16 已知 Home chunk warning 仍保留到 R21。
 
 ## 常见坑
 

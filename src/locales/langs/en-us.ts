@@ -20,14 +20,17 @@ export const enUS = {
     dark: 'Dark',
     localState: 'Local state: {count}',
     openLogin: 'Open login',
-    backHome: 'Back home'
+    backHome: 'Back home',
+    goBack: 'Go back',
+    retry: 'Retry'
   },
   route: {
     login: 'Login',
     home: 'Home',
     restricted: 'Restricted',
     forbidden: 'Forbidden',
-    notFound: 'Page not found'
+    notFound: 'Page not found',
+    serverError: 'Service error'
   },
   login: {
     title: 'Login',
@@ -80,6 +83,11 @@ export const enUS = {
     socialMedia: 'Social media',
     directVisit: 'Direct',
     emailCampaign: 'Email campaigns',
+    serviceReady: 'Local data service is ready: {service}',
+    simulateServiceError: 'Simulate service error',
+    loadingService: 'Checking the local data service…',
+    serviceUnavailable: 'Data service is temporarily unavailable',
+    serviceErrorDescription: 'The dashboard request failed. Check the network or local Mock service and try again.',
     chartAriaLabel: 'Combined line and bar chart of visits and orders over the last seven days',
     monday: 'Mon',
     tuesday: 'Tue',
@@ -105,6 +113,10 @@ export const enUS = {
   },
   error: {
     forbidden: 'No permission',
-    notFound: 'Page not found'
+    forbiddenDescription: 'This account cannot access the requested page. Go back or return home to continue.',
+    notFound: 'Page not found',
+    notFoundDescription: 'The requested address does not exist. The original URL is preserved for debugging and sharing.',
+    serverError: 'Service unavailable',
+    serverErrorDescription: 'The page service encountered an error. Go back to retry the operation or return home.'
   }
 } satisfies MessageSchema;

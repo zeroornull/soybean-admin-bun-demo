@@ -42,7 +42,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R14 | 暗黑与主题色 | done | 2026-08-24 | light/dark/auto + system media + CSS/Naive palette + pre-mount storage + reset 已落地；暗色弹层/主色/冷启动/移动端 Chrome 矩阵通过 |
 | R15 | 登录页交付 | done | 2026-08-24 | Naive Form + 双栏品牌页 + 校验/loading/NAlert/Enter/Tab/防重入已落地；错误/正确/离线/中英/亮暗/360px Chrome 矩阵通过 |
 | R16 | 首页看板与 ECharts | done | 2026-08-24 | 4 指标卡 + ECharts 双轴趋势 + 渠道卡 + ResizeObserver/KeepAlive/dispose 生命周期已落地；resize/tab/reload/theme/360px Chrome 矩阵通过 |
-| R17 | 内置异常页与边界状态 | pending | | |
+| R17 | 内置异常页与边界状态 | done | 2026-08-24 | 共享 ExceptionBase + 显式 403/404/500 + wildcard 原 URL + history/home fallback + Dashboard HTTP error/retry 已落地；边界 Chrome 矩阵通过 |
 | R18 | 工程化质量门 | pending | | |
 | R19 | 自动化回归测试 | pending | | |
 | R20 | Bun workspace 与内部包 | pending | | |
