@@ -67,7 +67,7 @@ describe('auth resetStore', () => {
       buttons: []
     };
 
-    routeStore.initAuthRoute(['R_SUPER'], router);
+    await routeStore.initAuthRoute(['R_SUPER'], router);
     tabStore.addTab({
       name: 'home',
       fullPath: '/home',

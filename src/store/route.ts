@@ -1,7 +1,9 @@
 import { computed, ref, shallowRef } from 'vue';
 import { defineStore } from 'pinia';
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw, Router } from 'vue-router';
+import { mapBackendRoutesToVue } from '@/router/map-backend-routes';
 import { authRoutes } from '@/router/routes';
+import { fetchGetUserRoutes } from '@/service/api';
 import { SetupStoreId } from './ids';
 
 export interface MenuItem {
@@ -206,25 +208,31 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
     removeRouteFns = [];
   }
 
-  function initAuthRoute(roles: string[], targetRouter: Router) {
-    if (import.meta.env.VITE_AUTH_ROUTE_MODE !== 'static') {
-      throw new Error('Dynamic auth route mode is not implemented in the main learning path');
-    }
-
+  async function initAuthRoute(roles: string[], targetRouter: Router) {
     removeAuthRoutes();
 
-    const filteredRoutes = filterAuthRoutesByRoles(authRoutes, roles, import.meta.env.VITE_STATIC_SUPER_ROLE);
+    let nextRoutes: RouteRecordRaw[] = [];
 
-    filteredRoutes.forEach(route => {
+    if (import.meta.env.VITE_AUTH_ROUTE_MODE === 'dynamic') {
+      const { data, error } = await fetchGetUserRoutes();
+
+      if (error || !data) return false;
+
+      nextRoutes = mapBackendRoutesToVue(data.routes);
+    } else {
+      nextRoutes = filterAuthRoutesByRoles(authRoutes, roles, import.meta.env.VITE_STATIC_SUPER_ROLE);
+    }
+
+    nextRoutes.forEach(route => {
       removeRouteFns.push(targetRouter.addRoute(route));
     });
 
     activeRouter = targetRouter;
-    menus.value = getMenusByAuthRoutes(filteredRoutes, targetRouter);
-    authorizedRouteNames.value = collectRouteNames(filteredRoutes);
+    menus.value = getMenusByAuthRoutes(nextRoutes, targetRouter);
+    authorizedRouteNames.value = collectRouteNames(nextRoutes);
     isAuthRouteInitialized.value = true;
 
-    return filteredRoutes;
+    return true;
   }
 
   function syncCurrentRoute(route: RouteLocationNormalizedLoaded) {

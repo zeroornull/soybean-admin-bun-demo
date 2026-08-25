@@ -52,7 +52,7 @@
 
 | 功能 | 说明 | 状态 |
 | --- | --- | --- |
-| 动态路由（后端下发） | `VITE_AUTH_ROUTE_MODE=dynamic` | ☐ |
+| 动态路由（后端下发） | `VITE_AUTH_ROUTE_MODE=dynamic` | ☑ A02（默认仍 static） |
 | token 刷新单飞与重放 | `EXPIRED_TOKEN_CODES` | ☑ A01 |
 | 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☐ |
 | Elegant Router | 文件即路由 | ☐ |

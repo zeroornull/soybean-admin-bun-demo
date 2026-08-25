@@ -10,7 +10,7 @@
 
 | 项 | 现状 |
 | --- | --- |
-| 主线位置 | **R00–R22 全部 done**。进阶 **A01 done**，下一可选 **A02** |
+| 主线位置 | **R00–R22 全部 done**。进阶 **A01–A02 done**，下一可选 **A03** |
 | 包形态 | Bun workspaces：`@sa/utils`、`@sa/color`、`@sa/axios`；应用组装 token/env/session |
 | 运行时 | Bun 1.4.0、Node 22.23.2；默认 npm registry，无 `bunfig.toml` |
 | 质量门 | frozen install + typecheck + lint + 22 tests + format + build 全绿；CI 含 test/build |
@@ -18,7 +18,7 @@
 | 请求 | 开发走 `/proxy-default`；生产直连 `http://127.0.0.1:19007` |
 | 部署 | 默认 `VITE_BASE_URL=/`；SPA fallback 已写入 README |
 
-主线已结束。进阶轮 **A01 已完成**，下一可选轮为 A02 动态路由。
+主线已结束。进阶轮 **A01–A02 已完成**，下一可选轮为 A03 Elegant Router。
 
 ## 轮次重核结论
 
@@ -90,14 +90,14 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | 生产构建可预览、不依赖 dev proxy | R21 | 是 | 是 |
 | 必须清单、文档与实际版本收口 | R22 | 是 | 是 |
 
-加分项（动态路由、token 刷新、Elegant Router、多布局、主题抽屉等）全部未做，不阻塞主线；R22 后走 A 系列。
+加分项默认不阻塞主线。A01 token 刷新、A02 动态路由已做；其余仍走 A 系列。
 
 ## 进阶轮
 
 | 轮 | 标题 | 状态 | 完成日 | 证据 / 笔记 |
 | --- | --- | --- | --- | --- |
 | A01 | token 刷新单飞与请求重放 | done | 2026-08-25 | `@sa/axios` 单飞 refresh + 一次重放；失败才登出；26 tests；Chrome 模拟过期后拿到 refreshed token |
-| A02 | 后端动态路由协议 | pending | | |
+| A02 | 后端动态路由协议 | done | 2026-08-25 | JSON→白名单组件；默认 static；dynamic 下超管/普通/刷新/403/404 Chrome 通过 |
 | A03 | Elegant Router 与路由生成 | pending | | |
 | A04 | 多 layout mode | pending | | |
 | A05 | 完整主题设置抽屉 | pending | | |
@@ -109,7 +109,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 
 ## 下一轮入口
 
-可选：[A02 动态路由](./04-learning-path.md)。主线不再增加 R 编号。
+可选：A03 Elegant Router（开始时再写轮次文档）。主线不再增加 R 编号。
 
 ## 剩余主线
 

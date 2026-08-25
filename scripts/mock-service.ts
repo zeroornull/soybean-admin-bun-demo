@@ -9,6 +9,73 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*'
 };
 
+const knownAuthPaths = new Set(['/', '/home', '/restricted']);
+
+function identityFromAuthorization(authorization: string | null) {
+  if (authorization === 'Bearer mock-expired-access-token') return 'expired';
+  if (['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(authorization || '')) return 'super';
+  if (['Bearer mock-user-access-token', 'Bearer mock-user-refreshed-access-token'].includes(authorization || '')) {
+    return 'user';
+  }
+
+  return 'anon';
+}
+
+function homeRoute() {
+  return {
+    name: 'home',
+    path: 'home',
+    component: 'home',
+    meta: {
+      title: '首页',
+      i18nKey: 'route.home',
+      icon: '⌂',
+      order: 1,
+      componentName: 'Home',
+      keepAlive: true,
+      pinned: true,
+      requiresAuth: true
+    }
+  };
+}
+
+function restrictedRoute() {
+  return {
+    name: 'restricted',
+    path: 'restricted',
+    component: 'restricted',
+    meta: {
+      title: '受限页',
+      i18nKey: 'route.restricted',
+      icon: '⚿',
+      order: 20,
+      componentName: 'Restricted',
+      keepAlive: true,
+      requiresAuth: true
+    }
+  };
+}
+
+function userRoutes(isSuper: boolean) {
+  return {
+    home: 'home',
+    routes: [
+      {
+        name: 'root',
+        path: '/',
+        component: 'layout.base',
+        redirect: '/home',
+        meta: {
+          title: '',
+          hideInMenu: true,
+          requiresAuth: true
+        },
+        children: isSuper ? [homeRoute(), restrictedRoute()] : [homeRoute()]
+      }
+    ]
+  };
+}
+
 function sendJson(response: import('node:http').ServerResponse, status: number, body: unknown) {
   response.writeHead(status, {
     ...corsHeaders,
@@ -224,6 +291,47 @@ const server = createServer(async (request, response) => {
       code,
       message: url.searchParams.get('message') || `Backend error ${code}`,
       data: null
+    });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/route/getUserRoutes') {
+    const identity = identityFromAuthorization(request.headers.authorization || null);
+
+    if (identity === 'expired') {
+      sendJson(response, 200, {
+        code: '9999',
+        message: 'Token expired',
+        data: null
+      });
+      return;
+    }
+
+    if (identity === 'anon') {
+      sendJson(response, 200, {
+        code: '8888',
+        message: 'Session expired',
+        data: null
+      });
+      return;
+    }
+
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: userRoutes(identity === 'super')
+    });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/route/isRouteExist') {
+    const path = url.searchParams.get('path') || '';
+    const normalized = path === '/' ? path : path.replace(/\/+$/, '');
+
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: knownAuthPaths.has(normalized)
     });
     return;
   }

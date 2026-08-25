@@ -64,6 +64,13 @@
 - **原因**：先把守卫决策树、刷新恢复和 403/404 分流学清楚；动态路由是加分项 A02，不阻塞主线。
 - **替代**：R22 后按 [04-learning-path.md](./04-learning-path.md) 的 A02 另开进阶轮。
 
+### D10 追加 · A02 实现 dynamic，默认仍 static
+
+- **日期**：2026-08-25（A02）
+- **是/否**：可选。`.env` 默认 `static`。设 `VITE_AUTH_ROUTE_MODE=dynamic` 后走 `GET /route/getUserRoutes`。
+- **后端 JSON 如何映射到组件**：`component` 字符串必须命中 `routeComponentMap` 白名单（`layout.base` / `home` / `restricted`），禁止任意路径 `import()`。
+- **403**：`GET /route/isRouteExist?path=` 判断系统是否存在该业务 path；存在但未注册 → 403，不存在 → 404。
+
 ### D11 · 抽出了哪些 `@sa/*` 包
 
 - **日期**：2026-08-25（R20）
