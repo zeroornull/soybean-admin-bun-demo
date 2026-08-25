@@ -56,7 +56,7 @@
 | token 刷新单飞与重放 | `EXPIRED_TOKEN_CODES` | ☑ A01 |
 | 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☐ |
 | Elegant Router | 文件即路由 | ☑ A03（本地生成器，未装官方插件） |
-| 6 种 layout mode | mix / hybrid | ☐ |
+| 6 种 layout mode | mix / hybrid | ☑ A04（壳投影，未装 materials） |
 | 主题设置抽屉全量 | 圆角、水印、各块开关 | ☐ |
 | 页签拖拽、Chrome 风格页签 | vue-draggable-plus + materials | ☐ |
 | 全局搜索命令盘 | `global-search` | ☐ |

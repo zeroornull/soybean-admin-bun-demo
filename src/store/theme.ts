@@ -2,10 +2,13 @@ import { computed, onScopeDispose, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { darkTheme } from 'naive-ui';
 import type { GlobalThemeOverrides } from 'naive-ui';
+import { defaultLayoutMode, resolveLayoutMode, type LayoutMode } from '@/layouts/layout-mode';
 import {
   clearThemeSettings,
+  getLayoutModeSetting,
   getThemeColorSetting,
   getThemeSchemeSetting,
+  setLayoutModeSetting,
   setThemeColorSetting,
   setThemeSchemeSetting
 } from '@/utils/storage';
@@ -27,6 +30,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
   const systemDark = ref(mediaQuery?.matches ?? false);
   const themeScheme = ref<ThemeScheme>(resolveThemeScheme(getThemeSchemeSetting()));
   const themeColor = ref(normalizeHexColor(getThemeColorSetting(), defaultThemeColor));
+  const layoutMode = ref<LayoutMode>(resolveLayoutMode(getLayoutModeSetting()));
   const darkMode = computed(() => (themeScheme.value === 'auto' ? systemDark.value : themeScheme.value === 'dark'));
   const themeColorPalette = computed(() => createThemeColorPalette(themeColor.value));
   const naiveTheme = computed(() => (darkMode.value ? darkTheme : null));
@@ -56,6 +60,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
 
   watch(themeScheme, value => setThemeSchemeSetting(value), { flush: 'sync', immediate: true });
   watch(themeColor, value => setThemeColorSetting(value), { flush: 'sync', immediate: true });
+  watch(layoutMode, value => setLayoutModeSetting(value), { flush: 'sync', immediate: true });
   watch([darkMode, themeColorPalette], syncThemeToDom, { flush: 'sync', immediate: true });
 
   function handleSystemThemeChange(event: MediaQueryListEvent) {
@@ -81,9 +86,14 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
     return true;
   }
 
+  function setLayoutMode(mode: LayoutMode) {
+    layoutMode.value = resolveLayoutMode(mode);
+  }
+
   function resetTheme() {
     themeScheme.value = defaultThemeScheme;
     themeColor.value = defaultThemeColor;
+    layoutMode.value = defaultLayoutMode;
     clearThemeSettings();
     syncThemeToDom();
   }
@@ -92,6 +102,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
     themeScheme,
     darkMode,
     themeColor,
+    layoutMode,
     systemDark,
     themeColorPalette,
     naiveTheme,
@@ -99,6 +110,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
     setThemeScheme,
     toggleThemeScheme,
     setThemeColor,
+    setLayoutMode,
     resetTheme
   };
 });

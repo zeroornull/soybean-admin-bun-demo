@@ -101,6 +101,18 @@ export const zhCN = {
     description: '只有静态超管角色可以绕过该路由的 R_NOBODY 要求。',
     demoNote: '演示页，用来验证静态权限 403，不是业务模块。'
   },
+  layout: {
+    switchMode: '切换布局模式',
+    subMenu: '子菜单',
+    mode: {
+      vertical: '垂直菜单',
+      'vertical-mix': '垂直混合',
+      'vertical-hybrid-header-first': '左侧混合-顶部优先',
+      horizontal: '顶部菜单',
+      'top-hybrid-sidebar-first': '顶部混合-侧边优先',
+      'top-hybrid-header-first': '顶部混合-顶部优先'
+    }
+  },
   theme: {
     light: '亮色',
     dark: '暗色',

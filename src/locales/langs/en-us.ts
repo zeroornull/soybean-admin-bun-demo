@@ -103,6 +103,18 @@ export const enUS = {
     description: "Only the static super role can bypass this route's R_NOBODY requirement.",
     demoNote: 'Demo page for static 403 checks, not a business module.'
   },
+  layout: {
+    switchMode: 'Switch layout mode',
+    subMenu: 'Submenu',
+    mode: {
+      vertical: 'Vertical',
+      'vertical-mix': 'Vertical mix',
+      'vertical-hybrid-header-first': 'Left hybrid, header first',
+      horizontal: 'Horizontal',
+      'top-hybrid-sidebar-first': 'Top hybrid, sidebar first',
+      'top-hybrid-header-first': 'Top hybrid, header first'
+    }
+  },
   theme: {
     light: 'Light',
     dark: 'Dark',

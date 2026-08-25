@@ -108,7 +108,7 @@ R00–R22 已满足三个停止条件：
 | A01 | [token 刷新单飞与请求重放](./rounds/A01-token-refresh.md) | expired token codes |
 | A02 | [后端动态路由协议](./rounds/A02-dynamic-routes.md) | `VITE_AUTH_ROUTE_MODE=dynamic` |
 | A03 | [Elegant Router 与路由生成](./rounds/A03-elegant-router.md) | 文件即路由 |
-| A04 | 多 layout mode | mix / hybrid / horizontal |
+| A04 | [多 layout mode](./rounds/A04-layout-mode.md) | mix / hybrid / horizontal |
 | A05 | 完整主题设置抽屉 | 圆角、水印、预设、区块开关 |
 | A06 | 高级页签 | 拖拽、Chrome 外观、更完整持久化 |
 | A07 | 全局搜索 | 命令盘与路由搜索 |

@@ -68,12 +68,7 @@ Elegant Router 的价值是「views 目录即路由」。代价是生成文件�
 
 ### 3. 布局变体
 
-原主题抽屉支持 6+ 种 layout mode。重写先做：
-
-- `vertical`：侧栏 + 顶栏 + 内容
-- （加分）`horizontal`
-
-mix / hybrid 放到功能对等之后。
+原主题抽屉支持 6+ 种 layout mode。R05 先做 `vertical`。A04 补齐 6 个 mode 名：同一份路由菜单投到 sider/header，不引入 `@sa/materials`，完整抽屉仍是 A05。
 
 ### 4. 登录模块
 

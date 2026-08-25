@@ -209,6 +209,14 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D29 · A04 六种 layout mode 只改壳，不扩菜单页
+
+- **日期**：2026-08-25（A04）
+- **决策**：实现 legacy 的 6 个 mode 名。菜单仍来自路由投影。当前只有一级 `home`/`restricted`，嵌套差异用单元测试夹具证明，不为 mix 加 CRUD 页。
+- **壳**：vertical 保持 R05；horizontal 去掉 sider、菜单进顶栏；vertical-mix 用 90px 一级栏，有二级再开子列；两个 header-first 在无二级时隐藏 sider。
+- **入口**：顶栏 `<select>`，写入 storage；重置主题回到 `vertical`。完整抽屉仍是 A05。
+- **不引入**：`@sa/materials`、mixSiderFixed、页脚/水印开关。
+
 ### D28 · A03 用本地生成器，不装 `@elegant-router/vue`
 
 - **日期**：2026-08-25（A03）
