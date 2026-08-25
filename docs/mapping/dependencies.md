@@ -42,7 +42,7 @@
 | vite-plugin-svg-icons | 2.0.1 | — | 本地 SVG 雪碧图，可后做 | 加分 |
 | vite-plugin-progress | 0.0.7 | — | 省略 | — |
 | vite-plugin-vue-transition-root-validator | ^0.1.0 | — | 省略 | — |
-| @elegant-router/vue | 0.3.8 | — | 主线不做 | 加分 |
+| @elegant-router/vue | 0.3.8 | — | A03 未安装（Prettier/unplugin 冲突）；本地生成器 | 加分 |
 | sass | 1.99.0 | — | 尽量不用 | — |
 | eslint | 10.3.0 | 10.9.0 | 按需 | R18 |
 | oxlint | ^1.64.0 | 1.79.0 | 实际 1.80.0 | R18 |

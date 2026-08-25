@@ -1,7 +1,10 @@
+import { layouts, views } from './elegant/imports';
+
+/** Backend dynamic-route whitelist. Generated views are not automatically trusted. */
 export const routeComponentMap = {
-  'layout.base': () => import('@/layouts/base-layout.vue'),
-  home: () => import('@/views/home/index.vue'),
-  restricted: () => import('@/views/restricted/index.vue')
+  'layout.base': layouts.base,
+  home: views.home,
+  restricted: views.restricted
 } as const;
 
 export type RouteComponentKey = keyof typeof routeComponentMap;

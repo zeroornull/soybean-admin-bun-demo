@@ -64,7 +64,7 @@ Elegant Router 的价值是「views 目录即路由」。代价是生成文件�
 
 1. R04 手写 `RouteRecordRaw`
 2. R10 自己实现 static 过滤（按角色）
-3. 加分：再接入 `@elegant-router/vue` 或 `unplugin-vue-router`
+3. A03：本地扫描 `src/views`，生成 Elegant 描述并变换为 vue-router；不装 `@elegant-router/vue`（Prettier / unplugin 1.x）
 
 ### 3. 布局变体
 

@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R22 主线已完成；A01 token 刷新、A02 动态路由已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
+当前进度：**R00–R22 主线已完成；A01 token 刷新、A02 动态路由、A03 文件即路由已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
 
 ## 对照运行原项目
 
@@ -69,6 +69,7 @@ History 模式部署必须配置 SPA fallback：
 ## 质量命令
 
 ```bash
+bun run gen:routes   # 从 src/views 生成 elegant 路由表
 bun run typecheck    # Vue + TypeScript 类型检查
 bun run lint         # oxlint 纯检查，不修改文件
 bun run lint:fix     # 显式应用 oxlint 安全修复

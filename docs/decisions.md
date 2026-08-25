@@ -209,6 +209,15 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D28 · A03 用本地生成器，不装 `@elegant-router/vue`
+
+- **日期**：2026-08-25（A03）
+- **决策**：扫描 `src/views` 生成 Elegant 描述 + 手写 `layout.x$view.y` 变换。不安装 `@elegant-router/vue` 0.3.8。
+- **原因**：官方插件依赖 Prettier 3 与 unplugin 1.x，和 D24（oxfmt 独占格式）冲突；`@elegant-router/types` 是生成的虚拟模块，不是 npm 包。
+- **KeepAlive**：官方把每个一级页包进独立 layout 实例，切换 `/home` 与 `/restricted` 会卸掉 `BaseLayout` 里的缓存。本轮把同一 `layout.base` 的业务页收进一个 `root`。
+- **覆盖**：文件名仍生成 `403`/`404`/`500`，vue-router name 覆盖为已有的 `forbidden` / `not-found-page` / `server-error`。
+- **替代**：以后官方插件去掉 Prettier、对齐 Vite 8 时再评估直装。
+
 ### D27 · expired 码走单飞刷新，失败才登出
 
 - **日期**：2026-08-25（A01）

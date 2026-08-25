@@ -9,6 +9,7 @@
     "dev": "bun scripts/dev.ts",
     "dev:app": "vite --mode test",
     "build": "vite build --mode prod",
+    "gen:routes": "bun scripts/gen-routes.ts",
     "format": "oxfmt --check src scripts packages vite.config.ts uno.config.ts package.json tsconfig.json .oxlintrc.json .oxfmtrc.json .vscode/extensions.json .vscode/settings.json",
     "format:write": "oxfmt --write src scripts packages vite.config.ts uno.config.ts package.json tsconfig.json .oxlintrc.json .oxfmtrc.json .vscode/extensions.json .vscode/settings.json",
     "lint": "oxlint --deny-warnings --report-unused-disable-directives src scripts packages vite.config.ts uno.config.ts",

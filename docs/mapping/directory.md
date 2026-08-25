@@ -36,7 +36,7 @@
 | `src/router/index.ts` | `src/router/index.ts` | R04 |
 | `src/router/routes/*` | `src/router/routes.ts` | R04 |
 | `src/router/guard/*` | `src/router/guards.ts` | R10 |
-| `src/router/elegant/*` | **不迁移** | — |
+| `src/router/elegant/*` | 本地生成器 + 手写 transform（A03） | A03 |
 | `src/layouts/base-layout` | `src/layouts/base-layout.vue` | R05 |
 | `src/layouts/blank-layout` | `src/layouts/blank-layout.vue` | R04 |
 | `src/layouts/modules/*` | `src/layouts/modules/*` 精简 | R05/R11/R12 |

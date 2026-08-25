@@ -55,7 +55,7 @@
 | 动态路由（后端下发） | `VITE_AUTH_ROUTE_MODE=dynamic` | ☑ A02（默认仍 static） |
 | token 刷新单飞与重放 | `EXPIRED_TOKEN_CODES` | ☑ A01 |
 | 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☐ |
-| Elegant Router | 文件即路由 | ☐ |
+| Elegant Router | 文件即路由 | ☑ A03（本地生成器，未装官方插件） |
 | 6 种 layout mode | mix / hybrid | ☐ |
 | 主题设置抽屉全量 | 圆角、水印、各块开关 | ☐ |
 | 页签拖拽、Chrome 风格页签 | vue-draggable-plus + materials | ☐ |

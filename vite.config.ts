@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import UnoCSS from 'unocss/vite';
 import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
+import { elegantRouterPlugin } from './scripts/elegant-router-plugin.ts';
 import { normalizePublicBase } from './src/utils/public-base.ts';
 
 const proxyPrefix = '/proxy-default';
@@ -20,7 +21,7 @@ export default defineConfig(({ mode }) => {
   const publicBase = normalizePublicBase(env.VITE_BASE_URL);
 
   return {
-    plugins: [vue(), UnoCSS()],
+    plugins: [vue(), UnoCSS(), elegantRouterPlugin()],
     base: publicBase,
     build: {
       sourcemap: false
