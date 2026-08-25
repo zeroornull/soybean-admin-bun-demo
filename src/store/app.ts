@@ -8,6 +8,7 @@ import { useTabStore } from './tab';
 export const useAppStore = defineStore(SetupStoreId.App, () => {
   const locale = ref<AppLocale>(initialLocale);
   const siderCollapse = ref(false);
+  const themeDrawerVisible = ref(false);
   const reloadFlag = ref(true);
   const reloading = ref(false);
 
@@ -15,6 +16,10 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
 
   function toggleSider() {
     siderCollapse.value = !siderCollapse.value;
+  }
+
+  function openThemeDrawer() {
+    themeDrawerVisible.value = true;
   }
 
   function setLocale(nextLocale: AppLocale) {
@@ -60,8 +65,10 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   return {
     locale,
     siderCollapse,
+    themeDrawerVisible,
     reloadFlag,
     reloading,
+    openThemeDrawer,
     setLocale,
     toggleLocale,
     toggleSider,

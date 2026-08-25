@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
-import { NConfigProvider, NGlobalStyle } from 'naive-ui';
+import { NConfigProvider, NGlobalStyle, NWatermark } from 'naive-ui';
 import { useRoute } from 'vue-router';
+import ThemeDrawer from '@/layouts/modules/theme-drawer.vue';
 import { naiveDateLocales, naiveLocales } from '@/locales/naive';
 import { setDocumentTitle } from '@/locales';
 import { useAppStore } from '@/store/app';
@@ -27,5 +28,15 @@ watch([() => appStore.locale, () => route.meta], ([, meta]) => setDocumentTitle(
   >
     <NGlobalStyle />
     <RouterView />
+    <NWatermark
+      v-if="themeStore.extras.watermark.visible"
+      data-watermark
+      :content="themeStore.watermarkContent"
+      cross
+      fullscreen
+      :font-size="16"
+      :z-index="9999"
+    />
+    <ThemeDrawer />
   </NConfigProvider>
 </template>

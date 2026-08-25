@@ -123,7 +123,41 @@ export const enUS = {
     themeColor: 'Theme color',
     reset: 'Reset theme',
     currentTheme: 'Current theme: {scheme} · {color}',
-    primaryAction: 'Naive primary button'
+    primaryAction: 'Naive primary button',
+    drawerTitle: 'Theme settings',
+    openDrawer: 'Open theme settings',
+    radius: 'Radius',
+    grayscale: 'Grayscale',
+    colourWeakness: 'Colour weakness',
+    tabs: {
+      appearance: 'Appearance',
+      layout: 'Layout',
+      general: 'General',
+      preset: 'Presets'
+    },
+    blocks: {
+      title: 'Blocks',
+      tabs: 'Tab bar',
+      breadcrumb: 'Breadcrumb',
+      footer: 'Footer'
+    },
+    watermark: {
+      title: 'Watermark',
+      visible: 'Show watermark',
+      text: 'Watermark text',
+      userName: 'Use user name',
+      time: 'Use current time'
+    },
+    preset: {
+      default: 'Default',
+      defaultDesc: 'Light scheme, vertical menu, default radius',
+      dark: 'Dark',
+      darkDesc: 'Dark scheme with the default layout',
+      compact: 'Compact',
+      compactDesc: 'Green primary, horizontal menu, small radius',
+      azir: 'Azir',
+      azirDesc: 'Cool dark mix layout with a larger radius'
+    }
   },
   error: {
     forbidden: 'No permission',

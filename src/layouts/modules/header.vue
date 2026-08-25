@@ -67,7 +67,11 @@ async function logout() {
         />
       </nav>
 
-      <NBreadcrumb v-else-if="routeStore.breadcrumbs.length" data-layout-breadcrumb class="min-w-0 overflow-hidden">
+      <NBreadcrumb
+        v-else-if="themeStore.extras.blocks.breadcrumb && routeStore.breadcrumbs.length"
+        data-layout-breadcrumb
+        class="min-w-0 overflow-hidden"
+      >
         <NBreadcrumbItem
           v-for="(item, index) in routeStore.breadcrumbs"
           :key="item.key"

@@ -57,4 +57,24 @@ describe('theme layout mode', () => {
     themeStore.resetTheme();
     expect(themeStore.layoutMode).toBe('vertical');
   });
+
+  it('applies a preset and resets extras', () => {
+    const themeStore = useThemeStore();
+
+    expect(themeStore.applyPreset('compact')).toBe(true);
+    expect(themeStore.themeColor).toBe('#18a058');
+    expect(themeStore.layoutMode).toBe('horizontal');
+    expect(themeStore.extras.radius).toBe(2);
+
+    themeStore.setThemeRadius(99);
+    themeStore.patchWatermark({ visible: true, text: 'Demo' });
+    themeStore.setBlockVisible('tabs', false);
+    expect(themeStore.extras.radius).toBe(16);
+    expect(themeStore.watermarkContent).toBe('Demo');
+
+    themeStore.resetTheme();
+    expect(themeStore.extras.radius).toBe(6);
+    expect(themeStore.extras.watermark.visible).toBe(false);
+    expect(themeStore.extras.blocks.tabs).toBe(true);
+  });
 });

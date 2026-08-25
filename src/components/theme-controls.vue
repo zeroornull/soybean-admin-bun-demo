@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useAppStore } from '@/store/app';
 import { useThemeStore, type ThemeScheme } from '@/store/theme';
 
 defineOptions({ name: 'ThemeControls' });
 
+const appStore = useAppStore();
 const themeStore = useThemeStore();
 const { t } = useI18n();
 const schemeIcons: Record<ThemeScheme, string> = {
@@ -53,6 +55,16 @@ function handleColorInput(event: Event) {
         @input="handleColorInput"
       />
     </label>
+    <button
+      data-theme-action="drawer"
+      class="size-34px rd-8px border border-[var(--border-color)] bg-transparent"
+      type="button"
+      :aria-label="t('theme.openDrawer')"
+      :title="t('theme.openDrawer')"
+      @click="appStore.openThemeDrawer"
+    >
+      ⚙
+    </button>
     <button
       data-theme-action="reset"
       class="size-34px rd-8px border border-[var(--border-color)] bg-transparent max-sm:hidden"

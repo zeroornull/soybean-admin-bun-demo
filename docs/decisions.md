@@ -209,6 +209,16 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D30 · A05 主题抽屉只覆盖圆角、水印、预设、区块
+
+- **日期**：2026-08-25（A05）
+- **决策**：一份 `themeExtras` JSON 持久化 radius / grayscale / colourWeakness / watermark / blocks。抽屉是编辑器，不是第二套主题系统。
+- **圆角**：`--theme-radius` + Naive `borderRadius`，范围 0–16。
+- **水印**：`NWatermark`；用户名与时间互斥；时间用 dayjs + `setInterval`。
+- **预设**：TS 内 4 个（default / dark / compact / azir），一次写入 scheme、色、layout mode、extras。
+- **区块**：页签、面包屑、页脚开关；页脚默认关。不改 tab 拖拽、不导出 JSON。
+- **不引入**：clipboard、`@vueuse/core`、preset JSON glob、全套 tokens。
+
 ### D29 · A04 六种 layout mode 只改壳，不扩菜单页
 
 - **日期**：2026-08-25（A04）

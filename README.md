@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R22 主线已完成；A01–A04（token 刷新、动态路由、文件即路由、多 layout mode）已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
+当前进度：**R00–R22 主线已完成；A01–A05（token 刷新、动态路由、文件即路由、多 layout mode、主题抽屉）已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
 
 ## 对照运行原项目
 

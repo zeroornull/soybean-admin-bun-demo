@@ -8,6 +8,7 @@
   --primary-hover: #7d83ff;
   --primary-pressed: #5259d1;
   --primary-suppl: #7077ff;
+  --theme-radius: 6px;
 }
 
 html.dark {

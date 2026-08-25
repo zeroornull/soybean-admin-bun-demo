@@ -121,7 +121,41 @@ export const zhCN = {
     themeColor: '主题色',
     reset: '重置主题',
     currentTheme: '当前主题：{scheme} · {color}',
-    primaryAction: 'Naive 主按钮'
+    primaryAction: 'Naive 主按钮',
+    drawerTitle: '主题设置',
+    openDrawer: '打开主题设置',
+    radius: '圆角',
+    grayscale: '灰色模式',
+    colourWeakness: '色弱模式',
+    tabs: {
+      appearance: '外观',
+      layout: '布局',
+      general: '通用',
+      preset: '预设'
+    },
+    blocks: {
+      title: '区块开关',
+      tabs: '页签栏',
+      breadcrumb: '面包屑',
+      footer: '页脚'
+    },
+    watermark: {
+      title: '水印',
+      visible: '显示水印',
+      text: '水印文本',
+      userName: '使用用户名',
+      time: '使用当前时间'
+    },
+    preset: {
+      default: '默认',
+      defaultDesc: '浅色、垂直菜单、默认圆角',
+      dark: '暗色',
+      darkDesc: '暗色方案，其余与默认相同',
+      compact: '紧凑',
+      compactDesc: '绿色主色、顶部菜单、小圆角',
+      azir: 'Azir',
+      azirDesc: '冷色暗黑、垂直混合、大圆角'
+    }
   },
   error: {
     forbidden: '无访问权限',

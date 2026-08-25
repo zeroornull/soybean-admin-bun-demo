@@ -9,6 +9,7 @@ export const localeStorageKey = `${storagePrefix}locale`;
 export const themeSchemeStorageKey = `${storagePrefix}themeScheme`;
 export const themeColorStorageKey = `${storagePrefix}themeColor`;
 export const layoutModeStorageKey = `${storagePrefix}layoutMode`;
+export const themeExtrasStorageKey = `${storagePrefix}themeExtras`;
 
 export function getAccessToken() {
   return storage.get('token');
@@ -66,8 +67,17 @@ export function setLayoutModeSetting(mode: string) {
   storage.set('layoutMode', mode);
 }
 
+export function getThemeExtrasSetting() {
+  return storage.get('themeExtras');
+}
+
+export function setThemeExtrasSetting(value: string) {
+  storage.set('themeExtras', value);
+}
+
 export function clearThemeSettings() {
   storage.remove('themeScheme');
   storage.remove('themeColor');
   storage.remove('layoutMode');
+  storage.remove('themeExtras');
 }
