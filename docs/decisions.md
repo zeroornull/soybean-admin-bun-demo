@@ -46,24 +46,35 @@
 - **原因**：这份代码的 `src/views` 只有 builtin + home。
 - **替代**：自己加业务模块，不写入「必须」清单。
 
-## 待你在对应轮次填写
+## 对应轮次已填
 
 ### D9 · Pinia 4 还是 3
 
-- 实际版本：
-- 是否遇到 peer 冲突：
+- **日期**：2026-08-24
+- **实际版本**：Pinia 4.0.3
+- **是否遇到 peer 冲突**：Pinia 4 要求 `@vue/devtools-api`。已作为直接依赖安装 `8.2.1`，未降回 Pinia 3，Naive UI / vue-i18n 无因此卡住。
+- **原因**：目标栈优先 Pinia 4；setup store + 受限 `$reset` 与 Pinia 4 兼容。
+- **替代**：若后续生态 peer 无法满足，再钉回 3.x 并在本条追加。
 
 ### D10 · 是否实现动态路由
 
-- 是/否：
-- 后端路由 JSON 如何映射到组件：
+- **日期**：2026-08-24（R10）
+- **是/否**：否。主线使用静态 `authRoutes`（`src/router/routes.ts`）+ roles 过滤 + `addRoute`/`removeRoute`。
+- **后端路由 JSON 如何映射到组件**：未实现。`VITE_AUTH_ROUTE_MODE=static`，超管角色为 `R_SUPER`。
+- **原因**：先把守卫决策树、刷新恢复和 403/404 分流学清楚；动态路由是加分项 A02，不阻塞主线。
+- **替代**：R22 后按 [04-learning-path.md](./04-learning-path.md) 的 A02 另开进阶轮。
+
+## 待对应轮次填最终值
 
 ### D11 · 抽出了哪些 `@sa/*` 包
 
-- 列表：
+- **当前（R18 结束）**：尚未抽出。仓库仍是单包；`storage`、`color`、Axios 工厂分别在 `src/utils`、`src/utils/color.ts`、`src/service/request`。
+- **列表**：R20 抽包后填写。候选见 [rounds/R20-packages.md](./rounds/R20-packages.md)（`@sa/utils`、`@sa/color`、`@sa/axios`）。
 
 ### D12 · 部署 public path（R21 演练后填）
 
+- **当前**：`.env` 中 `VITE_BASE_URL=/`；未做子路径构建演练。
+- **最终值**：R21 根路径与一个子路径都演练后再填。
 - `VITE_BASE_URL=`
 
 ### D13 · 使用默认 npm registry，不创建 `bunfig.toml`

@@ -30,15 +30,25 @@
 
 ## 仓库布局（当前）
 
+主线已做到 R18，下一轮是 R19。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
+
 ```text
 .
-├── docs/          ← 你正在看的文档（纳入 git）
-├── legacy/        ← 原 pnpm 版 Soybean Admin（本地对照，不入库）
-├── README.md      ← 根目录说明
-└── LICENSE
+├── docs/                 ← 学习文档（纳入 git）
+├── src/                  ← 重写中的应用
+├── scripts/              ← dev 编排与本地 Mock
+├── .github/workflows/    ← frozen install + quality
+├── package.json          ← 单包；R20 才加 workspaces
+├── bun.lock
+├── vite.config.ts
+├── uno.config.ts
+├── README.md
+├── LICENSE
+├── legacy/               ← 原 pnpm 版（本地对照，不入库）
+└── dist/                 ← 本地构建产物，不入库
 ```
 
-第 1 轮完成后，根目录会多出 `package.json`、`src/`、`vite.config.ts` 等新项目文件。
+尚未出现：`packages/`、Vitest 配置与测试文件。
 
 ## 想先看原项目怎么跑
 

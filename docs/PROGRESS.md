@@ -4,6 +4,24 @@
 
 轮次的目的是隔离学习边界与失败原因，不是把同样的工作人为拖长。每完成一轮，才把状态改成 `done`，并记下日期与必要证据；不要提前勾选。
 
+## 当前快照
+
+核对日：**2026-08-25**。仓库 HEAD `f72e054`（R18 质量门）。
+
+| 项 | 现状 |
+| --- | --- |
+| 主线位置 | **R00–R18 已完成（19/23）**，下一轮 **R19 自动化回归测试** |
+| 包形态 | 单包；无 `packages/`，无 Vitest / `test` 脚本 |
+| 运行时 | Bun 1.4.0、Node 22.23.2；默认 npm registry，无 `bunfig.toml` |
+| 质量门 | `bun run quality` 本轮复核通过：typecheck 0、oxlint 53 files / 0 issues、oxfmt 61 files |
+| CI | `.github/workflows/quality.yml`：Bun 1.4.0 + frozen install + quality；**尚未**含 test / build |
+| 应用内核 | 登录会话、静态权限守卫、菜单/面包屑/页签/KeepAlive、i18n、主题、登录页、看板、403/404/500 已在对应轮次用 Chrome 验收 |
+| 请求 | Axios flat union；dev 走 `/proxy-default` → 本地 Mock `127.0.0.1:19007`；prod env 仍占位 `19008` 且关闭 proxy |
+| 路由 | 手写 vue-router 5；`VITE_AUTH_ROUTE_MODE=static`；无 Elegant Router、无后端动态路由 |
+| 功能清单 | [mapping/features.md](./mapping/features.md) 已标出「落地 / 终验」：R00–R18 能力已落地，终验列留给 R22 |
+
+不要把「代码在、quality 绿」写成 R19–R22 完成。那四轮分别缺测试、workspace、生产演练和终验勾选。
+
 ## 轮次重核结论
 
 原 R00–R15 的大方向正确，但有 6 个轮次同时承担多个独立故障域，且没有自动化回归：
@@ -44,14 +62,63 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R16 | 首页看板与 ECharts | done | 2026-08-24 | 4 指标卡 + ECharts 双轴趋势 + 渠道卡 + ResizeObserver/KeepAlive/dispose 生命周期已落地；resize/tab/reload/theme/360px Chrome 矩阵通过 |
 | R17 | 内置异常页与边界状态 | done | 2026-08-24 | 共享 ExceptionBase + 显式 403/404/500 + wildcard 原 URL + history/home fallback + Dashboard HTTP error/retry 已落地；边界 Chrome 矩阵通过 |
 | R18 | 工程化质量门 | done | 2026-08-25 | oxlint/oxfmt check+fix 分离 + stable quality + EditorConfig/Oxc VS Code + pre-commit + Bun frozen CI 已落地；连续 quality/hash/hook/build 验证通过 |
-| R19 | 自动化回归测试 | pending | | |
-| R20 | Bun workspace 与内部包 | pending | | |
-| R21 | 生产构建与部署演练 | pending | | |
-| R22 | 功能对等与最终验收 | pending | | |
+| R19 | 自动化回归测试 | pending | | 无 `vitest`、无测试文件、quality/CI 尚未跑 test |
+| R20 | Bun workspace 与内部包 | pending | | 无 `packages/`；storage/color/axios 工厂仍在 `src/` |
+| R21 | 生产构建与部署演练 | pending | | `build` 命令存在，但未做 prod preview / 子路径 / D12；CI 未纳入 build |
+| R22 | 功能对等与最终验收 | pending | | 终验列未勾；`R_NOBODY` 演示页与 19008 占位仍在 |
 
 状态只用：`pending` / `in-progress` / `done` / `skipped`。
 
 `skipped` 必须在笔记里写清原因、影响和替代验证。主线必须轮次不应仅因「太难」被跳过。
+
+## 必须能力落地
+
+对照 [mapping/features.md](./mapping/features.md)。「落地」来自对应轮次的代码与验收证据；「终验」只在 R22 用生产 preview 复验后勾。
+
+| 能力 | 轮次 | 落地 | 终验 |
+| --- | --- | --- | --- |
+| Bun 安装与启动 | R00–R01 | 是 | 待 R22 |
+| Vite 开发 / 构建 | R01 | 是 | 待 R21/R22 |
+| Vite 生产 preview 与 base | R21 | 否 | 待 R21/R22 |
+| TypeScript 严格检查 | R01/R18 | 是 | 待 R22 |
+| 启动链 / loading / UnoCSS / 布局 / 五 store | R02–R06 | 是 | 待 R22 |
+| Mock 连通 + Axios flat + 登录会话 | R07–R09 | 是 | 待 R22 |
+| 静态权限守卫 / 403 / 404 / 500 | R10/R17 | 是 | 待 R22 |
+| 菜单 / 面包屑 / 页签 / KeepAlive / 局部重载 | R11–R12 | 是 | 待 R22 |
+| i18n / 主题 / 登录页 / 看板 / 360px | R13–R17 | 是 | 待 R22 |
+| typecheck/lint/format/CI | R18 | 是 | 待 R22 |
+| request/permission/menu/tabs/auth reset 自动化回归 | R19 | 否 | 待 R19/R22 |
+| Bun workspace 子集 + 抽包后回归仍绿 | R20 | 否 | 待 R20/R22 |
+| 生产构建可预览、不依赖 dev proxy | R21 | 否 | 待 R21/R22 |
+| 必须清单、文档与实际版本收口 | R22 | 否 | 待 R22 |
+
+加分项（动态路由、token 刷新、Elegant Router、多布局、主题抽屉等）全部未做，不阻塞主线；R22 后走 A 系列。
+
+## 下一轮入口：R19
+
+文档：[rounds/R19-testing.md](./rounds/R19-testing.md)
+
+前置已满足：R08–R13 的关键计算已有可测纯函数/工厂（`createFlatRequest`、`filterAuthRoutesByRoles`、`getMenusByAuthRoutes`、`getTabByRoute`、auth reset），不必先加测试专用开关。
+
+本轮必须交付：
+
+1. 安装最小工具：`vitest`、`jsdom`；组件测试再加 `@vue/test-utils`。不要同时引入 Playwright/Cypress。
+2. `bun run test` = `vitest run`（一次退出，不进 watch）。
+3. 五组契约至少一个有效断言：request、permission、menu、tabs、auth reset。
+4. 登录表单或 ExceptionBase 二选一做交互测试。
+5. `quality` 与 CI 接入 test；失败必须能单独定位。测试不打真实 Mock、不依赖本机 storage/当前时间。
+6. 把 vitest / jsdom / `@vue/test-utils` 的实际解析版本补进本文件版本表。
+
+R19 完成前不要开始 R20 抽包。
+
+## 剩余主线
+
+| 轮 | 进入条件 | 完成时必须多出来的证据 |
+| --- | --- | --- |
+| R19 | R18 已 done（已满足） | `bun run test` 退出 0；CI 含 test；五组契约 + 1 个组件测试 |
+| R20 | R19 全绿 | `package.json#workspaces` + 稳定 `@sa/*` 子集；抽包后重跑 R19；lint/format 覆盖 `packages/`；D11 填包列表 |
+| R21 | R19 全绿，R20 已抽或明确不抽 | prod build + preview 手工路径；根路径与一个子路径；不依赖 `/proxy-default`；D12 填 `VITE_BASE_URL`；CI 加 build |
+| R22 | R00–R21 均为 done 或有合理 skipped | features 终验全勾；清理演示/占位；README 收口启动/测试/部署；能讲清六条数据流 |
 
 ## 阶段门
 
@@ -64,9 +131,11 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | 页面交付 | R15–R17 | 登录、看板、异常边界在桌面/手机、中英、亮暗下可用 |
 | 工程与交付 | R18–R22 | workspace 边界、quality、test、prod preview、功能对等全部有证据 |
 
+前五段已关闭。工程与交付段只完成了 R18。
+
 ## 实际安装版本
 
-R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭回忆抄。
+R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭回忆抄。核对日 2026-08-25，以 `bun pm ls` / `bun.lock` 解析版本为准。
 
 | 包 | 版本 | 首次出现 |
 | --- | --- | --- |
@@ -77,6 +146,7 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | vite | 8.2.2 | R01 |
 | @vitejs/plugin-vue | 6.0.8 | R01 |
 | vue-tsc | 3.3.11 | R01 |
+| @types/node | 26.2.0 | R01 |
 | unocss | 66.8.1 | R03 |
 | vue-router | 5.2.0 | R04 |
 | pinia | 4.0.3 | R06 |
@@ -86,13 +156,40 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | vue-i18n | 11.4.9 | R13 |
 | dayjs | 1.11.23 | R13 |
 | echarts | 6.1.0 | R16 |
-| oxlint / oxfmt | 1.80.0 / 0.65.0 | R18 |
+| oxlint | 1.80.0 | R18 |
+| oxfmt | 0.65.0 | R18 |
 | simple-git-hooks | 2.13.1 | R18 |
 | vitest | | R19 |
+| jsdom | | R19 |
 | @vue/test-utils | | R19 |
+
+未安装、也不算主线缺口：`@vueuse/core`、`@iconify/vue`、`nprogress`、ESLint/Prettier。R18 已明确只用 oxlint + oxfmt。
 
 ```bash
 bun -v
 node -v
+bun pm ls
 # 其余以 package.json / bun.lock 的实际解析版本为准
 ```
+
+## 决策填写
+
+已拍板并写入 [decisions.md](./decisions.md)：D1–D8、D9（Pinia 4）、D10（主线不做动态路由）、D13–D24。
+
+仍待对应轮次填最终值：
+
+| 编号 | 主题 | 当前事实 | 何时填最终值 |
+| --- | --- | --- | --- |
+| D11 | 抽出哪些 `@sa/*` | 尚未抽包；候选在 `src/utils`、`src/utils/color.ts`、`src/service/request` | R20 |
+| D12 | 部署 public path | `.env` 里 `VITE_BASE_URL=/`；未做子路径演练 | R21 |
+
+## 已知边界（不是漏做的主线）
+
+这些是已记录的范围选择或留给后续轮次的残留，不要在 R19 里顺手扩成新需求：
+
+- **ECharts 体积**：Home 约 `722.90 kB / gzip 225.81 kB`，Vite 500kB warning 按 D22 保留，R21 再评估拆包。
+- **会话码**：logout / modal logout / expired token 目前都走 `resetStore`；无单飞刷新与请求重放（A01）。
+- **权限**：静态 `authRoutes` + `R_SUPER`；`/restricted` 使用 `R_NOBODY` 作为 403 演示页，R22 再决定删除或标明 demo。
+- **生产 API**：`.env.prod` 的 `127.0.0.1:19008` 只是占位，不是最终部署地址（D16）。
+- **布局 / 主题**：仅 vertical shell；无 mix/hybrid、无完整主题抽屉。
+- **本地产物**：`dist/`、`legacy/`、`node_modules/` 均 gitignore；`legacy/` 只作对照。

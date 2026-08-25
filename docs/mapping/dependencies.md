@@ -1,6 +1,6 @@
 # 依赖对照
 
-快照日期：2026-08-24。安装时以 npm latest 为准，TypeScript 例外。
+快照日期：2026-08-24。安装时以 npm latest 为准，TypeScript 例外。实际解析版本以 [PROGRESS.md](../PROGRESS.md) 的「实际安装版本」为准。
 
 ## 运行时（应用）
 
@@ -45,8 +45,8 @@
 | @elegant-router/vue | 0.3.8 | — | 主线不做 | 加分 |
 | sass | 1.99.0 | — | 尽量不用 | — |
 | eslint | 10.3.0 | 10.9.0 | 按需 | R18 |
-| oxlint | ^1.64.0 | 1.79.0 | 建议 | R18 |
-| oxfmt | ^0.49.0 | — | 建议 | R18 |
+| oxlint | ^1.64.0 | 1.79.0 | 实际 1.80.0 | R18 |
+| oxfmt | ^0.49.0 | — | 实际 0.65.0 | R18 |
 | simple-git-hooks | 2.13.1 | — | 可选 | R18 |
 | vitest | — | 4.1.11 | 核心回归测试，peer 支持 Vite 8 | R19 |
 | jsdom | — | 30.0.1 | DOM 测试环境 | R19 |

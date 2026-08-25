@@ -9,12 +9,12 @@
 | `package.json` | `package.json` | R01 | scripts 改 bun；去掉 sa CLI |
 | `pnpm-lock.yaml` | `bun.lock` | R01 | 入库新 lockfile |
 | `pnpm-workspace.yaml` | `package.json#workspaces` | R20 | R00–R19 不要 |
-| `.npmrc` | `bunfig.toml` | R00 | registry |
+| `.npmrc` | 不建 `bunfig.toml` | R00 | D13：默认 npm registry |
 | `vite.config.ts` | `vite.config.ts` | R01 | 可逐步内联 `build/` |
 | `tsconfig.json` | `tsconfig.json` | R01 | exclude `legacy` `docs` |
 | `uno.config.ts` | `uno.config.ts` | R03 | |
 | `index.html` | `index.html` | R01 | |
-| `eslint.config.js` | `eslint.config.js` 可选 | R18 | |
+| `eslint.config.js` | 不引入 ESLint | R18 | D24：oxlint + oxfmt |
 | `.oxlintrc.json` / `.oxfmtrc.json` | 同名 | R18 | |
 | `.env*` | `.env*` | R01/R07 | |
 | `build/` | 先内联，必要时 `build/` | R01+ | |
