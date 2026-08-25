@@ -209,6 +209,13 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D35 · A10 用本地插件，不装官方 svg-icons / vue-components
+
+- **日期**：2026-08-25（A10）
+- **雪碧图**：扫描 `src/assets/svg-icon`，注入 `virtual:svg-icons-register` 和 `#__SVG_ICON_LOCAL__`。symbol id 为 `icon-local-*`。不装 `vite-plugin-svg-icons`（Vite 2 时代 API）和 `@iconify/vue`。
+- **自动导入**：编译期给模板用到的 `SvgIcon` / `LocaleSwitch` / `ThemeControls` / `ExceptionBase` 注入 import。Naive 仍显式导入。不装 `unplugin-vue-components`。
+- **版本提示**：构建写入 `BUILD_TIME` 和 `<meta name="buildTime">`。生产且 `VITE_AUTOMATICALLY_DETECT_UPDATE=Y` 时轮询 `index.html`；开发用首页「模拟发现新版本」。横幅在 `App.vue`，不引入 `window.$notification`。
+
 ### D34 · A09 iframe 用同源演示，其它服务另绑 19008
 
 - **日期**：2026-08-25（A09）

@@ -3,8 +3,6 @@ import { computed } from 'vue';
 import { NCard } from 'naive-ui';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
-import LocaleSwitch from '@/components/locale-switch.vue';
-import ThemeControls from '@/components/theme-controls.vue';
 import BindWechat from './modules/bind-wechat.vue';
 import CodeLogin from './modules/code-login.vue';
 import PwdLogin from './modules/pwd-login.vue';

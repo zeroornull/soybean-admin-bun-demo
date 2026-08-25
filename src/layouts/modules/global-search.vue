@@ -132,7 +132,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onDocumentKeydown));
     :title="t('search.open')"
     @click="openSearch"
   >
-    ⌕
+    <SvgIcon local-icon="search" />
   </button>
 
   <NModal

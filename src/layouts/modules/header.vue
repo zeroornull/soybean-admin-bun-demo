@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import LocaleSwitch from '@/components/locale-switch.vue';
-import ThemeControls from '@/components/theme-controls.vue';
 import { useProvidedLayoutShell } from '@/layouts/use-layout-shell';
 import { useAuthStore } from '@/store/auth';
 import { useRouteStore } from '@/store/route';
@@ -50,7 +48,7 @@ async function logout() {
         :aria-label="props.collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')"
         @click="emit('toggleSider')"
       >
-        {{ props.collapsed ? '→' : '←' }}
+        <SvgIcon local-icon="menu" />
       </button>
 
       <div v-if="chrome.showHeaderLogo" data-layout-header-logo class="shrink-0 flex items-center gap-8px">
@@ -105,6 +103,7 @@ async function logout() {
         type="button"
         @click="logout"
       >
+        <SvgIcon local-icon="logout" class="mr-6px" />
         {{ t('common.logout') }}
       </button>
     </div>

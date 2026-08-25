@@ -5,7 +5,11 @@ import UnoCSS from 'unocss/vite';
 import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 import { elegantRouterPlugin } from './scripts/elegant-router-plugin.ts';
+import { htmlBuildTimePlugin } from './scripts/html-build-time-plugin.ts';
+import { localComponentsPlugin } from './scripts/local-components-plugin.ts';
+import { svgIconsPlugin } from './scripts/svg-icons-plugin.ts';
 import { normalizePublicBase } from './src/utils/public-base.ts';
+import { defaultSvgIconPrefix } from './src/utils/svg-sprite.ts';
 import { getProxyTargets } from './src/utils/service.ts';
 
 export function createSrcAlias() {
@@ -18,9 +22,24 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const proxyEnabled = env.VITE_HTTP_PROXY === 'Y';
   const publicBase = normalizePublicBase(env.VITE_BASE_URL);
+  const buildTime = new Date().toISOString();
+  const srcDir = fileURLToPath(new URL('./src', import.meta.url));
 
   return {
-    plugins: [vue(), UnoCSS(), elegantRouterPlugin()],
+    define: {
+      BUILD_TIME: JSON.stringify(buildTime)
+    },
+    plugins: [
+      vue(),
+      UnoCSS(),
+      elegantRouterPlugin(),
+      localComponentsPlugin(),
+      svgIconsPlugin({
+        dir: `${srcDir}/assets/svg-icon`,
+        prefix: env.VITE_ICON_LOCAL_PREFIX || defaultSvgIconPrefix
+      }),
+      htmlBuildTimePlugin(buildTime)
+    ],
     base: publicBase,
     build: {
       sourcemap: false

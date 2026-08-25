@@ -11,6 +11,7 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   const themeDrawerVisible = ref(false);
   const reloadFlag = ref(true);
   const reloading = ref(false);
+  const updateAvailable = ref(false);
 
   watch(locale, value => syncLocale(value), { flush: 'sync', immediate: true });
 
@@ -30,6 +31,14 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
 
   function toggleLocale() {
     setLocale(locale.value === 'zh-CN' ? 'en-US' : 'zh-CN');
+  }
+
+  function markUpdateAvailable() {
+    updateAvailable.value = true;
+  }
+
+  function dismissUpdate() {
+    updateAvailable.value = false;
   }
 
   async function reloadPage() {
@@ -68,6 +77,9 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
     themeDrawerVisible,
     reloadFlag,
     reloading,
+    updateAvailable,
+    markUpdateAvailable,
+    dismissUpdate,
     openThemeDrawer,
     setLocale,
     toggleLocale,

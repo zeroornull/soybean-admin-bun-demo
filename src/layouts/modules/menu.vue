@@ -3,6 +3,7 @@ import { computed, h } from 'vue';
 import { NMenu, type MenuOption } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import SvgIcon from '@/components/svg-icon.vue';
 import { useRouteStore, type MenuItem } from '@/store/route';
 
 defineOptions({ name: 'LayoutMenu' });
@@ -47,6 +48,13 @@ const menuThemeOverrides = {
 };
 
 function createMenuIcon(item: MenuItem, label: string) {
+  if (item.icon) {
+    return () =>
+      h('span', { 'data-menu-icon': item.icon, class: 'inline-flex items-center' }, [
+        h(SvgIcon, { localIcon: item.icon, class: 'text-18px' })
+      ]);
+  }
+
   return () =>
     h(
       'span',
@@ -54,7 +62,7 @@ function createMenuIcon(item: MenuItem, label: string) {
         'aria-hidden': 'true',
         class: 'w-22px inline-flex items-center justify-center text-17px font-700'
       },
-      item.icon || label.slice(0, 1)
+      label.slice(0, 1)
     );
 }
 

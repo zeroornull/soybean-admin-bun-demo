@@ -24,6 +24,12 @@ export const enUS = {
     goBack: 'Go back',
     retry: 'Retry'
   },
+  system: {
+    updateTitle: 'New version available',
+    updateContent: 'The app has been updated. Refresh to load the latest assets.',
+    updateCancel: 'Later',
+    updateConfirm: 'Refresh'
+  },
   search: {
     title: 'Search',
     open: 'Open search',
@@ -128,6 +134,7 @@ export const enUS = {
     otherServiceReady: 'Other service is ready: {service}',
     otherServiceUnavailable: 'Other service is temporarily unavailable',
     requestOtherService: 'Request other service',
+    simulateAppUpdate: 'Simulate a new version',
     loadingService: 'Checking the local data service…',
     serviceUnavailable: 'Data service is temporarily unavailable',
     serviceErrorDescription: 'The dashboard request failed. Check the network or local Mock service and try again.',

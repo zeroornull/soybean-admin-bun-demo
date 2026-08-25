@@ -22,6 +22,12 @@ export const zhCN = {
     goBack: '返回上一页',
     retry: '重试'
   },
+  system: {
+    updateTitle: '发现新版本',
+    updateContent: '检测到应用已更新，刷新页面以加载最新资源。',
+    updateCancel: '稍后',
+    updateConfirm: '刷新'
+  },
   search: {
     title: '搜索',
     open: '打开搜索',
@@ -126,6 +132,7 @@ export const zhCN = {
     otherServiceReady: '其它服务已就绪：{service}',
     otherServiceUnavailable: '其它服务暂时不可用',
     requestOtherService: '请求其它服务',
+    simulateAppUpdate: '模拟发现新版本',
     loadingService: '正在检查本地数据服务…',
     serviceUnavailable: '数据服务暂时不可用',
     serviceErrorDescription: '看板数据请求失败，请检查网络或本地 Mock 服务后重试。',

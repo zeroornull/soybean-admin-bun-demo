@@ -17,6 +17,9 @@ interface ImportMetaEnv {
   readonly VITE_SERVICE_MODAL_LOGOUT_CODES: string;
   readonly VITE_SERVICE_EXPIRED_TOKEN_CODES: string;
   readonly VITE_STORAGE_PREFIX: string;
+  readonly VITE_ICON_PREFIX: string;
+  readonly VITE_ICON_LOCAL_PREFIX: string;
+  readonly VITE_AUTOMATICALLY_DETECT_UPDATE: 'Y' | 'N';
 }
 
 interface ImportMeta {

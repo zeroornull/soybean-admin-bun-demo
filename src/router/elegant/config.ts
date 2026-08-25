@@ -73,7 +73,7 @@ export const elegantRouterConfig = {
       meta: {
         title: '首页',
         i18nKey: 'route.home',
-        icon: '⌂',
+        icon: 'home',
         order: 1,
         componentName: 'Home',
         keepAlive: true,
@@ -85,7 +85,7 @@ export const elegantRouterConfig = {
       meta: {
         title: '受限页',
         i18nKey: 'route.restricted',
-        icon: '⚿',
+        icon: 'lock',
         order: 20,
         componentName: 'Restricted',
         keepAlive: true,
@@ -98,7 +98,7 @@ export const elegantRouterConfig = {
       meta: {
         title: '外链页面',
         i18nKey: 'route.iframe-page',
-        icon: '⧉',
+        icon: 'link',
         order: 15,
         componentName: 'IframePage',
         keepAlive: true,

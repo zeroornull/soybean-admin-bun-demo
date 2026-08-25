@@ -2,8 +2,6 @@
 import { computed } from 'vue';
 import { NButton } from 'naive-ui';
 import { useI18n } from 'vue-i18n';
-import LocaleSwitch from '@/components/locale-switch.vue';
-import ThemeControls from '@/components/theme-controls.vue';
 
 defineOptions({ name: 'ExceptionBase' });
 

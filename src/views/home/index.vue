@@ -6,6 +6,7 @@ import type { EChartsCoreOption } from 'echarts/core';
 import { useEcharts } from '@/composables/use-echarts';
 import { dayjs } from '@/locales/dayjs';
 import { fetchDashboardServiceStatus, fetchOtherServiceStatus, fetchProtectedServiceStatus } from '@/service/api';
+import { useAppStore } from '@/store/app';
 import { useAuthStore } from '@/store/auth';
 import { useThemeStore } from '@/store/theme';
 import { setAccessToken } from '@/utils/storage';
@@ -22,6 +23,7 @@ const datePickerRef = ref<InstanceType<typeof NDatePicker> | null>(null);
 const trafficChartRef = ref<HTMLElement | null>(null);
 const { t, locale } = useI18n();
 const themeStore = useThemeStore();
+const appStore = useAppStore();
 const authStore = useAuthStore();
 const numberFormatter = computed(() => new Intl.NumberFormat(locale.value));
 const currencyFormatter = computed(
@@ -270,6 +272,9 @@ onMounted(() => {
       <span v-else>{{ t('dashboard.loadingService') }}</span>
       <NButton data-other-service-action="ping" size="tiny" tertiary @click="loadOtherServiceStatus">
         {{ t('dashboard.requestOtherService') }}
+      </NButton>
+      <NButton data-app-update-action="simulate" size="tiny" tertiary @click="appStore.markUpdateAvailable()">
+        {{ t('dashboard.simulateAppUpdate') }}
       </NButton>
     </section>
 

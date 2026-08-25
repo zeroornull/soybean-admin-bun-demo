@@ -31,7 +31,7 @@
 | --- | --- | --- |
 | `src/main.ts` | 同左 | R01/R02 |
 | `src/App.vue` | 同左 | R02/R13/R14 |
-| `src/plugins/*` | 同左，先 loading/assets | R02 |
+| `src/plugins/*` | 同左，先 loading/assets；A10 补版本检测 | R02/A10 |
 | `src/styles/*` | 同左，可只留 css | R03 |
 | `src/router/index.ts` | `src/router/index.ts` | R04 |
 | `src/router/routes/*` | `src/router/routes.ts` | R04 |
