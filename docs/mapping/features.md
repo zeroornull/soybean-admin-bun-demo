@@ -54,7 +54,7 @@
 | --- | --- | --- |
 | 动态路由（后端下发） | `VITE_AUTH_ROUTE_MODE=dynamic` | ☑ A02（默认仍 static） |
 | token 刷新单飞与重放 | `EXPIRED_TOKEN_CODES` | ☑ A01 |
-| 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☐ B01 |
+| 弹窗登出码 | `MODAL_LOGOUT_CODES` | ☑ B01（NModal 单飞；取消留会话） |
 | Elegant Router | 文件即路由 | ☑ A03（本地生成器，未装官方插件） |
 | 6 种 layout mode | mix / hybrid | ☑ A04（壳投影，未装 materials） |
 | 主题设置抽屉全量 | 圆角、水印、各块开关 | ☑ A05 |
@@ -67,7 +67,7 @@
 | 多服务 baseURL | `VITE_OTHER_SERVICE_BASE_URL` | ☑ A09（JSON 对象，不装 json5；`/proxy-demo` → 19008） |
 | 版本更新提示 | `plugins/app.ts` | ☑ A10（`buildTime` meta；生产轮询；开发可模拟） |
 | `@sa/*` workspace 全套 | R20 主线只要求稳定子集 | skipped（D36：不抽 materials/alova/hooks 表格/uno-preset） |
-| git commit 规范 CLI | `@sa/scripts` | ☐ B02（本地脚本，不装官方全家桶） |
+| git commit 规范 CLI | `@sa/scripts` | ☑ B02（本地 `bun run commit`，不装官方全家桶） |
 
 ## 明确不做（默认）
 

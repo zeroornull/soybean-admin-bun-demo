@@ -23,11 +23,17 @@ A01 把过期码改成刷新。`8888` 仍直接登出。本轮补上 `7777`/`777
 
 ## 验收
 
-- [ ] `7777` 弹出对话框，不立刻清 token
-- [ ] 取消后仍是登录态；确认后到登录页
-- [ ] 并发两次 7777 只弹一次，确认只登出一次
-- [ ] `bun run quality` 通过
-- [ ] Chrome：模拟弹窗登出 → 取消仍在首页 → 再确认回到登录
+- [x] `7777` 弹出对话框，不立刻清 token
+- [x] 取消后仍是登录态；确认后到登录页
+- [x] 并发两次 7777 只弹一次，确认只登出一次
+- [x] `bun run quality` 通过
+- [x] Chrome：模拟弹窗登出 → 取消仍在首页 → 再确认回到登录
+
+B01 实际证据（2026-08-25）：
+
+- 工厂仍只回调 `onModalLogout`；应用层 `createModalLogoutController` 单飞，取消不 `resetStore`；
+- 94 tests 全绿；`bun run quality` + `bun run build` 通过；
+- Chrome：点「模拟弹窗登出」出现对话框且 `SOY_token` 仍在；取消后仍在 `/home`、用户 Soybean；再确认后到 `/login`，token 为空。
 
 ## 不要做
 

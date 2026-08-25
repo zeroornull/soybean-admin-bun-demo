@@ -209,6 +209,22 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D38 · B02 用本地 commit 脚本，不建 `@sa/scripts`
+
+- **日期**：2026-08-25（B02）
+- **决策**：`bun run commit` 跑 `scripts/git-commit.ts`。格式 `type(scope): description`；描述以 `!` 开头则写成 `type(scope)!: description`。
+- **依赖**：不装 enquirer / kolorist / bumpp / changelog / ncu。TTY 用 node readline；非交互必须传 `--type --scope --description`。
+- **git**：无 staged 文件退出 1。`--dry-run` 只打印。`--verify` 检查已有提交说明。
+- **hook**：不改 pre-commit 的 `quality`，不强制 commit-msg hook。
+
+### D37 · B01 弹窗登出在应用层单飞，工厂只回调
+
+- **日期**：2026-08-25（B01）
+- **决策**：`7777`/`7778` 走 `onModalLogout`。应用层 `createModalLogoutController` 只弹一次；确认才 `resetStore`，取消保持 token。
+- **UI**：`App.vue` 里 `NModal`，不引入 `window.$dialog`。
+- **8888** 仍直接登出；**9999** 仍走 A01 刷新。
+- **演示**：首页「模拟弹窗登出」请求 `/auth/error?code=7777`。
+
 ### D36 · 第二波加分走 B 系列，不发明 A11
 
 - **日期**：2026-08-25

@@ -122,8 +122,8 @@ A01–A10 是封闭集合，已全部完成。不要发明 A11。
 
 | 第二波 | 主题 | 对应加分项 |
 | --- | --- | --- |
-| B01 | 弹窗登出码 | `MODAL_LOGOUT_CODES` 先确认再登出 |
-| B02 | 提交信息规范 | 本地 commit CLI，不装官方 `@sa/scripts` 全家桶 |
+| B01 | [弹窗登出码](./rounds/B01-modal-logout.md) | `MODAL_LOGOUT_CODES` 先确认再登出 |
+| B02 | [提交信息规范](./rounds/B02-git-commit.md) | 本地 commit CLI，不装官方 `@sa/scripts` 全家桶 |
 
 「`@sa/*` workspace 全套」不再单开轮次：R20 子集已经够用，materials / alova / hooks 表格 / uno-preset 明确不抽。
 

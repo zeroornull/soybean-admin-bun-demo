@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R22 主线已完成；A01–A10 已完成。** 第二波加分是 B 系列，下一可选 B01 弹窗登出码。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
+当前进度：**R00–R22 主线已完成；A01–A10、B01–B02 已完成。** 默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
 
 ## 对照运行原项目
 
@@ -46,7 +46,10 @@ bun install --frozen-lockfile
 bun run quality          # typecheck + lint + format + test
 bun run build            # vite build --mode prod，产物在 dist/
 bun run preview          # 编排本地 Mock + vite preview --mode prod
+bun run commit           # Conventional Commits：type(scope): description
 ```
+
+`bun run commit` 在有 staged 文件时生成提交说明。非交互请传 `--type --scope --description`；`--dry-run` 只打印不提交。它不替代 pre-commit 的 `quality`。
 
 生产请求**不走**开发代理，而是直连 `.env.prod` 的 `VITE_SERVICE_BASE_URL`（本地预览默认为 `http://127.0.0.1:19007`）和 `VITE_OTHER_SERVICE_BASE_URL` 里的其它服务（默认 `http://127.0.0.1:19008`）。把应用部署到真实环境时，把这些地址换成实际 API，不要把 Mock 主机名带上线。
 
