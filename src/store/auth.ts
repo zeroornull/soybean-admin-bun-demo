@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { fetchGetUserInfo, fetchLogin } from '@/service/api';
+import { fetchGetUserInfo, fetchLogin, fetchRefreshToken } from '@/service/api';
 import {
   clearAccessToken,
   clearRefreshToken,
@@ -45,6 +45,13 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const isLogin = computed(() => Boolean(token.value && userInfo.value));
 
   let initSessionPromise: Promise<boolean> | null = null;
+
+  function applyTokens(nextToken: string, nextRefreshToken: string) {
+    token.value = nextToken;
+    refreshToken.value = nextRefreshToken;
+    setAccessToken(nextToken);
+    setRefreshToken(nextRefreshToken);
+  }
 
   async function getUserInfo() {
     const { data, error } = await fetchGetUserInfo();
@@ -94,10 +101,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
         return false;
       }
 
-      token.value = data.token;
-      refreshToken.value = data.refreshToken;
-      setAccessToken(data.token);
-      setRefreshToken(data.refreshToken);
+      applyTokens(data.token, data.refreshToken);
 
       const initialized = await getUserInfo();
 
@@ -149,6 +153,25 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     return initSessionPromise;
   }
 
+  async function refreshSession() {
+    const currentRefreshToken = getRefreshToken() || refreshToken.value;
+
+    if (!currentRefreshToken) {
+      await resetStore({ reason: 'Session expired' });
+      return false;
+    }
+
+    const { data, error } = await fetchRefreshToken(currentRefreshToken);
+
+    if (error || !data) {
+      await resetStore({ reason: error?.message || 'Unable to refresh session' });
+      return false;
+    }
+
+    applyTokens(data.token, data.refreshToken);
+    return true;
+  }
+
   return {
     token,
     refreshToken,
@@ -161,6 +184,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     login,
     getUserInfo,
     initSession,
+    refreshSession,
     resetStore
   };
 });

@@ -91,14 +91,22 @@ bun run build
 
 ## 最终验收
 
-- [ ] R00–R21 状态真实，无提前标记 `done`
-- [ ] `bun install --frozen-lockfile`、typecheck、lint、test、build 全部通过
-- [ ] `features.md` 所有必须项都有浏览器验证
-- [ ] 生产 preview 的完整手工路径通过
-- [ ] 桌面与 360px 宽度的核心路径均可用
-- [ ] 无产品代码引用 `legacy/`，无 secret 或调试临时物进产物
-- [ ] 实际版本、关键决策、启动/测试/部署文档已收口
-- [ ] 能不看文档解释六条核心数据流
+- [x] R00–R21 状态真实，无提前标记 `done`
+- [x] `bun install --frozen-lockfile`、typecheck、lint、test、build 全部通过
+- [x] `features.md` 所有必须项都有浏览器验证
+- [x] 生产 preview 的完整手工路径通过
+- [x] 桌面与 360px 宽度的核心路径均可用
+- [x] 无产品代码引用 `legacy/`，无 secret 或调试临时物进产物
+- [x] 实际版本、关键决策、启动/测试/部署文档已收口
+- [x] 能不看文档解释六条核心数据流
+
+R22 实际证据（2026-08-25）：
+
+- frozen install 331 installs / 409 packages 无变化；typecheck/lint/22 tests/format/build 全绿；git 无 `legacy/` `dist/` `node_modules/`；产物无 proxy-default/legacy/绝对路径/sourcemap，含 loading 文案，API 为 19007；
+- `/restricted` 标明 demo，未删除，以便 User 访问得到 403；加分项记 D26，不升格主线；
+- preview 手工路径：空表单校验、错误密码、Soybean 登录、刷新恢复、折叠侧栏、菜单/面包屑/tab、KeepAlive 计数保留、局部重载归零、中英+dark 刷新仍在、User 经 redirect 进受限页得 403、菜单无受限项、404 保原 URL、`/500`、看板内错误不跳全页 500、登出后再进 `/home` 带 redirect、已登录访问 `/login` 回首页；
+- 360×800：login 品牌栏隐藏且 `scrollWidth=360`，home sider 64px 无横向溢出，404 无横向溢出；
+- 六条数据流写入 [03-architecture.md](../03-architecture.md)。
 
 ## 常见坑
 

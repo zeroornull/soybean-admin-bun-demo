@@ -6,20 +6,19 @@
 
 ## 当前快照
 
-核对日：**2026-08-25**（R21 生产演练完成）。
+核对日：**2026-08-25**（R22 终验完成，主线结束）。
 
 | 项 | 现状 |
 | --- | --- |
-| 主线位置 | **R00–R21 已完成（22/23）**，下一轮 **R22 功能对等与最终验收** |
+| 主线位置 | **R00–R22 全部 done**。进阶 **A01 done**，下一可选 **A02** |
 | 包形态 | Bun workspaces：`@sa/utils`、`@sa/color`、`@sa/axios`；应用组装 token/env/session |
 | 运行时 | Bun 1.4.0、Node 22.23.2；默认 npm registry，无 `bunfig.toml` |
-| 质量门 | `bun run quality` 22 tests / 11 files 全绿；oxlint 70 files / 0；oxfmt 84 files；CI 含 build |
-| 应用内核 | 登录会话、静态权限守卫、菜单/面包屑/页签/KeepAlive、i18n、主题、登录页、看板、403/404/500 已在对应轮次用 Chrome 验收 |
-| 请求 | 开发走 `/proxy-default`；生产直连 `http://127.0.0.1:19007`，不走 proxy |
-| 部署 | 默认 `VITE_BASE_URL=/`；`/admin/` 已演练后恢复；SPA history fallback 已写入 README |
-| 功能清单 | [mapping/features.md](./mapping/features.md)：R00–R21 已落地，终验列留给 R22 |
+| 质量门 | frozen install + typecheck + lint + 22 tests + format + build 全绿；CI 含 test/build |
+| 终验 | 生产 preview 完整手工路径 + 360px 通过；[features.md](./mapping/features.md) 必须项落地/终验均勾 |
+| 请求 | 开发走 `/proxy-default`；生产直连 `http://127.0.0.1:19007` |
+| 部署 | 默认 `VITE_BASE_URL=/`；SPA fallback 已写入 README |
 
-不要把 preview 通过写成 R22 完成。终验还要按功能清单把手工路径再勾一遍。
+主线已结束。进阶轮 **A01 已完成**，下一可选轮为 A02 动态路由。
 
 ## 轮次重核结论
 
@@ -64,7 +63,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R19 | 自动化回归测试 | done | 2026-08-25 | Vitest 4.1.11 + jsdom 30.0.1 + VTU 2.4.11；request/permission/menu/tabs/auth reset + ExceptionBase；14 tests 全绿；超管规则改错即红、恢复后绿；quality/CI 已接入 test |
 | R20 | Bun workspace 与内部包 | done | 2026-08-25 | `@sa/utils` / `@sa/color` / `@sa/axios`；workspace symlink；20 tests 全绿；登录与 dark 主题 Chrome 复验通过；D11 已填 |
 | R21 | 生产构建与部署演练 | done | 2026-08-25 | prod env 直连 19007；根路径 preview 全路径；`/admin/` 演练后恢复 `/`；CI 含 build；D12 已填 |
-| R22 | 功能对等与最终验收 | pending | | 终验列未勾；`R_NOBODY` 演示页与 19008 占位仍在 |
+| R22 | 功能对等与最终验收 | done | 2026-08-25 | features 必须项终验全勾；preview 桌面+360 路径通过；`/restricted` 标 demo；D26 记录加分项；六条数据流写入架构文档 |
 
 状态只用：`pending` / `in-progress` / `done` / `skipped`。
 
@@ -76,28 +75,41 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 
 | 能力 | 轮次 | 落地 | 终验 |
 | --- | --- | --- | --- |
-| Bun 安装与启动 | R00–R01 | 是 | 待 R22 |
-| Vite 开发 / 构建 | R01 | 是 | 待 R22 |
-| Vite 生产 preview 与 base | R21 | 是 | 待 R22 |
-| TypeScript 严格检查 | R01/R18 | 是 | 待 R22 |
-| 启动链 / loading / UnoCSS / 布局 / 五 store | R02–R06 | 是 | 待 R22 |
-| Mock 连通 + Axios flat + 登录会话 | R07–R09 | 是 | 待 R22 |
-| 静态权限守卫 / 403 / 404 / 500 | R10/R17 | 是 | 待 R22 |
-| 菜单 / 面包屑 / 页签 / KeepAlive / 局部重载 | R11–R12 | 是 | 待 R22 |
-| i18n / 主题 / 登录页 / 看板 / 360px | R13–R17 | 是 | 待 R22 |
-| typecheck/lint/format/CI | R18 | 是 | 待 R22 |
-| request/permission/menu/tabs/auth reset 自动化回归 | R19 | 是 | 待 R22 |
-| Bun workspace 子集 + 抽包后回归仍绿 | R20 | 是 | 待 R22 |
-| 生产构建可预览、不依赖 dev proxy | R21 | 是 | 待 R22 |
-| 必须清单、文档与实际版本收口 | R22 | 否 | 待 R22 |
+| Bun 安装与启动 | R00–R01 | 是 | 是 |
+| Vite 开发 / 构建 | R01 | 是 | 是 |
+| Vite 生产 preview 与 base | R21 | 是 | 是 |
+| TypeScript 严格检查 | R01/R18 | 是 | 是 |
+| 启动链 / loading / UnoCSS / 布局 / 五 store | R02–R06 | 是 | 是 |
+| Mock 连通 + Axios flat + 登录会话 | R07–R09 | 是 | 是 |
+| 静态权限守卫 / 403 / 404 / 500 | R10/R17 | 是 | 是 |
+| 菜单 / 面包屑 / 页签 / KeepAlive / 局部重载 | R11–R12 | 是 | 是 |
+| i18n / 主题 / 登录页 / 看板 / 360px | R13–R17 | 是 | 是 |
+| typecheck/lint/format/CI | R18 | 是 | 是 |
+| request/permission/menu/tabs/auth reset 自动化回归 | R19 | 是 | 是 |
+| Bun workspace 子集 + 抽包后回归仍绿 | R20 | 是 | 是 |
+| 生产构建可预览、不依赖 dev proxy | R21 | 是 | 是 |
+| 必须清单、文档与实际版本收口 | R22 | 是 | 是 |
 
 加分项（动态路由、token 刷新、Elegant Router、多布局、主题抽屉等）全部未做，不阻塞主线；R22 后走 A 系列。
 
-## 下一轮入口：R22
+## 进阶轮
 
-文档：[rounds/R22-final-acceptance.md](./rounds/R22-final-acceptance.md)
+| 轮 | 标题 | 状态 | 完成日 | 证据 / 笔记 |
+| --- | --- | --- | --- | --- |
+| A01 | token 刷新单飞与请求重放 | done | 2026-08-25 | `@sa/axios` 单飞 refresh + 一次重放；失败才登出；26 tests；Chrome 模拟过期后拿到 refreshed token |
+| A02 | 后端动态路由协议 | pending | | |
+| A03 | Elegant Router 与路由生成 | pending | | |
+| A04 | 多 layout mode | pending | | |
+| A05 | 完整主题设置抽屉 | pending | | |
+| A06 | 高级页签 | pending | | |
+| A07 | 全局搜索 | pending | | |
+| A08 | 其他登录模块 | pending | | |
+| A09 | iframe 与多服务请求 | pending | | |
+| A10 | 图标/插件自动化 | pending | | |
 
-前置已满足：R00–R21 均为 done。按功能清单和生产 preview 再走一遍完整手工路径，清理演示残留，收口文档。
+## 下一轮入口
+
+可选：[A02 动态路由](./04-learning-path.md)。主线不再增加 R 编号。
 
 ## 剩余主线
 
@@ -106,7 +118,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R19 | R18 已 done | 已完成：14 tests、quality/CI 含 test |
 | R20 | R19 全绿 | 已完成：三包 workspace、20 tests、D11 |
 | R21 | R19 全绿，R20 已抽 | 已完成：preview 路径、`/admin/` 演练、D12、CI build |
-| R22 | R00–R21 均为 done 或有合理 skipped | features 终验全勾；清理演示/占位；README 收口启动/测试/部署；能讲清六条数据流 |
+| R22 | R00–R21 均为 done | 已完成：features 终验、preview 路径、D26、数据流收口 |
 
 ## 阶段门
 
@@ -119,7 +131,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | 页面交付 | R15–R17 | 登录、看板、异常边界在桌面/手机、中英、亮暗下可用 |
 | 工程与交付 | R18–R22 | workspace 边界、quality、test、prod preview、功能对等全部有证据 |
 
-前五段已关闭。工程与交付段已完成 R18–R21，只剩 R22 终验。
+六个阶段门均已关闭。
 
 ## 实际安装版本
 
@@ -162,15 +174,15 @@ bun pm ls
 
 ## 决策填写
 
-已拍板并写入 [decisions.md](./decisions.md)：D1–D24。D12 为 `VITE_BASE_URL=/`。
+已拍板并写入 [decisions.md](./decisions.md)：D1–D27。D12 为 `VITE_BASE_URL=/`。A01 见 D27。
 
 ## 已知边界（不是漏做的主线）
 
-这些是已记录的范围选择或留给后续轮次的残留，不要在 R22 里顺手扩成新需求：
+这些是已记录的范围选择，不是未完成的主线：
 
 - **ECharts 体积**：Home 约 `724.32 kB / gzip 226.27 kB`，Vite 500kB warning 按 D22 保留，本轮不拆包。
 - **会话码**：logout / modal logout / expired token 目前都走 `resetStore`；无单飞刷新与请求重放（A01）。
-- **权限**：静态 `authRoutes` + `R_SUPER`；`/restricted` 使用 `R_NOBODY` 作为 403 演示页，R22 再决定删除或标明 demo。
+- **权限**：静态 `authRoutes` + `R_SUPER`；`/restricted`（`R_NOBODY`）保留为 403 演示页。
 - **生产 API**：本地 preview 直连 `127.0.0.1:19007`；真实上线需改 `.env.prod`，不要把 Mock 主机带上线。
 - **布局 / 主题**：仅 vertical shell；无 mix/hybrid、无完整主题抽屉。
 - **本地产物**：`dist/`、`legacy/`、`node_modules/` 均 gitignore；`legacy/` 只作对照。

@@ -105,7 +105,7 @@ R00–R22 已满足三个停止条件：
 
 | 进阶轮 | 主题 | 对应加分项 |
 | --- | --- | --- |
-| A01 | token 刷新单飞与请求重放 | expired token codes |
+| A01 | [token 刷新单飞与请求重放](./rounds/A01-token-refresh.md) | expired token codes |
 | A02 | 后端动态路由协议 | `VITE_AUTH_ROUTE_MODE=dynamic` |
 | A03 | Elegant Router 与路由生成 | 文件即路由 |
 | A04 | 多 layout mode | mix / hybrid / horizontal |

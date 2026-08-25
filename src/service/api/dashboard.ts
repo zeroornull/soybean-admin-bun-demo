@@ -10,3 +10,10 @@ export function fetchDashboardServiceStatus(simulateError = false) {
     method: 'GET'
   });
 }
+
+export function fetchProtectedServiceStatus() {
+  return request<DashboardServiceStatus>({
+    url: '/test/protected',
+    method: 'GET'
+  });
+}

@@ -5,8 +5,10 @@ import { useI18n } from 'vue-i18n';
 import type { EChartsCoreOption } from 'echarts/core';
 import { useEcharts } from '@/composables/use-echarts';
 import { dayjs } from '@/locales/dayjs';
-import { fetchDashboardServiceStatus } from '@/service/api';
+import { fetchDashboardServiceStatus, fetchProtectedServiceStatus } from '@/service/api';
+import { useAuthStore } from '@/store/auth';
 import { useThemeStore } from '@/store/theme';
+import { setAccessToken } from '@/utils/storage';
 
 defineOptions({ name: 'Home' });
 
@@ -18,6 +20,7 @@ const datePickerRef = ref<InstanceType<typeof NDatePicker> | null>(null);
 const trafficChartRef = ref<HTMLElement | null>(null);
 const { t, locale } = useI18n();
 const themeStore = useThemeStore();
+const authStore = useAuthStore();
 const numberFormatter = computed(() => new Intl.NumberFormat(locale.value));
 const currencyFormatter = computed(
   () => new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'CNY', maximumFractionDigits: 0 })
@@ -155,6 +158,22 @@ async function loadServiceStatus(simulateError = false) {
   serviceState.value = 'success';
 }
 
+async function simulateExpiredToken() {
+  authStore.token = 'mock-expired-access-token';
+  setAccessToken('mock-expired-access-token');
+  serviceState.value = 'loading';
+
+  const { data, error } = await fetchProtectedServiceStatus();
+
+  if (error) {
+    serviceState.value = 'error';
+    return;
+  }
+
+  serviceName.value = data.service;
+  serviceState.value = 'success';
+}
+
 onMounted(() => {
   const input = (datePickerRef.value?.$el as HTMLElement | undefined)?.querySelector('input');
   input?.setAttribute('id', 'dashboard-report-date');
@@ -214,6 +233,9 @@ onMounted(() => {
         </span>
         <NButton data-dashboard-action="simulate-error" size="tiny" tertiary @click="loadServiceStatus(true)">
           {{ t('dashboard.simulateServiceError') }}
+        </NButton>
+        <NButton data-dashboard-action="simulate-expired-token" size="tiny" tertiary @click="simulateExpiredToken">
+          {{ t('dashboard.simulateExpiredToken') }}
         </NButton>
       </div>
     </section>

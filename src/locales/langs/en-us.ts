@@ -85,6 +85,7 @@ export const enUS = {
     emailCampaign: 'Email campaigns',
     serviceReady: 'Local data service is ready: {service}',
     simulateServiceError: 'Simulate service error',
+    simulateExpiredToken: 'Simulate expired token',
     loadingService: 'Checking the local data service…',
     serviceUnavailable: 'Data service is temporarily unavailable',
     serviceErrorDescription: 'The dashboard request failed. Check the network or local Mock service and try again.',
@@ -99,7 +100,8 @@ export const enUS = {
   },
   restricted: {
     title: 'Restricted route',
-    description: "Only the static super role can bypass this route's R_NOBODY requirement."
+    description: "Only the static super role can bypass this route's R_NOBODY requirement.",
+    demoNote: 'Demo page for static 403 checks, not a business module.'
   },
   theme: {
     light: 'Light',

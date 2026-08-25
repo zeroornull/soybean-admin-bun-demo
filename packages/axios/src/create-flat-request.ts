@@ -1,6 +1,7 @@
-import { create, isAxiosError, isCancel } from 'axios';
-import type { AxiosError, AxiosRequestConfig } from 'axios';
+import { AxiosHeaders, create, isAxiosError, isCancel } from 'axios';
+import type { AxiosError } from 'axios';
 import type {
+  AppRequestConfig,
   BackendResponse,
   CreateFlatRequestOptions,
   FlatRequest,
@@ -65,6 +66,7 @@ export function createFlatRequest(options: CreateFlatRequestOptions) {
   });
 
   let sessionHandlers: RequestSessionHandlers = {};
+  let refreshPromise: Promise<boolean> | null = null;
 
   instance.interceptors.request.use(config => {
     const token = options.getToken?.();
@@ -96,7 +98,38 @@ export function createFlatRequest(options: CreateFlatRequestOptions) {
     }
   }
 
-  const request: FlatRequest = async function request<T>(config: AxiosRequestConfig) {
+  async function refreshSessionOnce() {
+    const refreshSession = sessionHandlers.refreshSession;
+
+    if (!refreshSession) return false;
+    if (!refreshPromise) {
+      refreshPromise = Promise.resolve()
+        .then(() => refreshSession())
+        .finally(() => {
+          refreshPromise = null;
+        });
+    }
+
+    return refreshPromise;
+  }
+
+  function withoutAuthorization(config: AppRequestConfig): AppRequestConfig {
+    const headers = new AxiosHeaders();
+
+    if (config.headers) {
+      headers.set(config.headers as never);
+    }
+
+    headers.delete('Authorization');
+
+    return {
+      ...config,
+      headers,
+      expiredRefreshRetried: true
+    };
+  }
+
+  const request: FlatRequest = async function request<T>(config: AppRequestConfig) {
     try {
       const response = await instance.request<BackendResponse<T>>(config);
       const backend = response.data;
@@ -114,6 +147,20 @@ export function createFlatRequest(options: CreateFlatRequestOptions) {
         message: backend.message || backend.msg || 'Backend request failed',
         code
       };
+
+      const canRefresh =
+        options.expiredTokenCodes.includes(code) &&
+        !config.skipExpiredRefresh &&
+        !config.expiredRefreshRetried &&
+        Boolean(sessionHandlers.refreshSession);
+
+      if (canRefresh) {
+        const refreshed = await refreshSessionOnce();
+
+        if (refreshed) {
+          return request<T>(withoutAuthorization(config));
+        }
+      }
 
       await dispatchSessionFailure(code, requestError);
 

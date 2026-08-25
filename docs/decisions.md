@@ -193,3 +193,18 @@
 - **范围**：R18 明确扫描 src、scripts、Vite/Uno 配置与必要 JSON；legacy/docs/dist/node_modules/coverage/.omx 不进入代码检查。R20 出现 packages 后再显式扩 scope，不用宽泛 `.` 把教学 Markdown 当源码。
 - **本地 hook**：simple-git-hooks pre-commit 只执行 quality；失败后由开发者显式修复并重新 stage，不在 hook 中静默 write/fix，也不跑耗时产品 build。
 - **CI**：GitHub Actions 固定 Bun 1.4.0，frozen install 后运行同一组脚本。R19 起本地 `quality` 含 test；CI 把 typecheck/lint/format、`bun run test` 与 `bun run build` 分成三步。pre-commit 仍不跑产品 build。
+
+### D26 · 加分项留在 A 系列，不升格为主线
+
+- **日期**：2026-08-25（R22）
+- **明确不做（本仓库主线）**：动态路由、token 刷新单飞与重放、弹窗登出码、Elegant Router、多 layout、完整主题抽屉、页签拖拽、全局搜索、其它登录模块、iframe、SVG sprite、组件自动导入、多服务 baseURL、版本更新提示、全套 `@sa/*`、`@sa/scripts`。
+- **原因**：必须项已覆盖后台内核；再加会把加分项升级成主线范围。
+- **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
+- **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
+
+### D27 · expired 码走单飞刷新，失败才登出
+
+- **日期**：2026-08-25（A01）
+- **决策**：`9999/9998/3333` 先 `refreshSession`（并发共用一个 Promise），成功后重放原请求一次；refresh 接口 `skipExpiredRefresh`。失败或没有 refresh token 才 `resetStore`。
+- **原因**：主线把三种会话码都登出，会把「token 过期可恢复」和「会话作废」混在一起。
+- **验证**：单元测试覆盖单飞/重放/失败；Chrome 模拟过期后 storage 换成 refreshed token 且不跳登录。

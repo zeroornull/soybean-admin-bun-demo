@@ -83,6 +83,7 @@ export const zhCN = {
     emailCampaign: '邮件活动',
     serviceReady: '本地数据服务已就绪：{service}',
     simulateServiceError: '模拟服务异常',
+    simulateExpiredToken: '模拟 token 过期',
     loadingService: '正在检查本地数据服务…',
     serviceUnavailable: '数据服务暂时不可用',
     serviceErrorDescription: '看板数据请求失败，请检查网络或本地 Mock 服务后重试。',
@@ -97,7 +98,8 @@ export const zhCN = {
   },
   restricted: {
     title: '受限路由',
-    description: '只有静态超管角色可以绕过该路由的 R_NOBODY 要求。'
+    description: '只有静态超管角色可以绕过该路由的 R_NOBODY 要求。',
+    demoNote: '演示页，用来验证静态权限 403，不是业务模块。'
   },
   theme: {
     light: '亮色',

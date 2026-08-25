@@ -21,6 +21,7 @@ export function setupStore(app: App) {
   setRequestSessionHandlers({
     onLogout: error => resetSession(error.message),
     onModalLogout: error => resetSession(error.message),
-    onTokenExpired: error => resetSession(error.message)
+    onTokenExpired: error => resetSession(error.message),
+    refreshSession: () => authStore.refreshSession()
   });
 }

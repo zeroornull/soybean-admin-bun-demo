@@ -34,6 +34,7 @@ export function fetchRefreshToken(refreshToken: string) {
   return request<LoginToken>({
     url: '/auth/refreshToken',
     method: 'post',
+    skipExpiredRefresh: true,
     data: {
       refreshToken
     }

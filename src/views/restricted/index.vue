@@ -9,9 +9,10 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <div data-page="restricted" class="min-h-full grid place-items-center p-24px">
+  <div data-page="restricted" data-demo="static-permission" class="min-h-full grid place-items-center p-24px">
     <section class="card-wrapper w-full max-w-520px bg-[var(--card-bg)] p-24px text-center">
-      <h1 class="m-0 text-28px font-600">{{ t('restricted.title') }}</h1>
+      <p class="m-0 text-12px font-700 tracking-1px text-primary">{{ t('restricted.demoNote') }}</p>
+      <h1 class="mb-0 mt-10px text-28px font-600">{{ t('restricted.title') }}</h1>
       <p class="mb-0 mt-8px">{{ t('restricted.description') }}</p>
       <button
         data-local-counter="restricted"

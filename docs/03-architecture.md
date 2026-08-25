@@ -142,3 +142,12 @@ app.mount('#app');
 - `moduleResolution: "bundler"`
 - 环境变量写成 `src/types/env.d.ts` 的 `ImportMetaEnv`，不要满项目 `as any`
 - API 类型放 `src/types/api.d.ts`，用 namespace 或模块导出都可以；legacy 用 `namespace Api`，学的时候模块导出更直观
+
+## R22 收口：六条核心数据流
+
+1. **启动链**：`setupLoading` → `createApp` → `setupStore`（Pinia、app/theme/auth、请求会话回调）→ `setupRouter`（守卫 + `isReady`）→ `setAuthNavigator` → `setupI18n` → `mount`。store 必须在 router 之前注册。
+2. **登录 / 恢复 / 登出**：登录只走 auth store：`fetchLogin` 写双 token → `getUserInfo`。刷新走 `initSession` 单飞：有 storage token 再拉 userInfo，失败则 `resetStore`。登出清 token、userInfo、auth routes、tabs，再由 navigator 带 `redirect` 回登录。
+3. **守卫**：先标记 constant 并 rematch；再 `initSession`。未登录只能留在 login/真正 constant/未知非业务 path，否则跳 login。已登录若尚未 `addRoute` 则注入过滤后的 auth 路由再 rematch；已登录访问 login 去首页；业务未知 path 转 403；无角色转 403。
+4. **请求**：仅 `DEV && VITE_HTTP_PROXY=Y` 时用 `/proxy-default`，生产直连 `VITE_SERVICE_BASE_URL`。成功码给出 `{ data, error: null }`；logout/modal 码清会话；**expired 码单飞 refresh 后重放一次**，失败才登出；HTTP 有响应为 `http`，无响应为 `network`，取消为 `cancelled`。
+5. **投影**：守卫过滤后的 auth routes → 菜单；`route.matched` → 面包屑；route name → tab id；`componentName` → KeepAlive include。关 tab 时同步丢掉 cache name。
+6. **locale / theme**：locale 只经 app store 写入，同步 Vue I18n、dayjs、`html lang`、storage；Naive 跟同一状态。theme 持久化 scheme 与主色，`darkMode` 只派生；同时写 CSS 变量和 Naive overrides。

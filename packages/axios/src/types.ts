@@ -2,6 +2,11 @@ import type { AxiosRequestConfig } from 'axios';
 
 export type RequestErrorKind = 'network' | 'http' | 'backend' | 'cancelled';
 
+export type AppRequestConfig = AxiosRequestConfig & {
+  skipExpiredRefresh?: boolean;
+  expiredRefreshRetried?: boolean;
+};
+
 export interface RequestError {
   kind: RequestErrorKind;
   message: string;
@@ -24,6 +29,7 @@ export interface RequestSessionHandlers {
   onLogout?: RequestSessionHandler;
   onModalLogout?: RequestSessionHandler;
   onTokenExpired?: RequestSessionHandler;
+  refreshSession?: () => Promise<boolean>;
 }
 
 export interface CreateFlatRequestOptions {
@@ -36,4 +42,4 @@ export interface CreateFlatRequestOptions {
   timeout?: number;
 }
 
-export type FlatRequest = <T>(config: AxiosRequestConfig) => Promise<FlatResult<T>>;
+export type FlatRequest = <T>(config: AppRequestConfig) => Promise<FlatResult<T>>;

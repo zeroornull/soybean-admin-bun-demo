@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R21 已完成，下一轮为 R22 功能对等与最终验收。**
+当前进度：**R00–R22 主线已完成，A01 token 刷新已完成。** 其余加分项见 `docs/04-learning-path.md`。
 
 ## 对照运行原项目
 

@@ -86,6 +86,16 @@ const server = createServer(async (request, response) => {
 
   if (request.method === 'GET' && url.pathname === '/auth/getUserInfo') {
     const authorization = request.headers.authorization || null;
+
+    if (authorization === 'Bearer mock-expired-access-token') {
+      sendJson(response, 200, {
+        code: '9999',
+        message: 'Token expired',
+        data: null
+      });
+      return;
+    }
+
     const isSuperUser = ['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(
       authorization || ''
     );
@@ -112,6 +122,42 @@ const server = createServer(async (request, response) => {
         buttons: isSuperUser ? ['B_CODE1', 'B_CODE2'] : ['B_CODE1'],
         authorization
       }
+    });
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/test/protected') {
+    const authorization = request.headers.authorization || '';
+
+    if (authorization === 'Bearer mock-expired-access-token') {
+      sendJson(response, 200, {
+        code: '9999',
+        message: 'Token expired',
+        data: null
+      });
+      return;
+    }
+
+    const isKnownToken = [
+      'Bearer mock-access-token',
+      'Bearer mock-refreshed-access-token',
+      'Bearer mock-user-access-token',
+      'Bearer mock-user-refreshed-access-token'
+    ].includes(authorization);
+
+    if (!isKnownToken) {
+      sendJson(response, 200, {
+        code: '8888',
+        message: 'Session expired',
+        data: null
+      });
+      return;
+    }
+
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: { service: 'soybean-local-mock' }
     });
     return;
   }
