@@ -1,40 +1,95 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAppStore } from '@/store/app';
 import { useTabStore } from '@/store/tab';
+import { useThemeStore } from '@/store/theme';
 
 defineOptions({ name: 'LayoutTabs' });
 
 const appStore = useAppStore();
 const tabStore = useTabStore();
+const themeStore = useThemeStore();
 const { t } = useI18n();
+const draggingId = ref('');
 const hasClosableTabs = computed(() => tabStore.tabs.some(tab => !tab.pinned));
 const hasOtherClosableTabs = computed(() => tabStore.tabs.some(tab => !tab.pinned && tab.id !== tabStore.activeTabId));
+const tabMode = computed(() => themeStore.extras.tabMode);
 
 function getTabLabel(tab: (typeof tabStore.tabs)[number]) {
   return tab.labelKey ? t(tab.labelKey) : tab.label;
+}
+
+function handleDragStart(event: DragEvent, id: string) {
+  draggingId.value = id;
+  event.dataTransfer?.setData('text/plain', id);
+  if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragOver(event: DragEvent) {
+  event.preventDefault();
+  if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+}
+
+function handleDrop(event: DragEvent, id: string) {
+  event.preventDefault();
+  const fromId = draggingId.value || event.dataTransfer?.getData('text/plain') || '';
+  if (fromId) tabStore.moveTab(fromId, id);
+  draggingId.value = '';
+}
+
+function handleDragEnd() {
+  draggingId.value = '';
+}
+
+function handleTabMouseDown(event: MouseEvent, id: string, pinned: boolean) {
+  if (event.button !== 1 || !themeStore.extras.closeTabByMiddleClick || pinned) return;
+
+  event.preventDefault();
+  void tabStore.removeTab(id);
 }
 </script>
 
 <template>
   <section
     data-layout-tabs
+    :data-tab-mode="tabMode"
     class="h-44px shrink-0 flex items-center gap-8px border-b border-[var(--border-color)] bg-[var(--card-bg)] px-10px"
   >
-    <div role="tablist" :aria-label="t('common.openPages')" class="min-w-0 flex flex-1 gap-6px overflow-x-auto py-6px">
+    <div
+      role="tablist"
+      :aria-label="t('common.openPages')"
+      class="min-w-0 flex flex-1 overflow-x-auto py-6px"
+      :class="tabMode === 'chrome' ? 'items-end gap-0' : 'items-center gap-6px'"
+    >
       <div
         v-for="tab in tabStore.tabs"
         :key="tab.id"
         :data-tab-id="tab.id"
         :data-tab-active="tab.id === tabStore.activeTabId"
         :data-tab-pinned="tab.pinned"
-        class="h-30px shrink-0 flex items-center rd-7px border transition-colors"
+        draggable="true"
+        class="shrink-0 flex items-center border transition-colors"
         :class="
-          tab.id === tabStore.activeTabId
-            ? 'border-primary bg-primary text-white'
-            : 'border-[var(--border-color)] bg-transparent hover:bg-[var(--layout-bg)]'
+          tabMode === 'chrome'
+            ? [
+                'relative -ml-8px h-34px first:ml-0',
+                tab.id === tabStore.activeTabId
+                  ? 'z-1 border-transparent bg-[var(--layout-bg)] rd-t-10px'
+                  : 'z-0 border-transparent bg-transparent rd-t-10px hover:bg-[var(--layout-bg)]'
+              ]
+            : [
+                'h-30px rd-7px',
+                tab.id === tabStore.activeTabId
+                  ? 'border-primary bg-primary text-white'
+                  : 'border-[var(--border-color)] bg-transparent hover:bg-[var(--layout-bg)]'
+              ]
         "
+        @dragstart="handleDragStart($event, tab.id)"
+        @dragover="handleDragOver"
+        @drop="handleDrop($event, tab.id)"
+        @dragend="handleDragEnd"
+        @mousedown="handleTabMouseDown($event, tab.id, tab.pinned)"
       >
         <button
           :id="`tab-${tab.id}`"

@@ -10,6 +10,7 @@ export const themeSchemeStorageKey = `${storagePrefix}themeScheme`;
 export const themeColorStorageKey = `${storagePrefix}themeColor`;
 export const layoutModeStorageKey = `${storagePrefix}layoutMode`;
 export const themeExtrasStorageKey = `${storagePrefix}themeExtras`;
+export const globalTabsStorageKey = `${storagePrefix}globalTabs`;
 
 export function getAccessToken() {
   return storage.get('token');
@@ -73,6 +74,18 @@ export function getThemeExtrasSetting() {
 
 export function setThemeExtrasSetting(value: string) {
   storage.set('themeExtras', value);
+}
+
+export function getGlobalTabsSetting() {
+  return storage.get('globalTabs');
+}
+
+export function setGlobalTabsSetting(value: string) {
+  storage.set('globalTabs', value);
+}
+
+export function removeGlobalTabsSetting() {
+  storage.remove('globalTabs');
 }
 
 export function clearThemeSettings() {

@@ -4,6 +4,7 @@ import { darkTheme } from 'naive-ui';
 import type { GlobalThemeOverrides } from 'naive-ui';
 import dayjs from 'dayjs';
 import { defaultLayoutMode, resolveLayoutMode, type LayoutMode } from '@/layouts/layout-mode';
+import { resolveTabMode, type TabMode } from '@/store/tab-shared';
 import {
   clampThemeRadius,
   defaultThemeExtras,
@@ -20,6 +21,7 @@ import {
   getThemeColorSetting,
   getThemeExtrasSetting,
   getThemeSchemeSetting,
+  removeGlobalTabsSetting,
   setLayoutModeSetting,
   setThemeColorSetting,
   setThemeExtrasSetting,
@@ -162,6 +164,19 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
     extras.value.blocks[block] = visible;
   }
 
+  function setTabMode(mode: TabMode) {
+    extras.value.tabMode = resolveTabMode(mode);
+  }
+
+  function setTabCache(enabled: boolean) {
+    extras.value.tabCache = enabled;
+    if (!enabled) removeGlobalTabsSetting();
+  }
+
+  function setCloseTabByMiddleClick(enabled: boolean) {
+    extras.value.closeTabByMiddleClick = enabled;
+  }
+
   function patchWatermark(patch: Partial<ThemeWatermark>) {
     const next = { ...extras.value.watermark, ...patch };
 
@@ -210,6 +225,9 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
     setGrayscale,
     setColourWeakness,
     setBlockVisible,
+    setTabMode,
+    setTabCache,
+    setCloseTabByMiddleClick,
     patchWatermark,
     applyPreset,
     resetTheme

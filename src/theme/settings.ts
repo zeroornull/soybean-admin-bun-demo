@@ -1,4 +1,5 @@
 import type { LayoutMode } from '@/layouts/layout-mode';
+import { defaultTabMode, resolveTabMode, type TabMode } from '@/store/tab-shared';
 
 export interface ThemeWatermark {
   visible: boolean;
@@ -19,6 +20,9 @@ export interface ThemeExtras {
   colourWeakness: boolean;
   watermark: ThemeWatermark;
   blocks: ThemeBlocks;
+  tabMode: TabMode;
+  tabCache: boolean;
+  closeTabByMiddleClick: boolean;
 }
 
 export interface ThemePreset {
@@ -50,7 +54,10 @@ export const defaultThemeExtras: ThemeExtras = {
     tabs: true,
     breadcrumb: true,
     footer: false
-  }
+  },
+  tabMode: defaultTabMode,
+  tabCache: true,
+  closeTabByMiddleClick: true
 };
 
 function cloneExtras(value: ThemeExtras): ThemeExtras {
@@ -98,7 +105,10 @@ export function parseThemeExtras(raw: unknown): ThemeExtras {
       tabs: blocks.tabs !== false,
       breadcrumb: blocks.breadcrumb !== false,
       footer: Boolean(blocks.footer)
-    }
+    },
+    tabMode: resolveTabMode(input.tabMode),
+    tabCache: input.tabCache !== false,
+    closeTabByMiddleClick: input.closeTabByMiddleClick !== false
   };
 }
 

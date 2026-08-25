@@ -1,22 +1,21 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
+import { parseThemeExtras } from '@/theme/settings';
+import {
+  getGlobalTabsSetting,
+  getThemeExtrasSetting,
+  removeGlobalTabsSetting,
+  setGlobalTabsSetting
+} from '@/utils/storage';
 import { SetupStoreId } from './ids';
+import { filterTabsByRouteNames, parseStoredTabs, reorderTabs, type TabItem } from './tab-shared';
+
+export type { TabItem } from './tab-shared';
 
 type TabRoute = Pick<RouteLocationNormalizedLoaded, 'fullPath' | 'matched'> & {
   name: RouteLocationNormalizedLoaded['name'] | null | undefined;
 };
-
-export interface TabItem {
-  id: string;
-  label: string;
-  labelKey?: string;
-  routeName: string;
-  fullPath: string;
-  pinned: boolean;
-  keepAlive: boolean;
-  componentName?: string;
-}
 
 function getCurrentRouteMeta(route: TabRoute) {
   return route.matched.find(record => record.name === route.name)?.meta;
@@ -59,6 +58,38 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
   ]);
 
   let activeRouter: Router | undefined;
+  let restoredFromStorage = false;
+
+  function isTabCacheEnabled() {
+    return parseThemeExtras(getThemeExtrasSetting()).tabCache;
+  }
+
+  function persistTabs() {
+    if (!isTabCacheEnabled()) {
+      removeGlobalTabsSetting();
+      return;
+    }
+
+    setGlobalTabsSetting(JSON.stringify(tabs.value));
+  }
+
+  function restoreTabs(targetRouter: Router) {
+    if (restoredFromStorage) return;
+
+    restoredFromStorage = true;
+
+    if (!isTabCacheEnabled()) return;
+
+    const stored = filterTabsByRouteNames(
+      parseStoredTabs(getGlobalTabsSetting()),
+      targetRouter
+        .getRoutes()
+        .filter(route => route.name)
+        .map(route => String(route.name))
+    );
+
+    if (stored.length) tabs.value = stored;
+  }
 
   function insertTab(tab: TabItem) {
     if (!tab.pinned) {
@@ -83,6 +114,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
       insertTab(tab);
     }
 
+    persistTabs();
     return existingTab || tab;
   }
 
@@ -104,10 +136,22 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     if (!currentTab) return;
 
     activeRouter = targetRouter;
+    restoreTabs(targetRouter);
     ensureHomeTab(targetRouter);
 
     const tab = addTab(route);
     if (tab) setActiveTab(tab.id);
+  }
+
+  function moveTab(fromId: string, toId: string) {
+    const fromIndex = tabs.value.findIndex(tab => tab.id === fromId);
+    const toIndex = tabs.value.findIndex(tab => tab.id === toId);
+
+    if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return false;
+
+    tabs.value = reorderTabs(tabs.value, fromIndex, toIndex);
+    persistTabs();
+    return true;
   }
 
   async function switchTab(id: string) {
@@ -136,6 +180,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     const nextTab = isRemovingActiveTab ? tabs.value[removeIndex - 1] || tabs.value[removeIndex + 1] : undefined;
 
     tabs.value.splice(removeIndex, 1);
+    persistTabs();
 
     if (isRemovingActiveTab) {
       if (nextTab) {
@@ -154,6 +199,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
 
     const activeTabRemoved = !tabs.value.some(tab => tab.id === activeTabId.value && (tab.pinned || tab.id === id));
     tabs.value = tabs.value.filter(tab => tab.pinned || tab.id === id);
+    persistTabs();
 
     if (activeTabRemoved) await switchTab(targetTab.id);
 
@@ -165,6 +211,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     const activeTabRemoved = !pinnedTabs.some(tab => tab.id === activeTabId.value);
 
     tabs.value = pinnedTabs;
+    persistTabs();
 
     if (activeTabRemoved) {
       if (pinnedTabs[0]) {
@@ -180,6 +227,8 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     activeTabId.value = '';
     excludedCacheName.value = '';
     activeRouter = undefined;
+    restoredFromStorage = false;
+    removeGlobalTabsSetting();
   }
 
   function excludeActiveCache() {
@@ -201,6 +250,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     removeAll,
     setActiveTab,
     switchTab,
+    moveTab,
     syncRoute,
     clearTabs,
     excludeActiveCache,

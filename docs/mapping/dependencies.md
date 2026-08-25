@@ -22,7 +22,7 @@
 | defu | 6.1.7 | — | 深合并配置时再装 | 按需 |
 | json5 | 2.2.3 | — | 解析 env JSON 时对照 `VITE_OTHER_SERVICE_BASE_URL` | 按需 |
 | tailwind-merge | 3.6.0 | — | 一般可省略 | — |
-| vue-draggable-plus | 0.6.1 | — | 做页签拖拽再装 | 加分 |
+| vue-draggable-plus | 0.6.1 | — | A06 用原生 DnD，未装 | 加分 |
 | @better-scroll/core | 2.5.1 | — | 可省略，overflow 代替 | — |
 
 ## 开发期

@@ -139,6 +139,14 @@ export const zhCN = {
       breadcrumb: '面包屑',
       footer: '页脚'
     },
+    tabsBar: {
+      title: '页签',
+      mode: '页签外观',
+      button: '按钮',
+      chrome: 'Chrome',
+      cache: '刷新后恢复页签',
+      middleClick: '中键关闭页签'
+    },
     watermark: {
       title: '水印',
       visible: '显示水印',

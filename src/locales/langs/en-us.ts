@@ -141,6 +141,14 @@ export const enUS = {
       breadcrumb: 'Breadcrumb',
       footer: 'Footer'
     },
+    tabsBar: {
+      title: 'Tabs',
+      mode: 'Tab style',
+      button: 'Button',
+      chrome: 'Chrome',
+      cache: 'Restore tabs after reload',
+      middleClick: 'Close tab with middle click'
+    },
     watermark: {
       title: 'Watermark',
       visible: 'Show watermark',

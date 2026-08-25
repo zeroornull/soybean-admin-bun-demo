@@ -129,6 +129,42 @@ const activeTab = ref('appearance');
               />
             </label>
           </div>
+
+          <NDivider title-placement="left">{{ t('theme.tabsBar.title') }}</NDivider>
+          <div class="grid gap-12px">
+            <label class="flex items-center justify-between gap-12px">
+              <span>{{ t('theme.tabsBar.mode') }}</span>
+              <select
+                data-theme-tab-mode
+                class="h-32px rd-8px border border-[var(--border-color)] bg-transparent px-8px"
+                :value="themeStore.extras.tabMode"
+                @change="
+                  themeStore.setTabMode(($event.target as HTMLSelectElement).value as typeof themeStore.extras.tabMode)
+                "
+              >
+                <option value="button">{{ t('theme.tabsBar.button') }}</option>
+                <option value="chrome">{{ t('theme.tabsBar.chrome') }}</option>
+              </select>
+            </label>
+            <label class="flex items-center justify-between gap-12px">
+              <span>{{ t('theme.tabsBar.cache') }}</span>
+              <NSwitch
+                data-theme-tab-cache
+                size="small"
+                :value="themeStore.extras.tabCache"
+                @update:value="themeStore.setTabCache"
+              />
+            </label>
+            <label class="flex items-center justify-between gap-12px">
+              <span>{{ t('theme.tabsBar.middleClick') }}</span>
+              <NSwitch
+                data-theme-tab-middle-click
+                size="small"
+                :value="themeStore.extras.closeTabByMiddleClick"
+                @update:value="themeStore.setCloseTabByMiddleClick"
+              />
+            </label>
+          </div>
         </NTabPane>
 
         <NTabPane name="general" :tab="t('theme.tabs.general')">

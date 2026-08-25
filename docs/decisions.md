@@ -209,6 +209,14 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D31 · A06 页签拖拽用原生 DnD，外观不拷 materials
+
+- **日期**：2026-08-25（A06）
+- **决策**：拖拽用 HTML5 DnD，不装 `vue-draggable-plus`（Sortable）。Chrome 外观是同一份 tab 数据的壳，不拷 `@sa/materials` CSS module。
+- **顺序**：`reorderTabs` 之后固定 tab 重新靠左，不能把 Restricted 拖到 Home 前面。
+- **持久化**：`globalTabs`；按当前路由名过滤；登出 `clearTabs` 必删。`tabCache` 默认开，可在抽屉关掉。
+- **中键关闭**：默认开，固定 tab 不理中键。
+
 ### D30 · A05 主题抽屉只覆盖圆角、水印、预设、区块
 
 - **日期**：2026-08-25（A05）

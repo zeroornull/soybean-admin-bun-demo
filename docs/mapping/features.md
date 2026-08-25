@@ -58,7 +58,7 @@
 | Elegant Router | 文件即路由 | ☑ A03（本地生成器，未装官方插件） |
 | 6 种 layout mode | mix / hybrid | ☑ A04（壳投影，未装 materials） |
 | 主题设置抽屉全量 | 圆角、水印、各块开关 | ☑ A05 |
-| 页签拖拽、Chrome 风格页签 | vue-draggable-plus + materials | ☐ |
+| 页签拖拽、Chrome 风格页签 | 原生 DnD + 本地 chrome 壳（未装 materials） | ☑ A06 |
 | 全局搜索命令盘 | `global-search` | ☐ |
 | 验证码/注册/重置/微信登录 | login modules | ☐ |
 | iframe 页 | `_builtin/iframe-page` | ☐ |
