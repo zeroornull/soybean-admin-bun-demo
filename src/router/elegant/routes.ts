@@ -35,7 +35,7 @@ export const generatedRoutes: ElegantConstRoute[] = [
   },
   {
     name: 'login',
-    path: '/login',
+    path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
     meta: {
       title: '登录',
       i18nKey: 'route.login',
@@ -43,7 +43,8 @@ export const generatedRoutes: ElegantConstRoute[] = [
       hideInMenu: true,
       hideInTab: true
     },
-    component: 'layout.blank$view.login'
+    component: 'layout.blank$view.login',
+    props: true
   },
   {
     name: 'not-found-page',

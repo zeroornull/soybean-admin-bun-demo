@@ -112,7 +112,7 @@ R00–R22 已满足三个停止条件：
 | A05 | [完整主题设置抽屉](./rounds/A05-theme-drawer.md) | 圆角、水印、预设、区块开关 |
 | A06 | [高级页签](./rounds/A06-advanced-tabs.md) | 拖拽、Chrome 外观、更完整持久化 |
 | A07 | [全局搜索](./rounds/A07-global-search.md) | 命令盘与路由搜索 |
-| A08 | 其他登录模块 | 验证码、注册、重置、微信 |
+| A08 | [其他登录模块](./rounds/A08-login-modules.md) | 验证码、注册、重置、微信 |
 | A09 | iframe 与多服务请求 | iframe page、other service baseURL |
 | A10 | 图标/插件自动化 | SVG sprite、组件自动导入、版本更新提示 |
 

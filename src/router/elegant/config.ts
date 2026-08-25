@@ -60,6 +60,7 @@ export const elegantRouterConfig = {
       }
     },
     login: {
+      path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
       meta: {
         title: '登录',
         i18nKey: 'route.login',

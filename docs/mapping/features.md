@@ -60,7 +60,7 @@
 | 主题设置抽屉全量 | 圆角、水印、各块开关 | ☑ A05 |
 | 页签拖拽、Chrome 风格页签 | 原生 DnD + 本地 chrome 壳（未装 materials） | ☑ A06 |
 | 全局搜索命令盘 | `global-search` | ☑ A07 |
-| 验证码/注册/重置/微信登录 | login modules | ☐ |
+| 验证码/注册/重置/微信登录 | login modules | ☑ A08（Mock 验证码/演示微信，不接真实 SDK） |
 | iframe 页 | `_builtin/iframe-page` | ☐ |
 | 本地 SVG 图标雪碧图 | vite-plugin-svg-icons | ☐ |
 | 组件自动导入 | unplugin-vue-components | ☐ |

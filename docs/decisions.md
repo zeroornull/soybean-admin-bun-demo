@@ -209,6 +209,15 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D33 · A08 登录模块用 URL 切换，微信只做演示
+
+- **日期**：2026-08-25（A08）
+- **决策**：同一 `login` 路由用可选 param `/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?` 切换五个模块。账密行为与 R15 相同。
+- **验证码**：倒计时 60s；Mock `/auth/captcha` 固定演示码 `123456`。`13800138000` 登超管，`13900139000` 登普通用户。
+- **注册/重置**：校验失败不发请求；成功回账密。Mock 不持久化用户表。
+- **微信**：页面标明未接开放平台；「模拟扫码」走 `/auth/wechatLogin` 发超管 token。不装 JSSDK。
+- **redirect**：模块切换保留 query；登录成功只接受站内、非 `//`、非 `/login` 前缀的 redirect。
+
 ### D32 · A07 命令盘只搜当前用户菜单
 
 - **日期**：2026-08-25（A07）

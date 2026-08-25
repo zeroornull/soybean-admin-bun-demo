@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { fetchGetUserInfo, fetchLogin, fetchRefreshToken } from '@/service/api';
+import { fetchCodeLogin, fetchGetUserInfo, fetchLogin, fetchRefreshToken, fetchWechatLogin } from '@/service/api';
 import {
   clearAccessToken,
   clearRefreshToken,
@@ -87,6 +87,22 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     await authNavigator?.();
   }
 
+  async function finishSession(nextToken: string, nextRefreshToken: string) {
+    applyTokens(nextToken, nextRefreshToken);
+
+    const initialized = await getUserInfo();
+
+    if (!initialized) {
+      if (token.value) {
+        await resetStore({ reason: authError.value || 'Unable to load user information', redirect: false });
+      }
+      return false;
+    }
+
+    sessionInitialized.value = true;
+    return true;
+  }
+
   async function login(userName: string, password: string) {
     if (loading.value) return false;
 
@@ -96,25 +112,52 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     try {
       const { data, error } = await fetchLogin(userName, password);
 
-      if (error) {
-        authError.value = error.message;
+      if (error || !data) {
+        authError.value = error?.message || 'Unable to sign in';
         return false;
       }
 
-      applyTokens(data.token, data.refreshToken);
+      return finishSession(data.token, data.refreshToken);
+    } finally {
+      loading.value = false;
+    }
+  }
 
-      const initialized = await getUserInfo();
+  async function loginByCode(phone: string, code: string) {
+    if (loading.value) return false;
 
-      if (!initialized) {
-        if (token.value) {
-          await resetStore({ reason: authError.value || 'Unable to load user information', redirect: false });
-        }
+    loading.value = true;
+    authError.value = null;
+
+    try {
+      const { data, error } = await fetchCodeLogin(phone, code);
+
+      if (error || !data) {
+        authError.value = error?.message || 'Unable to sign in';
         return false;
       }
 
-      sessionInitialized.value = true;
+      return finishSession(data.token, data.refreshToken);
+    } finally {
+      loading.value = false;
+    }
+  }
 
-      return true;
+  async function loginByWechat() {
+    if (loading.value) return false;
+
+    loading.value = true;
+    authError.value = null;
+
+    try {
+      const { data, error } = await fetchWechatLogin();
+
+      if (error || !data) {
+        authError.value = error?.message || 'Unable to sign in';
+        return false;
+      }
+
+      return finishSession(data.token, data.refreshToken);
     } finally {
       loading.value = false;
     }
@@ -182,6 +225,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     authError,
     isLogin,
     login,
+    loginByCode,
+    loginByWechat,
     getUserInfo,
     initSession,
     refreshSession,

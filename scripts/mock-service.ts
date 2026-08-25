@@ -116,6 +116,17 @@ const server = createServer(async (request, response) => {
     return;
   }
 
+  function sendAuthTokens(isSuperUser: boolean) {
+    sendJson(response, 200, {
+      code: '0000',
+      message: 'ok',
+      data: {
+        token: isSuperUser ? 'mock-access-token' : 'mock-user-access-token',
+        refreshToken: isSuperUser ? 'mock-refresh-token' : 'mock-user-refresh-token'
+      }
+    });
+  }
+
   if (request.method === 'POST' && url.pathname === '/auth/login') {
     try {
       const body = await readJson(request);
@@ -124,14 +135,7 @@ const server = createServer(async (request, response) => {
       const isRegularUser = body.userName === 'User';
 
       if (passwordValid && (isSuperUser || isRegularUser)) {
-        sendJson(response, 200, {
-          code: '0000',
-          message: 'ok',
-          data: {
-            token: isSuperUser ? 'mock-access-token' : 'mock-user-access-token',
-            refreshToken: isSuperUser ? 'mock-refresh-token' : 'mock-user-refresh-token'
-          }
-        });
+        sendAuthTokens(isSuperUser);
         return;
       }
 
@@ -149,6 +153,102 @@ const server = createServer(async (request, response) => {
       });
       return;
     }
+  }
+
+  if (request.method === 'POST' && url.pathname === '/auth/captcha') {
+    try {
+      const body = await readJson(request);
+      const phone = String(body.phone || '');
+
+      if (!/^1[3-9]\d{9}$/.test(phone)) {
+        sendJson(response, 200, {
+          code: '1002',
+          message: 'Invalid phone number',
+          data: null
+        });
+        return;
+      }
+
+      sendJson(response, 200, {
+        code: '0000',
+        message: 'ok',
+        data: { expireSeconds: 60, demoCode: '123456' }
+      });
+      return;
+    } catch {
+      sendJson(response, 400, {
+        code: '4000',
+        message: 'Invalid JSON body',
+        data: null
+      });
+      return;
+    }
+  }
+
+  if (request.method === 'POST' && url.pathname === '/auth/codeLogin') {
+    try {
+      const body = await readJson(request);
+      const phone = String(body.phone || '');
+      const code = String(body.code || '');
+      const isSuperUser = phone === '13800138000';
+      const isRegularUser = phone === '13900139000';
+
+      if (code === '123456' && (isSuperUser || isRegularUser)) {
+        sendAuthTokens(isSuperUser);
+        return;
+      }
+
+      sendJson(response, 200, {
+        code: '1003',
+        message: 'Invalid phone or captcha',
+        data: null
+      });
+      return;
+    } catch {
+      sendJson(response, 400, {
+        code: '4000',
+        message: 'Invalid JSON body',
+        data: null
+      });
+      return;
+    }
+  }
+
+  if (request.method === 'POST' && (url.pathname === '/auth/register' || url.pathname === '/auth/resetPwd')) {
+    try {
+      const body = await readJson(request);
+      const phone = String(body.phone || '');
+      const code = String(body.code || '');
+      const password = String(body.password || '');
+
+      if (!/^1[3-9]\d{9}$/.test(phone) || code !== '123456' || password.length < 6) {
+        sendJson(response, 200, {
+          code: '1004',
+          message: 'Invalid phone, captcha or password',
+          data: null
+        });
+        return;
+      }
+
+      sendJson(response, 200, {
+        code: '0000',
+        message: 'ok',
+        data: { phone }
+      });
+      return;
+    } catch {
+      sendJson(response, 400, {
+        code: '4000',
+        message: 'Invalid JSON body',
+        data: null
+      });
+      return;
+    }
+  }
+
+  if (request.method === 'POST' && url.pathname === '/auth/wechatLogin') {
+    sendAuthTokens(true);
+    return;
   }
 
   if (request.method === 'GET' && url.pathname === '/auth/getUserInfo') {

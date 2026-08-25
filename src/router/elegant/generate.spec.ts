@@ -19,6 +19,7 @@ describe('generated elegant routes', () => {
     const byName = Object.fromEntries(generatedRoutes.map(route => [route.name, route]));
 
     expect(byName.login?.component).toBe('layout.blank$view.login');
+    expect(byName.login?.path).toBe('/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?');
     expect(byName.forbidden?.component).toBe('layout.blank$view.403');
     expect(byName['not-found-page']?.path).toBe('/404');
     expect(byName['not-found-page']?.component).toBe('layout.blank$view.404');
@@ -44,7 +45,13 @@ describe('generated elegant routes', () => {
     expect(vueAuth[0]?.children?.map(child => child.name)).toEqual(['home', 'restricted']);
     expect(vueConstant.at(-1)?.path).toBe('/:pathMatch(.*)*');
     expect(vueConstant.map(route => route.path)).toEqual(
-      expect.arrayContaining(['/login', '/403', '/404', '/500', '/:pathMatch(.*)*'])
+      expect.arrayContaining([
+        '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
+        '/403',
+        '/404',
+        '/500',
+        '/:pathMatch(.*)*'
+      ])
     );
   });
 });
