@@ -24,6 +24,16 @@ export const enUS = {
     goBack: 'Go back',
     retry: 'Retry'
   },
+  search: {
+    title: 'Search',
+    open: 'Open search',
+    placeholder: 'Search pages or commands',
+    empty: 'No matching pages',
+    command: 'Command',
+    commandTheme: 'Open theme settings',
+    commandThemeScheme: 'Toggle light / dark',
+    hint: 'Ctrl / ⌘ + K to open · ↑↓ to select · Enter to go · Esc to close'
+  },
   route: {
     login: 'Login',
     home: 'Home',
@@ -139,7 +149,8 @@ export const enUS = {
       title: 'Blocks',
       tabs: 'Tab bar',
       breadcrumb: 'Breadcrumb',
-      footer: 'Footer'
+      footer: 'Footer',
+      search: 'Global search'
     },
     tabsBar: {
       title: 'Tabs',

@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R22 主线已完成；A01–A06（到高级页签）已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
+当前进度：**R00–R22 主线已完成；A01–A07（到全局搜索）已完成。** 其余加分项见 `docs/04-learning-path.md`。默认仍是静态路由，动态模式设 `VITE_AUTH_ROUTE_MODE=dynamic`。
 
 ## 对照运行原项目
 

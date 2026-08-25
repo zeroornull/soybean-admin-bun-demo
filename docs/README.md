@@ -30,7 +30,7 @@
 
 ## 仓库布局（当前）
 
-主线 R00–R22 已完成，A01–A06 已完成。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
+主线 R00–R22 已完成，A01–A07 已完成。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
 
 ```text
 .

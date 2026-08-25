@@ -209,6 +209,14 @@
 - **后续**：按 [04-learning-path.md](./04-learning-path.md) 的 A01–A10 另开进阶轮。
 - **演示残留**：`/restricted`（`R_NOBODY`）保留为静态 403 演示页，页面标 `data-demo="static-permission"`，不是业务模块。
 
+### D32 · A07 命令盘只搜当前用户菜单
+
+- **日期**：2026-08-25（A07）
+- **决策**：全局搜索展平 `routeStore.menus` 叶子，不扫全部 vue-router 记录。普通用户因此搜不到 Restricted。
+- **空关键字**：列出全部可搜项（命令盘）；输入后对标题/path/id 做包含匹配。
+- **命令**：打开主题抽屉、切换亮暗。快捷键 `Ctrl/⌘+K` 自己绑在 `window`，不装 `@vueuse/core`。
+- **开关**：`themeExtras.blocks.search`，默认开。
+
 ### D31 · A06 页签拖拽用原生 DnD，外观不拷 materials
 
 - **日期**：2026-08-25（A06）

@@ -22,6 +22,16 @@ export const zhCN = {
     goBack: '返回上一页',
     retry: '重试'
   },
+  search: {
+    title: '搜索',
+    open: '打开搜索',
+    placeholder: '搜索页面或命令',
+    empty: '没有匹配的页面',
+    command: '命令',
+    commandTheme: '打开主题设置',
+    commandThemeScheme: '切换亮色 / 暗色',
+    hint: 'Ctrl / ⌘ + K 打开 · ↑↓ 选择 · Enter 跳转 · Esc 关闭'
+  },
   route: {
     login: '登录',
     home: '首页',
@@ -137,7 +147,8 @@ export const zhCN = {
       title: '区块开关',
       tabs: '页签栏',
       breadcrumb: '面包屑',
-      footer: '页脚'
+      footer: '页脚',
+      search: '全局搜索'
     },
     tabsBar: {
       title: '页签',

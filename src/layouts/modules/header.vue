@@ -7,6 +7,7 @@ import { useProvidedLayoutShell } from '@/layouts/use-layout-shell';
 import { useAuthStore } from '@/store/auth';
 import { useRouteStore } from '@/store/route';
 import { useThemeStore } from '@/store/theme';
+import GlobalSearch from './global-search.vue';
 import LayoutMenu from './menu.vue';
 import LayoutModeSwitch from './mode-switch.vue';
 
@@ -93,6 +94,7 @@ async function logout() {
     </div>
 
     <div v-if="authStore.isLogin" class="shrink-0 flex items-center gap-10px">
+      <GlobalSearch v-if="themeStore.extras.blocks.search" />
       <LayoutModeSwitch />
       <ThemeControls />
       <LocaleSwitch />

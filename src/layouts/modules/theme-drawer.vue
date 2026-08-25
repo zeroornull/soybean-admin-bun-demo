@@ -128,6 +128,15 @@ const activeTab = ref('appearance');
                 @update:value="value => themeStore.setBlockVisible('footer', value)"
               />
             </label>
+            <label class="flex items-center justify-between gap-12px">
+              <span>{{ t('theme.blocks.search') }}</span>
+              <NSwitch
+                data-theme-block="search"
+                size="small"
+                :value="themeStore.extras.blocks.search"
+                @update:value="value => themeStore.setBlockVisible('search', value)"
+              />
+            </label>
           </div>
 
           <NDivider title-placement="left">{{ t('theme.tabsBar.title') }}</NDivider>

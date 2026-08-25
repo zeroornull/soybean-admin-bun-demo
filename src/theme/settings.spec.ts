@@ -33,7 +33,7 @@ describe('parseThemeExtras', () => {
       enableUserName: true,
       enableTime: false
     });
-    expect(parsed.blocks).toEqual({ tabs: false, breadcrumb: true, footer: true });
+    expect(parsed.blocks).toEqual({ tabs: false, breadcrumb: true, footer: true, search: true });
   });
 
   it('returns defaults for invalid JSON', () => {

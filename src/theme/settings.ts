@@ -12,6 +12,7 @@ export interface ThemeBlocks {
   tabs: boolean;
   breadcrumb: boolean;
   footer: boolean;
+  search: boolean;
 }
 
 export interface ThemeExtras {
@@ -53,7 +54,8 @@ export const defaultThemeExtras: ThemeExtras = {
   blocks: {
     tabs: true,
     breadcrumb: true,
-    footer: false
+    footer: false,
+    search: true
   },
   tabMode: defaultTabMode,
   tabCache: true,
@@ -104,7 +106,8 @@ export function parseThemeExtras(raw: unknown): ThemeExtras {
     blocks: {
       tabs: blocks.tabs !== false,
       breadcrumb: blocks.breadcrumb !== false,
-      footer: Boolean(blocks.footer)
+      footer: Boolean(blocks.footer),
+      search: blocks.search !== false
     },
     tabMode: resolveTabMode(input.tabMode),
     tabCache: input.tabCache !== false,
