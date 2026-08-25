@@ -76,12 +76,22 @@ R18 的统一命令加入 `bun run test`。CI 本轮至少执行 install → qua
 
 ## 验收
 
-- [ ] `bun run test` 可一次运行并退出，不停在 watch 模式
-- [ ] request、permission、menu、tabs、auth reset 五组契约都有至少一个有效断言
-- [ ] 至少一个关键组件交互测试通过
-- [ ] 故意改错一个规则时对应测试确实会红，恢复后重新变绿
-- [ ] 测试不访问真实 Mock 域名，不依赖当前时间或用户本地 storage
-- [ ] CI 执行测试，失败会阻止通过
+- [x] `bun run test` 可一次运行并退出，不停在 watch 模式
+- [x] request、permission、menu、tabs、auth reset 五组契约都有至少一个有效断言
+- [x] 至少一个关键组件交互测试通过
+- [x] 故意改错一个规则时对应测试确实会红，恢复后重新变绿
+- [x] 测试不访问真实 Mock 域名，不依赖当前时间或用户本地 storage
+- [x] CI 执行测试，失败会阻止通过
+
+R19 实际证据（2026-08-25）：
+
+- 安装 `vitest@4.1.11`、`jsdom@30.0.1`、`@vue/test-utils@2.4.11`；`test` = `vitest run`，`test:watch` 才进 watch；
+- Vite/Vitest 共用 `createSrcAlias()`，默认 environment 为 node；ExceptionBase 单文件声明 jsdom；
+- 契约用例：成功码 / 业务码 / 网络错误 → FlatResult；无 roles / `R_USER` / `R_SUPER` 过滤；`hideInMenu` 与空父节点不进菜单；关当前/非当前/固定 tab 与 cacheNames；`resetStore` 清 token、userInfo、auth routes、tabs、storage；
+- 组件用例：ExceptionBase 403/404/500 标题与主/次动作，click 发出 primary/secondary；额外锁定中英消息键集；
+- request 只用 Axios adapter，baseURL 为 `https://request.invalid`；auth 测试使用内存 Storage，不读本机 localStorage；
+- 将 `hasRoutePermission` 的超管旁路改成 `return false` 后，超管过滤用例红并得到 `[]`；恢复后 14 tests 全绿；
+- `quality` 追加 test；CI 在 frozen install 后分开跑 typecheck/lint/format 与 `bun run test`。
 
 ## 常见坑
 

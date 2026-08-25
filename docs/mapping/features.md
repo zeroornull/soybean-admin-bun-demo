@@ -43,7 +43,7 @@
 | 首页可演示且图表生命周期正确 | `views/home` + echarts hook | R16 | ☑ | ☐ |
 | 核心页在 360px 宽度可用 | login/layout/home/exceptions | R15–R17 | ☑ | ☐ |
 | typecheck/lint/format/CI 质量门 | scripts + workflow | R18 | ☑ | ☐ |
-| request/permission/menu/tabs/auth reset 自动化回归 | Vitest | R19 | ☐ | ☐ |
+| request/permission/menu/tabs/auth reset 自动化回归 | Vitest | R19 | ☑ | ☐ |
 | Bun workspace 子集边界正确，抽包后回归仍绿 | `packages/*` | R20 | ☐ | ☐ |
 | 生产构建可预览，不依赖 dev proxy | `vite build --mode prod` | R21 | ☐ | ☐ |
 | 必须清单、产品路径、文档与实际版本收口 | R22 最终验收 | R22 | ☐ | ☐ |

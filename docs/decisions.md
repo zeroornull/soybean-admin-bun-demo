@@ -174,4 +174,4 @@
 - **命令契约**：`lint`/`format` 永远只检查；只有显式 `lint:fix`/`format:write` 才修改文件。`quality` 组合 typecheck、lint、format，不包含产品 build；R19 再加 test，R21 才把 build 纳入最终 CI 门。
 - **范围**：R18 明确扫描 src、scripts、Vite/Uno 配置与必要 JSON；legacy/docs/dist/node_modules/coverage/.omx 不进入代码检查。R20 出现 packages 后再显式扩 scope，不用宽泛 `.` 把教学 Markdown 当源码。
 - **本地 hook**：simple-git-hooks pre-commit 只执行 quality；失败后由开发者显式修复并重新 stage，不在 hook 中静默 write/fix，也不跑耗时产品 build。
-- **CI**：GitHub Actions 固定 Bun 1.4.0，frozen install 后运行同一 quality。CI 与本地不维护两套命令；R19/R21 按轮次追加 test/build。
+- **CI**：GitHub Actions 固定 Bun 1.4.0，frozen install 后运行同一组脚本。R19 起本地 `quality` 含 test；CI 把 typecheck/lint/format 与 `bun run test` 分成两步，方便定位失败。R21 再加 build。

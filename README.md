@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R18 已完成，下一轮为 R19 自动化回归测试。**
+当前进度：**R00–R19 已完成，下一轮为 R20 Bun workspace 与内部包。**
 
 ## 对照运行原项目
 
@@ -52,11 +52,13 @@ bun run lint         # oxlint 纯检查，不修改文件
 bun run lint:fix     # 显式应用 oxlint 安全修复
 bun run format       # oxfmt 纯格式检查
 bun run format:write # 显式写入格式化结果
-bun run quality      # typecheck + lint + format
+bun run test         # Vitest 单次运行，不进入 watch
+bun run test:watch   # Vitest watch
+bun run quality      # typecheck + lint + format + test
 bun run build        # 生产构建（R21 纳入最终 CI 交付门）
 ```
 
-pre-commit 只执行 `bun run quality`，不会自动改文件，也不会运行产品 build。GitHub Actions 使用 Bun `1.4.0`、frozen lockfile 和同一条 quality 命令。
+pre-commit 执行 `bun run quality`，不会自动改文件，也不会运行产品 build。GitHub Actions 使用 Bun `1.4.0`、frozen lockfile，并分开跑 quality 检查与 `bun run test`。
 
 ## 许可
 

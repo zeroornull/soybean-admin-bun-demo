@@ -13,7 +13,9 @@
     "mock": "bun scripts/mock-service.ts",
     "prepare": "simple-git-hooks",
     "preview": "vite preview",
-    "quality": "bun run typecheck && bun run lint && bun run format",
+    "quality": "bun run typecheck && bun run lint && bun run format && bun run test",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
@@ -30,12 +32,15 @@
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^30.0.1",
     "oxfmt": "^0.65.0",
     "oxlint": "^1.80.0",
     "simple-git-hooks": "^2.13.1",
     "typescript": "6",
     "unocss": "^66.8.1",
     "vite": "^8.2.2",
+    "vitest": "^4.1.11",
     "vue-tsc": "^3.3.11"
   },
   "simple-git-hooks": {
