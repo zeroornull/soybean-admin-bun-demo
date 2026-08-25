@@ -10,9 +10,7 @@ const appStore = useAppStore();
 const tabStore = useTabStore();
 const { t } = useI18n();
 const hasClosableTabs = computed(() => tabStore.tabs.some(tab => !tab.pinned));
-const hasOtherClosableTabs = computed(() =>
-  tabStore.tabs.some(tab => !tab.pinned && tab.id !== tabStore.activeTabId)
-);
+const hasOtherClosableTabs = computed(() => tabStore.tabs.some(tab => !tab.pinned && tab.id !== tabStore.activeTabId));
 
 function getTabLabel(tab: (typeof tabStore.tabs)[number]) {
   return tab.labelKey ? t(tab.labelKey) : tab.label;
@@ -24,11 +22,7 @@ function getTabLabel(tab: (typeof tabStore.tabs)[number]) {
     data-layout-tabs
     class="h-44px shrink-0 flex items-center gap-8px border-b border-[var(--border-color)] bg-[var(--card-bg)] px-10px"
   >
-    <div
-      role="tablist"
-      :aria-label="t('common.openPages')"
-      class="min-w-0 flex flex-1 gap-6px overflow-x-auto py-6px"
-    >
+    <div role="tablist" :aria-label="t('common.openPages')" class="min-w-0 flex flex-1 gap-6px overflow-x-auto py-6px">
       <div
         v-for="tab in tabStore.tabs"
         :key="tab.id"
@@ -51,7 +45,8 @@ function getTabLabel(tab: (typeof tabStore.tabs)[number]) {
           type="button"
           @click="tabStore.switchTab(tab.id)"
         >
-          <span v-if="tab.pinned" aria-hidden="true" class="mr-5px">•</span>{{ getTabLabel(tab) }}
+          <span v-if="tab.pinned" aria-hidden="true" class="mr-5px">•</span>
+          {{ getTabLabel(tab) }}
         </button>
         <button
           v-if="!tab.pinned"

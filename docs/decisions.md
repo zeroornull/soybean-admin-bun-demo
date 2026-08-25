@@ -155,3 +155,12 @@
 - **恢复**：异常页 Home action 在 auth route 已注册时按 name 跳转；匿名冷启动尚无 home name 时改走 `/home`，让既有守卫安全转 login。Back/Retry 优先使用 Vue Router history state，无 back 时回 Home，不依赖 `window.history.length` 猜测。
 - **500 边界**：全页 500 只用于页面级服务异常；普通 Dashboard request error 在模块内保留指标/图表，显示 NAlert 和 Retry。不会把所有 Axios/HTTP/backend error 粗暴重定向到 `/500`。
 - **复用**：403/404/500 只提供 code、i18n key、illustration、actions 与 handler；共同 DOM、主题、响应式和可访问性全部由 ExceptionBase 负责。
+
+### D24 · Oxlint 负责静态规则，Oxfmt 独占代码格式
+
+- **日期**：2026-08-25
+- **工具职责**：oxlint 启用 correctness/suspicious 与 TS/Vue/import 等结构规则；oxfmt 是唯一代码 formatter。当前不叠加 ESLint/Prettier，避免相同文件被两套规则反复改写。
+- **命令契约**：`lint`/`format` 永远只检查；只有显式 `lint:fix`/`format:write` 才修改文件。`quality` 组合 typecheck、lint、format，不包含产品 build；R19 再加 test，R21 才把 build 纳入最终 CI 门。
+- **范围**：R18 明确扫描 src、scripts、Vite/Uno 配置与必要 JSON；legacy/docs/dist/node_modules/coverage/.omx 不进入代码检查。R20 出现 packages 后再显式扩 scope，不用宽泛 `.` 把教学 Markdown 当源码。
+- **本地 hook**：simple-git-hooks pre-commit 只执行 quality；失败后由开发者显式修复并重新 stage，不在 hook 中静默 write/fix，也不跑耗时产品 build。
+- **CI**：GitHub Actions 固定 Bun 1.4.0，frozen install 后运行同一 quality。CI 与本地不维护两套命令；R19/R21 按轮次追加 test/build。

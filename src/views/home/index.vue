@@ -23,8 +23,10 @@ const currencyFormatter = computed(
   () => new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'CNY', maximumFractionDigits: 0 })
 );
 const localizedDate = computed(() => {
-  locale.value;
-  return dayjs(reportDate.value || undefined).format('YYYY MMMM D, dddd');
+  const dayjsLocale = locale.value === 'zh-CN' ? 'zh-cn' : 'en';
+  return dayjs(reportDate.value || undefined)
+    .locale(dayjsLocale)
+    .format('YYYY MMMM D, dddd');
 });
 const dashboardStats = computed(() => [
   { key: 'visits', label: t('dashboard.totalVisits'), value: numberFormatter.value.format(128_430), trend: '+12.5%' },
@@ -173,20 +175,9 @@ onMounted(() => {
       <div class="flex flex-col gap-10px sm:flex-row sm:items-end">
         <label class="flex min-w-0 flex-col gap-5px text-12px sm:w-190px">
           <span>{{ t('dashboard.reportDate') }}</span>
-          <NDatePicker
-            ref="datePickerRef"
-            v-model:value="reportDate"
-            data-naive-locale-demo
-            type="date"
-            clearable
-          />
+          <NDatePicker ref="datePickerRef" v-model:value="reportDate" data-naive-locale-demo type="date" clearable />
         </label>
-        <NButton
-          data-local-counter="home"
-          data-naive-primary
-          type="primary"
-          @click="refreshCount += 1"
-        >
+        <NButton data-local-counter="home" data-naive-primary type="primary" @click="refreshCount += 1">
           {{ t('dashboard.refreshData', { count: refreshCount }) }}
         </NButton>
       </div>

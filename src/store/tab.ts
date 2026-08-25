@@ -152,9 +152,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     const targetTab = tabs.value.find(tab => tab.id === id);
     if (!targetTab) return false;
 
-    const activeTabRemoved = !tabs.value.some(
-      tab => tab.id === activeTabId.value && (tab.pinned || tab.id === id)
-    );
+    const activeTabRemoved = !tabs.value.some(tab => tab.id === activeTabId.value && (tab.pinned || tab.id === id));
     tabs.value = tabs.value.filter(tab => tab.pinned || tab.id === id);
 
     if (activeTabRemoved) await switchTab(targetTab.id);

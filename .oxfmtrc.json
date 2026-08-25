@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": ["legacy/**", "docs/**", "dist/**", "node_modules/**", "coverage/**", ".omx/**"],
+  "printWidth": 120,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "arrowParens": "avoid",
+  "htmlWhitespaceSensitivity": "ignore",
+  "sortImports": false,
+  "sortPackageJson": false
+}

@@ -12,7 +12,7 @@
 2. [分轮学习路线](./docs/04-learning-path.md)
 3. [进度表](./docs/PROGRESS.md)
 
-当前进度：**R00–R17 已完成，下一轮为 R18 工程化质量门。**
+当前进度：**R00–R18 已完成，下一轮为 R19 自动化回归测试。**
 
 ## 对照运行原项目
 
@@ -43,6 +43,20 @@ bun run dev
 超管：Soybean / 123456（R_SUPER）
 普通：User / 123456（R_USER）
 ```
+
+## 质量命令
+
+```bash
+bun run typecheck    # Vue + TypeScript 类型检查
+bun run lint         # oxlint 纯检查，不修改文件
+bun run lint:fix     # 显式应用 oxlint 安全修复
+bun run format       # oxfmt 纯格式检查
+bun run format:write # 显式写入格式化结果
+bun run quality      # typecheck + lint + format
+bun run build        # 生产构建（R21 纳入最终 CI 交付门）
+```
+
+pre-commit 只执行 `bun run quality`，不会自动改文件，也不会运行产品 build。GitHub Actions 使用 Bun `1.4.0`、frozen lockfile 和同一条 quality 命令。
 
 ## 许可
 

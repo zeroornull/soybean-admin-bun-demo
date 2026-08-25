@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue';
+import { computed, watch } from 'vue';
 import { NConfigProvider, NGlobalStyle } from 'naive-ui';
 import { useRoute } from 'vue-router';
 import { naiveDateLocales, naiveLocales } from '@/locales/naive';
@@ -15,10 +15,7 @@ const themeStore = useThemeStore();
 const naiveLocale = computed(() => naiveLocales[appStore.locale]);
 const naiveDateLocale = computed(() => naiveDateLocales[appStore.locale]);
 
-watchEffect(() => {
-  appStore.locale;
-  setDocumentTitle(route.meta);
-});
+watch([() => appStore.locale, () => route.meta], ([, meta]) => setDocumentTitle(meta), { immediate: true });
 </script>
 
 <template>

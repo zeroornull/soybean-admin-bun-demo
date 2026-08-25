@@ -86,7 +86,9 @@ const server = createServer(async (request, response) => {
 
   if (request.method === 'GET' && url.pathname === '/auth/getUserInfo') {
     const authorization = request.headers.authorization || null;
-    const isSuperUser = ['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(authorization || '');
+    const isSuperUser = ['Bearer mock-access-token', 'Bearer mock-refreshed-access-token'].includes(
+      authorization || ''
+    );
     const isRegularUser = ['Bearer mock-user-access-token', 'Bearer mock-user-refreshed-access-token'].includes(
       authorization || ''
     );

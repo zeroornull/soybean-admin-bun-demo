@@ -43,7 +43,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R15 | 登录页交付 | done | 2026-08-24 | Naive Form + 双栏品牌页 + 校验/loading/NAlert/Enter/Tab/防重入已落地；错误/正确/离线/中英/亮暗/360px Chrome 矩阵通过 |
 | R16 | 首页看板与 ECharts | done | 2026-08-24 | 4 指标卡 + ECharts 双轴趋势 + 渠道卡 + ResizeObserver/KeepAlive/dispose 生命周期已落地；resize/tab/reload/theme/360px Chrome 矩阵通过 |
 | R17 | 内置异常页与边界状态 | done | 2026-08-24 | 共享 ExceptionBase + 显式 403/404/500 + wildcard 原 URL + history/home fallback + Dashboard HTTP error/retry 已落地；边界 Chrome 矩阵通过 |
-| R18 | 工程化质量门 | pending | | |
+| R18 | 工程化质量门 | done | 2026-08-25 | oxlint/oxfmt check+fix 分离 + stable quality + EditorConfig/Oxc VS Code + pre-commit + Bun frozen CI 已落地；连续 quality/hash/hook/build 验证通过 |
 | R19 | 自动化回归测试 | pending | | |
 | R20 | Bun workspace 与内部包 | pending | | |
 | R21 | 生产构建与部署演练 | pending | | |
@@ -86,7 +86,8 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | vue-i18n | 11.4.9 | R13 |
 | dayjs | 1.11.23 | R13 |
 | echarts | 6.1.0 | R16 |
-| oxlint / oxfmt | | R18 |
+| oxlint / oxfmt | 1.80.0 / 0.65.0 | R18 |
+| simple-git-hooks | 2.13.1 | R18 |
 | vitest | | R19 |
 | @vue/test-utils | | R19 |
 

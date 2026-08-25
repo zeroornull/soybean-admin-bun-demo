@@ -46,11 +46,7 @@ const pageName = computed(() => {
     <section
       class="relative grid w-full max-w-920px items-center gap-20px overflow-hidden rd-18px border border-[var(--border-color)] bg-[var(--card-bg)] p-24px shadow-[0_28px_90px_rgba(15,23,42,0.12)] md:grid-cols-[minmax(260px,0.9fr)_minmax(0,1.1fr)] md:p-44px"
     >
-      <div
-        data-exception-illustration
-        aria-hidden="true"
-        class="mx-auto w-full max-w-300px text-primary"
-      >
+      <div data-exception-illustration aria-hidden="true" class="mx-auto w-full max-w-300px text-primary">
         <svg viewBox="0 0 240 180" class="block h-auto w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="120" cy="90" r="76" fill="currentColor" opacity="0.08" />
           <circle cx="120" cy="90" r="54" fill="currentColor" opacity="0.10" />

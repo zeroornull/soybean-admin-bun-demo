@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { create, isAxiosError, isCancel } from 'axios';
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import type {
   BackendResponse,
@@ -20,15 +20,15 @@ function getBackendErrorDetails(data: unknown) {
 }
 
 function normalizeAxiosError(error: unknown): RequestError {
-  if (axios.isCancel(error) || (axios.isAxiosError(error) && error.code === 'ERR_CANCELED')) {
+  if (isCancel(error) || (isAxiosError(error) && error.code === 'ERR_CANCELED')) {
     return {
       kind: 'cancelled',
       message: 'Request cancelled',
-      code: axios.isAxiosError(error) ? error.code : undefined
+      code: isAxiosError(error) ? error.code : undefined
     };
   }
 
-  if (axios.isAxiosError(error)) {
+  if (isAxiosError(error)) {
     const axiosError = error as AxiosError;
 
     if (axiosError.response) {
@@ -56,7 +56,7 @@ function normalizeAxiosError(error: unknown): RequestError {
 }
 
 export function createFlatRequest(options: CreateFlatRequestOptions) {
-  const instance = axios.create({
+  const instance = create({
     baseURL: options.baseURL,
     timeout: options.timeout ?? 10_000,
     headers: {

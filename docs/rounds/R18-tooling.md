@@ -83,13 +83,27 @@ R19 再将 test 纳入，R21 将 build 纳入最终交付门。
 
 ## 验收
 
-- [ ] `bun run typecheck` 退出 0
-- [ ] `bun run lint` 只检查不修文件，退出 0
-- [ ] `bun run format` 只检查格式，退出 0
-- [ ] `bun run quality` 能稳定重复运行，第二次不产生新 diff
-- [ ] lint/format/typecheck 不扫描 `legacy/` 与文档代码块制造假失败
-- [ ] CI 在干净 checkout 上执行 frozen install + quality
-- [ ] README 列出开发和质量命令
+- [x] `bun run typecheck` 退出 0
+- [x] `bun run lint` 只检查不修文件，退出 0
+- [x] `bun run format` 只检查格式，退出 0
+- [x] `bun run quality` 能稳定重复运行，第二次不产生新 diff
+- [x] lint/format/typecheck 不扫描 `legacy/` 与文档代码块制造假失败
+- [x] CI 在干净 checkout 上执行 frozen install + quality
+- [x] README 列出开发和质量命令
+
+R18 实际证据（2026-08-25）：
+
+- 安装 `oxlint@1.80.0`、`oxfmt@0.65.0`、`simple-git-hooks@2.13.1`；不引入 ESLint/Prettier 第二套 lint/formatter；
+- scripts 明确分离 `lint/lint:fix`、`format/format:write`；quality 顺序为 typecheck→lint→format，三个 check 命令都不带 fix/write；
+- oxlint 开启 correctness+suspicious error 与 TypeScript/Unicorn/Oxc/Import/Vue plugins；只关闭合法 side-effect import、`.d.ts export {}` 和不适合当前数据变换的三条 Unicorn 规则；
+- 首轮 lint 报 15 项：合法 side-effect/module marker 规则例外 2 类；Axios 默认成员改 named import；App/Home 裸响应式依赖改显式 watch/dayjs locale 使用。最终 lint 0；
+- 首轮 oxfmt check 只报告 7 个源码文件并退出 1；显式 `format:write` 建立基线并将 Oxc/VS Code JSON 纳入范围后，check 扫 61 个文件全部通过；格式 diff 仅换行/空白，类型与构建复验通过；
+- 连续 quality 前后受管文件 SHA-256 均为 `3cf7ea01394e96d37f43187a61a5a211f9b5308aad4a2c4875cd2b5148bf0e58`，git status 也完全一致；
+- oxlint `--debug=files` 实际列出 53 个 src/scripts/config 文件，legacy/docs/dist 命中均为 0；format 使用显式 src/scripts/config 范围并有相同 ignore；
+- `.editorconfig` 统一 UTF-8/LF/2 空格/final newline；VS Code 只推荐 Oxc + Volar，Oxc 是代码默认 formatter，Markdown 保存格式关闭；
+- package 的 `simple-git-hooks.pre-commit` 为 `bun run quality`；`bun run prepare` 成功生成 hook，手动执行 hook 退出 0；hook 不跑 build、不自动 stage/format；
+- `.github/workflows/quality.yml` 使用 checkout v4、setup-bun v2 + `bun-version: 1.4.0`、`bun install --frozen-lockfile`、`bun run quality`；R19 再加 test，R21 再加 build；
+- 最终 frozen install 检查 225 installs / 300 packages、quality 退出 0、生产 build 通过；R16 ECharts chunk warning 仍按已知边界保留。
 
 ## 常见坑
 

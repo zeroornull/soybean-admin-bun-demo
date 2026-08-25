@@ -115,7 +115,8 @@ export const enUS = {
     forbidden: 'No permission',
     forbiddenDescription: 'This account cannot access the requested page. Go back or return home to continue.',
     notFound: 'Page not found',
-    notFoundDescription: 'The requested address does not exist. The original URL is preserved for debugging and sharing.',
+    notFoundDescription:
+      'The requested address does not exist. The original URL is preserved for debugging and sharing.',
     serverError: 'Service unavailable',
     serverErrorDescription: 'The page service encountered an error. Go back to retry the operation or return home.'
   }
