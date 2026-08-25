@@ -60,10 +60,10 @@
 
 | legacy 包 | 新项目 | 轮次 |
 | --- | --- | --- |
-| `@sa/axios` | 先内联，R19 锁回归后 R20 再决定是否抽 | R08/R20 |
-| `@sa/utils` | R20 | R20 |
-| `@sa/hooks` | 可选 | R20 |
-| `@sa/color` | 可选 | R14/R20 |
+| `@sa/axios` | 已抽工厂；token/env/session 留应用层 | R08/R20 |
+| `@sa/utils` | `createPrefixedStorage` | R20 |
+| `@sa/hooks` | 不抽 | R20 |
+| `@sa/color` | hex/混色/主色 palette | R14/R20 |
 | `@sa/materials` | 不抽，布局自己写 | R05 |
 | `@sa/uno-preset` | 不抽，必要 shortcut 写进 `uno.config.ts` | R03 |
 | `@sa/scripts` | 不做 | — |

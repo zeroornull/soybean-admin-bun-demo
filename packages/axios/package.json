@@ -1,0 +1,12 @@
+{
+  "name": "@sa/axios",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "axios": "^1.19.0"
+  }
+}

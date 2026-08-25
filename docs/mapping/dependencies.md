@@ -58,10 +58,10 @@
 
 | 包 | legacy 是否被应用直接依赖 | 重写 |
 | --- | --- | --- |
-| @sa/axios | 是 | R19 锁定回归后，R20 决定是否抽，或长期留 `src/service` |
-| @sa/utils | 是（经 axios/hooks） | R20 |
-| @sa/hooks | 是 | 可选 |
-| @sa/color | 是（登录、主题） | 可选 |
+| @sa/axios | 是 | R20 已抽工厂；应用切面仍在 `src/service/request` |
+| @sa/utils | 是（经 axios/hooks） | R20 已抽 `createPrefixedStorage` |
+| @sa/hooks | 是 | 不抽 |
+| @sa/color | 是（登录、主题） | R20 已抽 palette |
 | @sa/materials | 是 | 不抽 |
 | @sa/uno-preset | 是（dev） | 不抽 |
 | @sa/scripts | 是（dev CLI） | 不做 |

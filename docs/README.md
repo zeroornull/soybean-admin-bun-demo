@@ -30,7 +30,7 @@
 
 ## 仓库布局（当前）
 
-主线已做到 R19，下一轮是 R20。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
+主线已做到 R20，下一轮是 R21。进度以 [PROGRESS.md](./PROGRESS.md) 为准。
 
 ```text
 .
@@ -38,7 +38,8 @@
 ├── src/                  ← 重写中的应用
 ├── scripts/              ← dev 编排与本地 Mock
 ├── .github/workflows/    ← frozen install + quality + test
-├── package.json          ← 单包；R20 才加 workspaces
+├── packages/             ← @sa/utils、@sa/color、@sa/axios
+├── package.json          ← Bun workspaces
 ├── bun.lock
 ├── vite.config.ts
 ├── uno.config.ts
@@ -48,7 +49,7 @@
 └── dist/                 ← 本地构建产物，不入库
 ```
 
-测试与源码共用 Vite alias，规格文件在 `src/**/*.spec.ts`。尚未出现：`packages/`。
+测试与源码共用 Vite alias；规格文件在 `src/**/*.spec.ts` 与 `packages/*/src/**/*.spec.ts`。
 
 ## 想先看原项目怎么跑
 

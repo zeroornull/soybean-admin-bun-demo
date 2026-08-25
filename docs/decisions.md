@@ -64,12 +64,17 @@
 - **原因**：先把守卫决策树、刷新恢复和 403/404 分流学清楚；动态路由是加分项 A02，不阻塞主线。
 - **替代**：R22 后按 [04-learning-path.md](./04-learning-path.md) 的 A02 另开进阶轮。
 
-## 待对应轮次填最终值
-
 ### D11 · 抽出了哪些 `@sa/*` 包
 
-- **当前（R18 结束）**：尚未抽出。仓库仍是单包；`storage`、`color`、Axios 工厂分别在 `src/utils`、`src/utils/color.ts`、`src/service/request`。
-- **列表**：R20 抽包后填写。候选见 [rounds/R20-packages.md](./rounds/R20-packages.md)（`@sa/utils`、`@sa/color`、`@sa/axios`）。
+- **日期**：2026-08-25（R20）
+- **列表**：
+  - `@sa/utils`：`createPrefixedStorage`。应用 key 与 `VITE_STORAGE_PREFIX` 仍在 `src/utils/storage.ts`。未发明当前用不到的 clone/nanoid。
+  - `@sa/color`：hex 校验、混色、主色 palette。无 `@sa/utils` / colord 依赖。
+  - `@sa/axios`：纯 `createFlatRequest` 工厂。token、env、proxy、session 回调留在 `src/service/request/index.ts`。
+- **依赖方向**：应用 → `@sa/*`；`@sa/axios` → `axios`；`@sa/utils` 与 `@sa/color` 无互相依赖。包内不引用 `@/` 或 Pinia。
+- **不做**：`@sa/hooks`、`@sa/materials`、`@sa/scripts`、`@sa/alova`、`@sa/uno-preset`。
+
+## 待对应轮次填最终值
 
 ### D12 · 部署 public path（R21 演练后填）
 

@@ -127,14 +127,24 @@ export const request = createFlatRequest(
 
 ## 验收
 
-- [ ] `bun install` 无报错
-- [ ] 应用可以 `import { x } from '@sa/utils'`
-- [ ] `bun run dev` 与 `bun run typecheck` 仍过
-- [ ] R19 的全部回归测试在抽包后仍通过
-- [ ] R18 的 lint/format 已覆盖 `packages/`
-- [ ] 没有出现「包里 import `@/store`」
-- [ ] 抽包前后用户行为不变，R08/R14 已有的手工验收重跑通过
-- [ ] 依赖图无循环，应用层依赖包，基础包不反向依赖应用
+- [x] `bun install` 无报错
+- [x] 应用可以 `import { x } from '@sa/utils'`
+- [x] `bun run dev` 与 `bun run typecheck` 仍过
+- [x] R19 的全部回归测试在抽包后仍通过
+- [x] R18 的 lint/format 已覆盖 `packages/`
+- [x] 没有出现「包里 import `@/store`」
+- [x] 抽包前后用户行为不变，R08/R14 已有的手工验收重跑通过
+- [x] 依赖图无循环，应用层依赖包，基础包不反向依赖应用
+
+R20 实际证据（2026-08-25）：
+
+- 根 `package.json` 设 `workspaces: ["packages/*"]`；`node_modules/@sa/{utils,color,axios}` 均 symlink 到 `packages/*`；
+- 一次一包：utils → color → axios，每包后 `quality` 全绿；最终 10 files / 20 tests；
+- `exports` 指向 `./src/index.ts`，未建 tsup；Vite 不另写 `@sa/*` alias；
+- 应用：`src/utils/storage.ts` 用 `@sa/utils`；`theme` 用 `@sa/color`；`src/service/request/index.ts` 组装 `@sa/axios` + token/env；axios 依赖下沉到 `@sa/axios`；
+- lint/format/typecheck/test include `packages/`；`workspace-boundary.spec.ts` 锁定包内不得 import `@/` 或 pinia；
+- `bun run dev` Local `http://localhost:19528/` HTTP 200；Chrome 登录 `POST /proxy-default/auth/login` 与 `GET /auth/getUserInfo` 均为 200，进入首页看板；切 dark 后 `html.dark`、`colorScheme=dark`，`--primary/#646cff`、`--primary-hover/#7d84ff`、`--primary-pressed/#5259d1`；控制台无 error；
+- 生产 `vite build --mode prod` 能解析 workspace 包（R21 再做 preview/base 演练）。
 
 ## 常见坑
 

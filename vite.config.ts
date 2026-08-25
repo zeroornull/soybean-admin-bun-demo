@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
     },
     test: {
       environment: 'node',
-      include: ['src/**/*.spec.ts'],
+      include: ['src/**/*.spec.ts', 'packages/*/src/**/*.spec.ts'],
       restoreMocks: true,
       unstubGlobals: true
     },

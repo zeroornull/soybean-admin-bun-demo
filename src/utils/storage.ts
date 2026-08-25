@@ -1,4 +1,7 @@
+import { createPrefixedStorage } from '@sa/utils';
+
 const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX;
+const storage = createPrefixedStorage(storagePrefix);
 
 export const tokenStorageKey = `${storagePrefix}token`;
 export const refreshTokenStorageKey = `${storagePrefix}refreshToken`;
@@ -6,59 +9,55 @@ export const localeStorageKey = `${storagePrefix}locale`;
 export const themeSchemeStorageKey = `${storagePrefix}themeScheme`;
 export const themeColorStorageKey = `${storagePrefix}themeColor`;
 
-function getStorage() {
-  return typeof localStorage === 'undefined' ? null : localStorage;
-}
-
 export function getAccessToken() {
-  return getStorage()?.getItem(tokenStorageKey) || null;
+  return storage.get('token');
 }
 
 export function setAccessToken(token: string) {
-  getStorage()?.setItem(tokenStorageKey, token);
+  storage.set('token', token);
 }
 
 export function clearAccessToken() {
-  getStorage()?.removeItem(tokenStorageKey);
+  storage.remove('token');
 }
 
 export function getRefreshToken() {
-  return getStorage()?.getItem(refreshTokenStorageKey) || null;
+  return storage.get('refreshToken');
 }
 
 export function setRefreshToken(token: string) {
-  getStorage()?.setItem(refreshTokenStorageKey, token);
+  storage.set('refreshToken', token);
 }
 
 export function clearRefreshToken() {
-  getStorage()?.removeItem(refreshTokenStorageKey);
+  storage.remove('refreshToken');
 }
 
 export function getLocaleSetting() {
-  return getStorage()?.getItem(localeStorageKey) || null;
+  return storage.get('locale');
 }
 
 export function setLocaleSetting(locale: string) {
-  getStorage()?.setItem(localeStorageKey, locale);
+  storage.set('locale', locale);
 }
 
 export function getThemeSchemeSetting() {
-  return getStorage()?.getItem(themeSchemeStorageKey) || null;
+  return storage.get('themeScheme');
 }
 
 export function setThemeSchemeSetting(scheme: string) {
-  getStorage()?.setItem(themeSchemeStorageKey, scheme);
+  storage.set('themeScheme', scheme);
 }
 
 export function getThemeColorSetting() {
-  return getStorage()?.getItem(themeColorStorageKey) || null;
+  return storage.get('themeColor');
 }
 
 export function setThemeColorSetting(color: string) {
-  getStorage()?.setItem(themeColorStorageKey, color);
+  storage.set('themeColor', color);
 }
 
 export function clearThemeSettings() {
-  getStorage()?.removeItem(themeSchemeStorageKey);
-  getStorage()?.removeItem(themeColorStorageKey);
+  storage.remove('themeScheme');
+  storage.remove('themeColor');
 }

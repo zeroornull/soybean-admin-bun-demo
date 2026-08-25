@@ -6,21 +6,21 @@
 
 ## 当前快照
 
-核对日：**2026-08-25**（R19 回归测试完成）。
+核对日：**2026-08-25**（R20 workspace 抽包完成）。
 
 | 项 | 现状 |
 | --- | --- |
-| 主线位置 | **R00–R19 已完成（20/23）**，下一轮 **R20 Bun workspace 与内部包** |
-| 包形态 | 仍是单包；无 `packages/`。Vitest 已接入，测试与源码同用 `createSrcAlias()` |
+| 主线位置 | **R00–R20 已完成（21/23）**，下一轮 **R21 生产构建与部署演练** |
+| 包形态 | Bun workspaces：`@sa/utils`、`@sa/color`、`@sa/axios`；应用组装 token/env/session |
 | 运行时 | Bun 1.4.0、Node 22.23.2；默认 npm registry，无 `bunfig.toml` |
-| 质量门 | `bun run quality` = typecheck + lint + format + test；本轮 14 tests / 7 files 全绿，oxlint 60 files / 0，oxfmt 68 files |
+| 质量门 | `bun run quality` 本轮 20 tests / 10 files 全绿；oxlint 66 files / 0；oxfmt 80 files |
 | CI | frozen install 后分开跑 typecheck/lint/format 与 `bun run test`；**尚未**含 build |
 | 应用内核 | 登录会话、静态权限守卫、菜单/面包屑/页签/KeepAlive、i18n、主题、登录页、看板、403/404/500 已在对应轮次用 Chrome 验收 |
-| 请求 | Axios flat union；dev 走 `/proxy-default` → 本地 Mock `127.0.0.1:19007`；prod env 仍占位 `19008` 且关闭 proxy |
+| 请求 | `@sa/axios` 工厂 + 应用切面；dev 走 `/proxy-default` → 本地 Mock `127.0.0.1:19007`；prod env 仍占位 `19008` |
 | 路由 | 手写 vue-router 5；`VITE_AUTH_ROUTE_MODE=static`；无 Elegant Router、无后端动态路由 |
-| 功能清单 | [mapping/features.md](./mapping/features.md)：R00–R19 已落地，终验列留给 R22 |
+| 功能清单 | [mapping/features.md](./mapping/features.md)：R00–R20 已落地，终验列留给 R22 |
 
-不要把 quality 绿写成 R20–R22 完成。那三轮分别缺 workspace、生产演练和终验勾选。
+不要把 quality 绿写成 R21–R22 完成。那两轮分别缺生产演练和终验勾选。
 
 ## 轮次重核结论
 
@@ -63,7 +63,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | R17 | 内置异常页与边界状态 | done | 2026-08-24 | 共享 ExceptionBase + 显式 403/404/500 + wildcard 原 URL + history/home fallback + Dashboard HTTP error/retry 已落地；边界 Chrome 矩阵通过 |
 | R18 | 工程化质量门 | done | 2026-08-25 | oxlint/oxfmt check+fix 分离 + stable quality + EditorConfig/Oxc VS Code + pre-commit + Bun frozen CI 已落地；连续 quality/hash/hook/build 验证通过 |
 | R19 | 自动化回归测试 | done | 2026-08-25 | Vitest 4.1.11 + jsdom 30.0.1 + VTU 2.4.11；request/permission/menu/tabs/auth reset + ExceptionBase；14 tests 全绿；超管规则改错即红、恢复后绿；quality/CI 已接入 test |
-| R20 | Bun workspace 与内部包 | pending | | 无 `packages/`；storage/color/axios 工厂仍在 `src/` |
+| R20 | Bun workspace 与内部包 | done | 2026-08-25 | `@sa/utils` / `@sa/color` / `@sa/axios`；workspace symlink；20 tests 全绿；登录与 dark 主题 Chrome 复验通过；D11 已填 |
 | R21 | 生产构建与部署演练 | pending | | `build` 命令存在，但未做 prod preview / 子路径 / D12；CI 未纳入 build |
 | R22 | 功能对等与最终验收 | pending | | 终验列未勾；`R_NOBODY` 演示页与 19008 占位仍在 |
 
@@ -88,24 +88,24 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | i18n / 主题 / 登录页 / 看板 / 360px | R13–R17 | 是 | 待 R22 |
 | typecheck/lint/format/CI | R18 | 是 | 待 R22 |
 | request/permission/menu/tabs/auth reset 自动化回归 | R19 | 是 | 待 R22 |
-| Bun workspace 子集 + 抽包后回归仍绿 | R20 | 否 | 待 R20/R22 |
+| Bun workspace 子集 + 抽包后回归仍绿 | R20 | 是 | 待 R22 |
 | 生产构建可预览、不依赖 dev proxy | R21 | 否 | 待 R21/R22 |
 | 必须清单、文档与实际版本收口 | R22 | 否 | 待 R22 |
 
 加分项（动态路由、token 刷新、Elegant Router、多布局、主题抽屉等）全部未做，不阻塞主线；R22 后走 A 系列。
 
-## 下一轮入口：R20
+## 下一轮入口：R21
 
-文档：[rounds/R20-packages.md](./rounds/R20-packages.md)
+文档：[rounds/R21-production.md](./rounds/R21-production.md)
 
-前置已满足：R19 回归全绿。抽包前先再跑一遍 `bun run quality`，每抽出一个包就重跑测试。不要把仍依赖 `@/` 或 Pinia 的业务切面塞进 `@sa/*`。
+前置已满足：R19 回归在抽包后仍绿。本轮要固化 prod env、preview 手工路径、根路径与一个子路径，并填写 D12。不要把 19008 占位当成最终部署地址。
 
 ## 剩余主线
 
 | 轮 | 进入条件 | 完成时必须多出来的证据 |
 | --- | --- | --- |
 | R19 | R18 已 done | 已完成：14 tests、quality/CI 含 test |
-| R20 | R19 全绿 | `package.json#workspaces` + 稳定 `@sa/*` 子集；抽包后重跑 R19；lint/format 覆盖 `packages/`；D11 填包列表 |
+| R20 | R19 全绿 | 已完成：三包 workspace、20 tests、D11 |
 | R21 | R19 全绿，R20 已抽或明确不抽 | prod build + preview 手工路径；根路径与一个子路径；不依赖 `/proxy-default`；D12 填 `VITE_BASE_URL`；CI 加 build |
 | R22 | R00–R21 均为 done 或有合理 skipped | features 终验全勾；清理演示/占位；README 收口启动/测试/部署；能讲清六条数据流 |
 
@@ -120,7 +120,7 @@ R22 之后若继续 token 刷新、动态/Elegant Router、多布局、主题抽
 | 页面交付 | R15–R17 | 登录、看板、异常边界在桌面/手机、中英、亮暗下可用 |
 | 工程与交付 | R18–R22 | workspace 边界、quality、test、prod preview、功能对等全部有证据 |
 
-前五段已关闭。工程与交付段已完成 R18–R19。
+前五段已关闭。工程与交付段已完成 R18–R20。
 
 ## 实际安装版本
 
@@ -140,7 +140,7 @@ R01 之后开始填，后续新增关键依赖时及时补齐，不等 R22 凭�
 | vue-router | 5.2.0 | R04 |
 | pinia | 4.0.3 | R06 |
 | @vue/devtools-api | 8.2.1 | R06 |
-| axios | 1.19.0 | R08 |
+| axios | 1.19.0（现为 `@sa/axios` 依赖） | R08 |
 | naive-ui | 2.45.2 | R11 |
 | vue-i18n | 11.4.9 | R13 |
 | dayjs | 1.11.23 | R13 |
@@ -163,18 +163,17 @@ bun pm ls
 
 ## 决策填写
 
-已拍板并写入 [decisions.md](./decisions.md)：D1–D8、D9（Pinia 4）、D10（主线不做动态路由）、D13–D24。
+已拍板并写入 [decisions.md](./decisions.md)：D1–D11、D13–D24。
 
 仍待对应轮次填最终值：
 
 | 编号 | 主题 | 当前事实 | 何时填最终值 |
 | --- | --- | --- | --- |
-| D11 | 抽出哪些 `@sa/*` | 尚未抽包；候选在 `src/utils`、`src/utils/color.ts`、`src/service/request` | R20 |
 | D12 | 部署 public path | `.env` 里 `VITE_BASE_URL=/`；未做子路径演练 | R21 |
 
 ## 已知边界（不是漏做的主线）
 
-这些是已记录的范围选择或留给后续轮次的残留，不要在 R20 里顺手扩成新需求：
+这些是已记录的范围选择或留给后续轮次的残留，不要在 R21 里顺手扩成新需求：
 
 - **ECharts 体积**：Home 约 `722.90 kB / gzip 225.81 kB`，Vite 500kB warning 按 D22 保留，R21 再评估拆包。
 - **会话码**：logout / modal logout / expired token 目前都走 `resetStore`；无单飞刷新与请求重放（A01）。

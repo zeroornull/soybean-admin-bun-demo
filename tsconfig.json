@@ -17,6 +17,13 @@
     "isolatedModules": true,
     "moduleDetection": "force"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "scripts/**/*.ts", "vite.config.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "scripts/**/*.ts",
+    "packages/*/src/**/*.ts",
+    "vite.config.ts"
+  ],
   "exclude": ["node_modules", "dist", "legacy", "docs"]
 }

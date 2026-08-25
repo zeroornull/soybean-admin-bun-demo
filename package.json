@@ -2,14 +2,17 @@
   "name": "soybean-admin",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "bun scripts/dev.ts",
     "dev:app": "vite --mode test",
     "build": "vite build --mode prod",
-    "format": "oxfmt --check src scripts vite.config.ts uno.config.ts package.json tsconfig.json .oxlintrc.json .oxfmtrc.json .vscode/extensions.json .vscode/settings.json",
-    "format:write": "oxfmt --write src scripts vite.config.ts uno.config.ts package.json tsconfig.json .oxlintrc.json .oxfmtrc.json .vscode/extensions.json .vscode/settings.json",
-    "lint": "oxlint --deny-warnings --report-unused-disable-directives src scripts vite.config.ts uno.config.ts",
-    "lint:fix": "oxlint --fix --deny-warnings --report-unused-disable-directives src scripts vite.config.ts uno.config.ts",
+    "format": "oxfmt --check src scripts packages vite.config.ts uno.config.ts package.json tsconfig.json .oxlintrc.json .oxfmtrc.json .vscode/extensions.json .vscode/settings.json",
+    "format:write": "oxfmt --write src scripts packages vite.config.ts uno.config.ts package.json tsconfig.json .oxlintrc.json .oxfmtrc.json .vscode/extensions.json .vscode/settings.json",
+    "lint": "oxlint --deny-warnings --report-unused-disable-directives src scripts packages vite.config.ts uno.config.ts",
+    "lint:fix": "oxlint --fix --deny-warnings --report-unused-disable-directives src scripts packages vite.config.ts uno.config.ts",
     "mock": "bun scripts/mock-service.ts",
     "prepare": "simple-git-hooks",
     "preview": "vite preview",
@@ -19,8 +22,10 @@
     "typecheck": "vue-tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
+    "@sa/axios": "workspace:*",
+    "@sa/color": "workspace:*",
+    "@sa/utils": "workspace:*",
     "@vue/devtools-api": "^8.2.1",
-    "axios": "^1.19.0",
     "dayjs": "^1.11.23",
     "echarts": "^6.1.0",
     "naive-ui": "^2.45.2",

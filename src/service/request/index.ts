@@ -1,6 +1,5 @@
-import { createFlatRequest } from './create-flat-request';
+import { createFlatRequest, type RequestSessionHandlers } from '@sa/axios';
 import { getAccessToken } from '@/utils/storage';
-import type { RequestSessionHandlers } from './types';
 
 function parseCodes(value: string) {
   return value
@@ -26,6 +25,3 @@ export const request = flatRequest.request;
 export function setRequestSessionHandlers(handlers: RequestSessionHandlers) {
   flatRequest.setSessionHandlers(handlers);
 }
-
-export { createFlatRequest } from './create-flat-request';
-export type * from './types';

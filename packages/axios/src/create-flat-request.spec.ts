@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { describe, expect, it } from 'vitest';
-import { createFlatRequest } from './create-flat-request';
+import { createFlatRequest } from '@sa/axios';
 
 function createClient() {
   return createFlatRequest({

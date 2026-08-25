@@ -5,8 +5,10 @@
     "": {
       "name": "soybean-admin",
       "dependencies": {
+        "@sa/axios": "workspace:*",
+        "@sa/color": "workspace:*",
+        "@sa/utils": "workspace:*",
         "@vue/devtools-api": "^8.2.1",
-        "axios": "^1.19.0",
         "dayjs": "^1.11.23",
         "echarts": "^6.1.0",
         "naive-ui": "^2.45.2",
@@ -29,6 +31,21 @@
         "vitest": "^4.1.11",
         "vue-tsc": "^3.3.11",
       },
+    },
+    "packages/axios": {
+      "name": "@sa/axios",
+      "version": "0.0.0",
+      "dependencies": {
+        "axios": "^1.19.0",
+      },
+    },
+    "packages/color": {
+      "name": "@sa/color",
+      "version": "0.0.0",
+    },
+    "packages/utils": {
+      "name": "@sa/utils",
+      "version": "0.0.0",
     },
   },
   "packages": {
@@ -261,6 +278,12 @@
     "@rolldown/binding-win32-x64-msvc": ["@rolldown/binding-win32-x64-msvc@1.2.5", "", { "os": "win32", "cpu": "x64" }, "sha512-e/SXpgISz+IoqVcSSI0rx/d/he8zqLex+/rCWpnHpmVfmPIUjag9H6P7zotf0gJHwPUhQxZ/mF8tr6acebT9yw=="],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.1", "", {}, "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw=="],
+
+    "@sa/axios": ["@sa/axios@workspace:packages/axios"],
+
+    "@sa/color": ["@sa/color@workspace:packages/color"],
+
+    "@sa/utils": ["@sa/utils@workspace:packages/utils"],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 

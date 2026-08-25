@@ -9,7 +9,7 @@ import {
   setThemeColorSetting,
   setThemeSchemeSetting
 } from '@/utils/storage';
-import { createThemeColorPalette, isHexColor, normalizeHexColor } from '@/utils/color';
+import { createThemeColorPalette, isHexColor, normalizeHexColor } from '@sa/color';
 import { SetupStoreId } from './ids';
 
 export const themeSchemes = ['light', 'dark', 'auto'] as const;
